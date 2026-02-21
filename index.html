@@ -4,197 +4,360 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Бортовой Журнал — Сирота</title>
-<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Martel+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{
-  /* =====================================================
-     🎨 ЦВЕТА САЙТА — здесь можно менять всё оформление
-     =====================================================
-
-     ФОНЫ (от самого тёмного к светлее):
-     --bg   = основной фон страницы
-     --bg1  = фон карточек, шапки
-     --bg2  = фон внутри карточек (строки таблиц и т.д.)
-
-     РАМКИ:
-     --border  = тонкие рамки между элементами
-     --border2 = более заметные рамки (hover, active)
-
-     АКЦЕНТНЫЙ ЦВЕТ (сейчас синий — можно поменять на любой):
-     --accent  = основной цвет кнопок, чисел, ссылок
-     --accent2 = светлый вариант акцента
-
-     ТЕКСТ:
-     --text   = основной текст
-     --muted  = второстепенный текст (подписи, даты)
-     --muted2 = совсем приглушённый
-
-     ЦВЕТА РАЗДЕЛОВ:
-     --water  / --water2 = цвет для "Нырки"
-     --moss   / --moss2  = цвет для "Дупло"
-     --red2              = цвет для шанса отравиться
-
-     КАК МЕНЯТЬ: просто замени hex-код (#xxxxxx) на нужный.
-     Удобный подборщик цветов: https://coolors.co
-     ===================================================== */
-
-  --bg:   #0a0a0a;   /* чисто чёрный фон */
-  --bg1:  #111111;   /* чуть светлее — карточки */
-  --bg2:  #1a1a1a;   /* строки таблицы, внутренности */
-
-  --border:  rgba(255,255,255,0.07);   /* едва заметные рамки */
-  --border2: rgba(255,255,255,0.15);   /* рамки при наведении */
-
-  --accent:  #4a9eff;   /* синий акцент — можно поменять */
-  --accent2: #7ab8ff;   /* светлее */
-  --gold:    #4a9eff;   /* используется везде как акцент */
-  --gold2:   #7ab8ff;
-  --rust:    #4a9eff;
-
-  --text:   #e8e8e8;   /* основной текст — почти белый */
-  --muted:  #666666;   /* второстепенный */
-  --muted2: #444444;   /* совсем тихий */
-
-  --water:  #2a6aaa;   /* нырки — синий */
-  --water2: #4a9eff;
-  --moss:   #2a6a3a;   /* дупло — зелёный */
-  --moss2:  #4aaa60;
-  --red:    #aa2020;
-  --red2:   #ff4444;   /* шанс отравиться */
+:root {
+  --bg:     #0e1117;
+  --bg1:    #151820;
+  --bg2:    #1c2030;
+  --bg3:    #222840;
+  --border: rgba(100,140,200,0.12);
+  --border2:rgba(100,140,200,0.25);
+  --accent: #4a8fd4;
+  --accent2:#6eb3f7;
+  --gold:   #c8a84b;
+  --gold2:  #e8c870;
+  --teal:   #3ab8a0;
+  --red:    #e05050;
+  --text:   #e8eaf0;
+  --muted:  #7880a0;
+  --muted2: #505870;
+  --water:  #2a5a8a;
+  --water2: #4a8ab0;
+  --moss:   #2a5a3a;
+  --moss2:  #4a8a5a;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Martel Sans',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth }
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(74,143,212,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 80%, rgba(58,184,160,0.04) 0%, transparent 60%);
+  pointer-events:none; z-index:0;
+}
 
 /* ── HEADER ── */
-header{background:var(--bg1);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100}
-.header-inner{max-width:1200px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
-.logo{font-family:'Philosopher',serif;font-size:18px;color:var(--gold);cursor:pointer;background:none;border:none;font-style:italic}
-nav{display:flex;gap:2px}
-.nb{padding:6px 16px;border:1px solid transparent;border-radius:4px;background:none;font-family:'Martel Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all .18s}
-.nb:hover{color:var(--gold);border-color:var(--border)}
-.nb.active{color:var(--gold);border-color:var(--border2);background:var(--bg2);font-weight:600}
+header {
+  background:rgba(14,17,23,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border2);
+  position:sticky; top:0; z-index:100;
+}
+.header-inner {
+  max-width:1280px; margin:0 auto;
+  padding:0 32px;
+  display:flex; align-items:center; justify-content:space-between; height:58px;
+}
+.logo {
+  font-family:'Playfair Display',serif;
+  font-size:17px; color:var(--accent2);
+  cursor:pointer; background:none; border:none;
+  font-style:italic; letter-spacing:0.3px;
+}
+.logo span { color:var(--muted); font-style:normal; font-size:13px; margin-left:8px; }
+nav { display:flex; gap:2px }
+.nb {
+  padding:6px 18px;
+  border:1px solid transparent; border-radius:6px;
+  background:none;
+  font-family:'DM Sans',sans-serif; font-size:13px;
+  color:var(--muted); cursor:pointer;
+  transition:all .18s;
+}
+.nb:hover { color:var(--text); border-color:var(--border) }
+.nb.active {
+  color:var(--accent2); border-color:var(--border2);
+  background:rgba(74,143,212,0.08);
+  font-weight:500;
+}
 
 /* ── PAGES ── */
-.page{display:none}.page.active{display:block}
+.page { display:none } .page.active { display:block }
 
 /* ── HOME ── */
-.home-wrap{max-width:900px;margin:0 auto;padding:72px 28px 80px;text-align:center}
-.home-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
-.home-title{font-family:'Philosopher',serif;font-size:clamp(32px,5vw,56px);line-height:1.15;color:var(--text);margin-bottom:20px}
-.home-title em{color:var(--gold);font-style:italic}
-.home-desc{font-size:14px;line-height:1.85;color:var(--muted);max-width:520px;margin:0 auto 52px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;max-width:680px;margin:0 auto}
-.card{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:26px;cursor:pointer;transition:all .22s;text-align:left;position:relative;overflow:hidden}
-.card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .22s}
-.card.water::after{background:linear-gradient(90deg,var(--water),var(--water2))}
-.card.moss::after{background:linear-gradient(90deg,var(--moss),var(--moss2))}
-.card:hover{transform:translateY(-2px);border-color:var(--border2);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.card:hover::after{opacity:1}
-.card-icon{font-size:26px;margin-bottom:12px;display:block}
-.card-title{font-family:'Philosopher',serif;font-size:18px;margin-bottom:6px;color:var(--text)}
-.card-desc{font-size:12px;color:var(--muted2);line-height:1.6;margin-bottom:14px}
-.card-arrow{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);font-weight:600}
+.home-wrap {
+  max-width:860px; margin:0 auto;
+  padding:80px 32px 100px; text-align:center;
+  position:relative; z-index:1;
+}
+.home-eyebrow {
+  font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:20px;
+}
+.home-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,5vw,60px); line-height:1.1;
+  color:var(--text); margin-bottom:18px;
+}
+.home-title em { color:var(--accent2); font-style:italic }
+.home-desc {
+  font-size:14px; line-height:1.9; color:var(--muted);
+  max-width:480px; margin:0 auto 60px;
+}
+.cards {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px; max-width:640px; margin:0 auto;
+}
+.card {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:12px; padding:28px;
+  cursor:pointer; transition:all .25s; text-align:left;
+  position:relative; overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; inset:0;
+  opacity:0; transition:opacity .25s;
+}
+.card.water::before { background:linear-gradient(135deg,rgba(42,90,138,0.15),transparent 60%) }
+.card.moss::before  { background:linear-gradient(135deg,rgba(42,90,58,0.15),transparent 60%) }
+.card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px; opacity:0; transition:opacity .25s;
+}
+.card.water::after { background:linear-gradient(90deg,var(--water),var(--water2)) }
+.card.moss::after  { background:linear-gradient(90deg,var(--moss),var(--moss2)) }
+.card:hover { transform:translateY(-3px); border-color:var(--border2); box-shadow:0 12px 40px rgba(0,0,0,.5) }
+.card:hover::after,.card:hover::before { opacity:1 }
+.card-icon { font-size:28px; margin-bottom:14px; display:block }
+.card-title { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:6px; color:var(--text) }
+.card-desc { font-size:12px; color:var(--muted2); line-height:1.7; margin-bottom:16px }
+.card-arrow { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); font-weight:500 }
 
 /* ── STATS PAGE ── */
-.sp{max-width:1200px;margin:0 auto;padding:40px 28px 80px}
-.sp-head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;flex-wrap:wrap;gap:12px}
-.sp-title{font-family:'Philosopher',serif;font-size:32px;color:var(--text)}
-.sp-sub{font-size:12px;color:var(--muted);margin-top:3px}
-.sp-updated{font-size:11px;color:var(--muted2)}
+.sp { max-width:1280px; margin:0 auto; padding:40px 32px 80px; position:relative; z-index:1 }
+.sp-head {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:28px; flex-wrap:wrap; gap:12px;
+}
+.sp-title-group {}
+.sp-title { font-family:'Playfair Display',serif; font-size:28px; color:var(--text) }
+.sp-sub { font-size:12px; color:var(--muted); margin-top:3px }
 
 /* Эпохи */
-.epochs-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
-.epoch-btn{padding:5px 14px;border:1px solid var(--border);border-radius:4px;background:var(--bg1);color:var(--muted);font-family:'Martel Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .18s}
-.epoch-btn:hover{border-color:var(--border2);color:var(--text)}
-.epoch-btn.active{border-color:var(--gold);color:var(--gold);background:var(--bg2)}
+.epochs-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px }
+.epoch-btn {
+  padding:5px 14px; border:1px solid var(--border); border-radius:6px;
+  background:var(--bg1); color:var(--muted);
+  font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; transition:all .18s;
+}
+.epoch-btn:hover { border-color:var(--border2); color:var(--text) }
+.epoch-btn.active { border-color:var(--accent); color:var(--accent2); background:rgba(74,143,212,0.1) }
 
-/* Предметы сверху (как в таблице) */
-.items-row{background:var(--bg1);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
-.items-row-inner{display:flex;align-items:flex-end;padding:14px 16px 0;gap:4px;flex-wrap:wrap;min-height:80px;border-bottom:1px solid var(--border)}
-.item-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;min-width:48px}
-.item-cell img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
-.item-count{font-family:'Philosopher',serif;font-size:14px;color:var(--gold2);padding:4px 0 10px}
-.items-total-row{display:flex;justify-content:flex-end;align-items:center;padding:8px 16px;gap:8px}
-.items-total-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.items-total-val{font-family:'Philosopher',serif;font-size:20px;color:var(--gold)}
+/* ── МЕТРИКИ (заменяют блок "всего попыток") ── */
+.metrics-row {
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap:12px; margin-bottom:20px;
+}
+.metric-card {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px;
+  position:relative; overflow:hidden;
+  transition:border-color .18s;
+}
+.metric-card:hover { border-color:var(--border2) }
+.metric-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+}
+.mc-blue::before   { background:linear-gradient(90deg,#4a8fd4,#6eb3f7) }
+.mc-green::before  { background:linear-gradient(90deg,#3a8a50,#5ab870) }
+.mc-red::before    { background:linear-gradient(90deg,#c04040,#e06060) }
+.mc-teal::before   { background:linear-gradient(90deg,#3ab8a0,#5ad8c0) }
+.mc-gold::before   { background:linear-gradient(90deg,#b89040,#e8c870) }
+.mc-grey::before   { background:linear-gradient(90deg,#505870,#7880a0) }
+.metric-label {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:8px;
+}
+.metric-val {
+  font-family:'Playfair Display',serif;
+  font-size:26px; color:var(--text); line-height:1;
+}
+.metric-sub {
+  font-size:10px; color:var(--muted); margin-top:4px;
+}
+.metric-val .pct {
+  font-size:13px; color:var(--muted); margin-left:3px; font-family:'DM Sans',sans-serif;
+}
 
-/* Сводная таблица (как в примере) */
-.stat-block{background:var(--bg1);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
-.stat-block-title{background:var(--bg2);padding:9px 16px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;border-bottom:1px solid var(--border)}
-.stat-table{width:100%;border-collapse:collapse}
-.stat-table th{padding:8px 12px;font-size:11px;letter-spacing:.5px;color:var(--muted);font-weight:400;text-align:center;border-bottom:1px solid var(--border)}
-.stat-table td{padding:10px 12px;font-family:'Philosopher',serif;font-size:18px;color:var(--gold2);text-align:center}
-.stat-table tr.pct td{font-family:'Martel Sans',sans-serif;font-size:13px;color:var(--gold);font-weight:400}
+/* ── ПРЕДМЕТЫ ── */
+.items-block {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden; margin-bottom:20px;
+}
+.items-inner {
+  display:flex; align-items:flex-end;
+  padding:14px 16px 0; gap:6px; flex-wrap:wrap; min-height:72px;
+  border-bottom:1px solid var(--border);
+}
+.item-cell {
+  display:flex; flex-direction:column; align-items:center;
+  gap:4px; padding:0 4px; min-width:44px;
+}
+.item-cell img { width:34px; height:34px; object-fit:contain; filter:drop-shadow(0 1px 4px rgba(0,0,0,.6)) }
+.item-count {
+  font-family:'Playfair Display',serif; font-size:13px;
+  color:var(--gold2); padding:2px 0 8px;
+}
 
-/* Боковая строка специальных (Комочки/Гнёзда + Навыки) */
-.side-row{display:grid;grid-template-columns:auto 1fr;gap:16px;margin-bottom:20px;align-items:start}
-.side-card{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
-.side-card-title{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.side-mini-table{display:flex;gap:20px}
-.side-mini-col{text-align:center}
-.side-mini-label{font-size:11px;color:var(--muted2);margin-bottom:4px}
-.side-mini-val{font-family:'Philosopher',serif;font-size:20px;color:var(--gold2)}
-.skills-card{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
-.skills-title{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.skills-chips{display:flex;gap:8px;flex-wrap:wrap}
-.skill-chip{padding:4px 12px;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;font-family:'Philosopher',serif;font-size:16px;color:var(--gold2)}
+/* ── ОСНОВНОЙ БЛОК: ГРАФИК + ПОНЧИК ── */
+.charts-main {
+  display:grid; grid-template-columns:1fr 340px;
+  gap:16px; margin-bottom:20px;
+}
+.chart-box {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:10px; padding:20px 24px;
+}
+.chart-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; flex-wrap:wrap; gap:8px;
+}
+.chart-title {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+}
+.range-btns { display:flex; gap:4px }
+.range-btn {
+  padding:3px 10px; border:1px solid var(--border); border-radius:4px;
+  background:none; font-family:'DM Sans',sans-serif; font-size:11px;
+  color:var(--muted); cursor:pointer; transition:all .15s;
+}
+.range-btn:hover { color:var(--text); border-color:var(--border2) }
+.range-btn.active { color:var(--accent2); border-color:var(--accent); background:rgba(74,143,212,0.1) }
+.chart-box canvas { max-height:260px }
 
-/* Графики */
-.charts-row{display:grid;grid-template-columns:1fr 280px;gap:16px;margin-bottom:20px}
-.chart-box{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:20px}
-.chart-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.chart-box canvas{max-height:240px}
+/* Пончик со статистикой */
+.pie-box {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:10px; padding:20px 24px;
+  display:flex; flex-direction:column;
+}
+.pie-canvas-wrap { position:relative; flex:1; min-height:180px; margin-bottom:12px }
+.pie-legend { display:flex; flex-direction:column; gap:6px }
+.pie-legend-item {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+}
+.pie-legend-left { display:flex; align-items:center; gap:7px }
+.pie-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0 }
+.pie-legend-name { font-size:11px; color:var(--muted) }
+.pie-legend-right { display:flex; align-items:center; gap:8px }
+.pie-legend-count { font-size:11px; color:var(--text); font-weight:500 }
+.pie-legend-pct {
+  font-size:10px; color:var(--muted2);
+  background:var(--bg2); padding:1px 6px;
+  border-radius:4px; min-width:44px; text-align:right;
+}
 
-/* Сессии */
-.section-title{font-family:'Philosopher',serif;font-size:18px;color:var(--text);margin:36px 0 14px;display:flex;align-items:center;gap:10px}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
-.sessions-list{display:flex;flex-direction:column;gap:10px}
-.sess{background:var(--bg1);border:1px solid var(--border);border-radius:7px;overflow:hidden;transition:border-color .18s}
-.sess:hover{border-color:var(--border2)}
-.sess-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;gap:12px;flex-wrap:wrap}
-.sess-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.sess-badge{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px}
-.sess-badge.dive{background:rgba(58,106,138,.2);color:var(--water2)}
-.sess-badge.hollow{background:rgba(58,90,48,.2);color:var(--moss2)}
-.sess-date{font-size:12px;color:var(--muted)}
-.sess-time{font-size:13px;font-weight:600;color:var(--text)}
-.sess-epoch{font-size:10px;color:var(--muted2)}
-.sess-stats{display:flex;gap:16px;flex-shrink:0}
-.sess-stat{text-align:right}
-.sess-stat-v{font-family:'Philosopher',serif;font-size:18px;color:var(--gold2)}
-.sess-stat-l{font-size:9px;color:var(--muted);letter-spacing:.5px}
-.sess-arrow{color:var(--muted);font-size:11px;transition:transform .18s;flex-shrink:0}
-.sess-arrow.open{transform:rotate(180deg)}
-.sess-body{padding:14px 16px;display:none;border-top:1px solid var(--border)}
-.sess-body.open{display:block}
-.catches-wrap{display:flex;flex-wrap:wrap;gap:6px}
-.catch-chip{display:flex;align-items:center;gap:5px;padding:3px 9px;border:1px solid var(--border);border-radius:14px;background:var(--bg2);font-size:11px;color:var(--text)}
-.catch-chip img{width:18px;height:18px;object-fit:contain}
-.catch-t{font-size:9px;color:var(--muted);margin-left:1px}
-.catch-empty{font-size:12px;color:var(--muted);font-style:italic}
+/* ── КОМОЧКИ/ГНЁЗДА (компактно под графиком) ── */
+.bottom-row {
+  display:grid; grid-template-columns:auto 1fr;
+  gap:12px; margin-bottom:20px; align-items:start;
+}
+.extras-card {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:10px; padding:14px 20px;
+  display:flex; gap:24px; align-items:center;
+}
+.extra-item { text-align:center }
+.extra-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted2); margin-bottom:6px }
+.extra-val { font-family:'Playfair Display',serif; font-size:22px; color:var(--gold2) }
+.extra-name { font-size:9px; color:var(--muted2); margin-top:2px }
 
-/* Utility */
-.loading{text-align:center;padding:48px;color:var(--muted);font-style:italic}
-.loading span::after{content:'.';animation:d 1s steps(3,end) infinite}
-@keyframes d{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
-footer{border-top:1px solid var(--border);padding:20px;text-align:center;font-size:11px;color:var(--muted2)}
-@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.fu{animation:fu .45s ease both}.d1{animation-delay:.06s}.d2{animation-delay:.13s}.d3{animation-delay:.2s}
-@media(max-width:768px){
-  .charts-row{grid-template-columns:1fr}
-  .side-row{grid-template-columns:1fr}
-  .header-inner{padding:0 14px}
-  .nb{padding:5px 9px;font-size:11px}
-  .sp{padding:28px 14px 60px}
+/* Яд (дупло) */
+.poison-card {
+  background:var(--bg1); border:1px solid rgba(200,60,60,0.2);
+  border-radius:10px; padding:14px 20px;
+  display:flex; align-items:center; gap:16px;
+}
+.poison-pct { font-family:'Playfair Display',serif; font-size:28px; color:var(--red) }
+.poison-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted) }
+
+/* ── СЕССИИ ── */
+.section-title {
+  font-family:'Playfair Display',serif; font-size:18px;
+  color:var(--text); margin:32px 0 14px;
+  display:flex; align-items:center; gap:12px;
+}
+.section-title::after { content:''; flex:1; height:1px; background:var(--border) }
+.sessions-list { display:flex; flex-direction:column; gap:8px }
+.sess {
+  background:var(--bg1); border:1px solid var(--border);
+  border-radius:8px; overflow:hidden; transition:border-color .18s;
+}
+.sess:hover { border-color:var(--border2) }
+.sess-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:11px 16px; cursor:pointer; user-select:none; gap:12px; flex-wrap:wrap;
+}
+.sess-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+.sess-badge {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:2px 8px; border-radius:4px;
+}
+.sess-badge.dive   { background:rgba(42,90,138,.25); color:var(--water2) }
+.sess-badge.hollow { background:rgba(42,90,58,.25);  color:var(--moss2) }
+.sess-date { font-size:12px; color:var(--muted) }
+.sess-time { font-size:13px; font-weight:500; color:var(--text) }
+.sess-stats { display:flex; gap:20px; flex-shrink:0; align-items:center }
+.sess-stat { text-align:right }
+.sess-stat-v { font-family:'Playfair Display',serif; font-size:18px; color:var(--accent2) }
+.sess-stat-l { font-size:9px; color:var(--muted); letter-spacing:.5px }
+.sess-arrow { color:var(--muted); font-size:10px; transition:transform .18s; flex-shrink:0 }
+.sess-arrow.open { transform:rotate(180deg) }
+.sess-body { padding:12px 16px; display:none; border-top:1px solid var(--border) }
+.sess-body.open { display:block }
+.catches-wrap { display:flex; flex-wrap:wrap; gap:6px }
+.catch-chip {
+  display:flex; align-items:center; gap:5px;
+  padding:3px 10px; border:1px solid var(--border);
+  border-radius:14px; background:var(--bg2); font-size:11px; color:var(--text);
+}
+.catch-chip img { width:16px; height:16px; object-fit:contain }
+.catch-t { font-size:9px; color:var(--muted); margin-left:2px }
+.catch-empty { font-size:12px; color:var(--muted); font-style:italic }
+
+/* ── UTILITY ── */
+.loading { text-align:center; padding:60px; color:var(--muted); font-style:italic; font-size:13px }
+.loading span::after { content:'.'; animation:ld 1s steps(3,end) infinite }
+@keyframes ld { 0%{content:'.'}33%{content:'..'}66%{content:'...'} }
+footer {
+  border-top:1px solid var(--border); padding:20px;
+  text-align:center; font-size:11px; color:var(--muted2);
+  position:relative; z-index:1;
+}
+footer a { color:var(--muted2); text-decoration:none }
+footer a:hover { color:var(--muted) }
+
+@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.fu { animation:fu .4s ease both }
+.d1 { animation-delay:.07s } .d2 { animation-delay:.14s } .d3 { animation-delay:.21s }
+
+@media(max-width:900px) {
+  .charts-main { grid-template-columns:1fr }
+  .metrics-row { grid-template-columns:repeat(3,1fr) }
+  .bottom-row { grid-template-columns:1fr }
+  .header-inner { padding:0 16px }
+  .sp { padding:28px 16px 60px }
+}
+@media(max-width:520px) {
+  .metrics-row { grid-template-columns:repeat(2,1fr) }
 }
 </style>
 </head>
 <body>
 <header>
   <div class="header-inner">
-    <button class="logo" onclick="showPage('home')">🐾 Бортовой Журнал</button>
+    <button class="logo" onclick="showPage('home')">🐾 Бортовой Журнал <span>/ Сирота</span></button>
     <nav>
       <button class="nb active" data-page="home">Главная</button>
       <button class="nb" data-page="diving">Нырки</button>
@@ -206,21 +369,21 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;font-si
 <!-- HOME -->
 <div id="page-home" class="page active">
   <div class="home-wrap">
-    <div class="home-eyebrow fu">Catwar.net · cw3</div>
-    <h1 class="home-title fu d1">Бортовой Журнал<br><em>Шкуродёр</em></h1>
-    <p class="home-desc fu d2">Личная статистика ныряний и осмотров дупла. Данные собираются автоматически во время игры и разбиты по эпохам — каждое изменение навыков создаёт новую таблицу.</p>
+    <div class="home-eyebrow fu">Catwar.net · cw3 · личная статистика</div>
+    <h1 class="home-title fu d1">Журнал<br><em>Сироты</em></h1>
+    <p class="home-desc fu d2">Автоматический дневник ныряний и осмотров дупла. Данные собираются в реальном времени и разбиты по эпохам навыков.</p>
     <div class="cards fu d3">
       <div class="card water" onclick="showPage('diving')">
         <span class="card-icon">🌊</span>
         <div class="card-title">Нырки</div>
-        <div class="card-desc">Найденные предметы, процент успеха, динамика по сессиям и эпохи навыков ЗУ + ПУ.</div>
-        <div class="card-arrow">Смотреть →</div>
+        <div class="card-desc">Найденные предметы, процент успеха, динамика по сессиям, эпохи навыков ЗУ + ПУ.</div>
+        <div class="card-arrow">Открыть →</div>
       </div>
       <div class="card moss" onclick="showPage('hollow')">
         <span class="card-icon">🌲</span>
         <div class="card-title">Дупло</div>
         <div class="card-desc">Осмотры дупла: находки, шанс отравиться, эпохи навыков ЗУ + УН + ЛУ.</div>
-        <div class="card-arrow">Смотреть →</div>
+        <div class="card-arrow">Открыть →</div>
       </div>
     </div>
   </div>
@@ -230,8 +393,10 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;font-si
 <div id="page-diving" class="page">
   <div class="sp">
     <div class="sp-head fu">
-      <div><div class="sp-title">🌊 Нырки</div><div class="sp-sub">Статистика ныряний по эпохам навыков</div></div>
-      <div class="sp-updated" id="div-updated"></div>
+      <div class="sp-title-group">
+        <div class="sp-title">🌊 Нырки</div>
+        <div class="sp-sub" id="div-updated"></div>
+      </div>
     </div>
     <div class="epochs-nav fu d1" id="div-epochs"></div>
     <div id="div-content"><div class="loading"><span></span></div></div>
@@ -242,21 +407,22 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;font-si
 <div id="page-hollow" class="page">
   <div class="sp">
     <div class="sp-head fu">
-      <div><div class="sp-title">🌲 Дупло</div><div class="sp-sub">Статистика осмотров дупла по эпохам навыков</div></div>
-      <div class="sp-updated" id="hol-updated"></div>
+      <div class="sp-title-group">
+        <div class="sp-title">🌲 Дупло</div>
+        <div class="sp-sub" id="hol-updated"></div>
+      </div>
     </div>
     <div class="epochs-nav fu d1" id="hol-epochs"></div>
     <div id="hol-content"><div class="loading"><span></span></div></div>
   </div>
 </div>
 
-<footer>Бортовой Журнал · Сирота · catwar.net · <a href="https://sirotkin1.github.io/catwar-stats" style="color:var(--muted);text-decoration:none">sirotkin1.github.io/catwar-stats</a></footer>
+<footer>Бортовой Журнал · Сирота · catwar.net · <a href="https://sirotkin1.github.io/catwar-stats">sirotkin1.github.io/catwar-stats</a></footer>
 
 <script>
 const SB_URL = 'https://bnjsevuuqgqvohfrvkvx.supabase.co';
 const SB_KEY = 'sb_publishable_PX2go4dTqu3IoT_NXjdLXQ_i7yTPGp0';
 
-// Группы предметов
 const DIVE_GROUPS = {
   'Целебки':  [21,3993],
   'Гадость':  [3956,3958,3960,3962,3965,3966,3967,3968,3969,3970,3971,3973],
@@ -265,41 +431,40 @@ const DIVE_GROUPS = {
   'Еда вода': [75,76,565,566],
 };
 const HOL_GROUPS = {
-  'Перо и гнездо': [2072,2075,2076,2077],
-  'Целебки':       [75,76,110],
-  'Гадость':       [8021,8022,8023,8024,8042,8043],
-  'Строчка':       [20,566],
-  'Камень':        [417,418,1034],
-  'Еда вода':      [565],
+  'Перо/гнездо':[2072,2075,2076,2077],
+  'Целебки':    [75,76,110],
+  'Гадость':    [8021,8022,8023,8024,8042,8043],
+  'Строчка':    [20,566],
+  'Камень':     [417,418,1034],
+  'Еда':        [565],
 };
-// Ядовитые предметы (для шанса отравиться)
-const POISON_IDS = [8021,8022,8023,8024];
-// Комочки
-const CLUMP_FISH_IDS = [4008];
-const CLUMP_SHELL_IDS = [4009];
-// Гнёзда
-const NEST_IDS = [2072];
-const EGG_IDS  = [2074];
-const FEATHER_IDS = [2075,2076,2077];
+const POISON_IDS    = [8021,8022,8023,8024];
+const CLUMP_FISH    = [4008];
+const CLUMP_SHELL   = [4009];
+const EGG_IDS       = [2074];
+const FEATHER_IDS   = [2075,2076,2077];
 
 const NAMES = {
   20:'Паутина',21:'Целебная водоросль',75:'Мох',76:'Водный мох',110:'Мёд',
   417:'Камень 2м',418:'Камень 3м',565:'Ветка',566:'Вьюнок',1034:'Маленький камень',
   2072:'Гнездо',2074:'Яйцо',2075:'Чёрное перо',2076:'Коричневое перо',2077:'Голубое перо',
-  3956:'Рак',3958:'Рак',3960:'Рак',3962:'Жерлянка',3965:'Карась',3966:'Рыба',
-  3967:'Рыба',3968:'Рыба',3969:'Рыба',3970:'Рыба',3971:'Угорь',3973:'Угорь',
+  3956:'Рак',3958:'Рак',3960:'Рак',3962:'Жерлянка',3965:'Карась',
+  3966:'Рыба',3967:'Рыба',3968:'Рыба',3969:'Рыба',3970:'Рыба',
+  3971:'Угорь',3973:'Угорь',
   3993:'Плотная водоросль',3994:'Ракушка +20',3995:'Ракушка +30',
   3997:'Ракушка сон',3998:'Ракушка +15',3999:'Ракушка +28',
   4008:'Комок (мальки)',4009:'Комок (ракушки)',
-  8020:'Пчела',8021:'Паук',8022:'Паук',8023:'Паук',8024:'Тёмный паук',8042:'Мышь',8043:'Мышь',
+  8021:'Паук',8022:'Паук',8023:'Паук',8024:'Тёмный паук',8042:'Мышь',8043:'Мышь',
 };
 const IMG = id => `https://catwar.net/cw3/things/${id}.png`;
 
-// Палитра для пончика
-const DIVE_COLORS  = ['#5a8a50','#c84040','#3a7aaa','#888','#c8a830','#555'];
-const HOL_COLORS   = ['#8a5a30','#5a8a50','#c84040','#c8a830','#888','#3a7aaa'];
+// Цвета для пончика (порядок = порядок групп + пусто)
+const DIVE_COLORS = ['#4a8a50','#d04040','#4a8fd4','#888870','#c8a830','#404858'];
+const HOL_COLORS  = ['#9a6030','#4a8a50','#d04040','#c8a830','#888870','#4a8fd4','#404858'];
 
 let CH = {}, loaded = {};
+// Текущий диапазон графика по префиксу
+let chartRange = {};
 
 // ── NAV ──────────────────────────────────────────────────────
 function showPage(id) {
@@ -313,7 +478,7 @@ function showPage(id) {
 }
 document.querySelectorAll('.nb').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
 
-// ── API ───────────────────────────────────────────────────────
+// ── API ──────────────────────────────────────────────────────
 async function sbGet(path) {
   const r = await fetch(SB_URL + '/rest/v1/' + path, {
     headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
@@ -324,9 +489,9 @@ async function sbGet(path) {
 // ── LOAD ─────────────────────────────────────────────────────
 async function loadPage(type) {
   const prefix = type === 'diving' ? 'div' : 'hol';
-  const groups  = type === 'diving' ? DIVE_GROUPS : HOL_GROUPS;
+  const groups = type === 'diving' ? DIVE_GROUPS : HOL_GROUPS;
+  chartRange[prefix] = '30'; // дефолт: 30 дней
 
-  // Загружаем эпохи, сессии, находки параллельно
   const [epochs, sessions] = await Promise.all([
     sbGet('skill_epochs?select=*&order=started_at.asc'),
     sbGet('sessions?type=eq.' + type + '&select=*&order=started_at.desc'),
@@ -334,25 +499,22 @@ async function loadPage(type) {
   const ids = sessions.length ? sessions.map(s => s.id).join(',') : '0';
   const catches = await sbGet('catches?session_id=in.(' + ids + ')&select=*&order=caught_at.desc');
 
-  // Время последней активности
   if (sessions.length) {
+    const last = new Date(sessions[0].started_at);
     document.getElementById(prefix + '-updated').textContent =
-      'Последняя сессия: ' + new Date(sessions[0].started_at).toLocaleDateString('ru');
+      'Последняя активность: ' + last.toLocaleDateString('ru', { day:'numeric', month:'long', year:'numeric' });
   }
 
-  // Строим навигацию по эпохам (только те где есть сессии)
   const usedEpochIds = new Set(sessions.map(s => s.epoch_id));
   const relevantEpochs = epochs.filter(e => usedEpochIds.has(e.id));
 
   const epEl = document.getElementById(prefix + '-epochs');
   epEl.innerHTML = '';
-
-  // Кнопка "Все"
   const allBtn = document.createElement('button');
   allBtn.className = 'epoch-btn active';
-  allBtn.textContent = 'Все эпохи';
+  allBtn.textContent = 'Все';
   allBtn.onclick = () => {
-    document.querySelectorAll('#' + prefix + '-epochs .epoch-btn').forEach(b => b.classList.remove('active'));
+    epEl.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
     allBtn.classList.add('active');
     renderContent(type, null, sessions, catches, epochs, groups, prefix);
   };
@@ -369,7 +531,7 @@ async function loadPage(type) {
     btn.textContent = sk.join(' ') || 'Эпоха ' + ep.id;
     btn.title = 'С ' + new Date(ep.started_at).toLocaleDateString('ru');
     btn.onclick = () => {
-      document.querySelectorAll('#' + prefix + '-epochs .epoch-btn').forEach(b => b.classList.remove('active'));
+      epEl.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderContent(type, ep.id, sessions, catches, epochs, groups, prefix);
     };
@@ -382,18 +544,16 @@ async function loadPage(type) {
 // ── RENDER ────────────────────────────────────────────────────
 function renderContent(type, epochId, allSessions, allCatches, epochs, groups, prefix) {
   const isDive = type === 'diving';
-  // Фильтруем по эпохе
   const sessions = epochId ? allSessions.filter(s => s.epoch_id === epochId) : allSessions;
   const sessIds  = new Set(sessions.map(s => s.id));
   const catches  = allCatches.filter(c => sessIds.has(c.session_id));
-
   const el = document.getElementById(prefix + '-content');
+
   if (!sessions.length) {
-    el.innerHTML = '<div class="loading" style="color:var(--muted)">Нет данных для этой эпохи</div>';
+    el.innerHTML = '<div class="loading" style="color:var(--muted)">Нет данных</div>';
     return;
   }
 
-  // Считаем статистику
   const totalAttempts = sessions.reduce((s, x) => s + (x.total_attempts || 0), 0);
   const catchById = {};
   catches.forEach(c => { catchById[c.item_id] = (catchById[c.item_id] || 0) + 1; });
@@ -405,87 +565,100 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
     totalCaught += groupCounts[g];
   });
   const pust = totalAttempts - totalCaught;
+  const successRate = totalAttempts ? ((totalCaught / totalAttempts) * 100).toFixed(1) : '0.0';
 
-  // Специальные для нырков: комочки
-  const clumpFish  = CLUMP_FISH_IDS.reduce((s, id)  => s + (catchById[id] || 0), 0);
-  const clumpShell = CLUMP_SHELL_IDS.reduce((s, id) => s + (catchById[id] || 0), 0);
-  // Специальные для дупла: гнёзда
-  const nestEgg    = EGG_IDS.reduce((s, id)     => s + (catchById[id] || 0), 0);
-  const nestFeather= FEATHER_IDS.reduce((s, id) => s + (catchById[id] || 0), 0);
-  // Шанс отравиться (дупло)
-  const poisoned   = POISON_IDS.reduce((s, id) => s + (catchById[id] || 0), 0);
-  const poisonPct  = totalAttempts ? (poisoned / totalAttempts * 100).toFixed(2) : '0.00';
+  const clumpFish  = CLUMP_FISH.reduce((s,id) => s + (catchById[id]||0), 0);
+  const clumpShell = CLUMP_SHELL.reduce((s,id) => s + (catchById[id]||0), 0);
+  const nestEgg    = EGG_IDS.reduce((s,id) => s + (catchById[id]||0), 0);
+  const nestFeather= FEATHER_IDS.reduce((s,id) => s + (catchById[id]||0), 0);
+  const poisoned   = POISON_IDS.reduce((s,id) => s + (catchById[id]||0), 0);
+  const poisonPct  = totalAttempts ? (poisoned/totalAttempts*100).toFixed(2) : '0.00';
 
-  // Навыки текущей эпохи
-  const epoch = epochId ? epochs.find(e => e.id === epochId) : (epochs.length ? getLastEpochWithSessions(epochs, sessions) : null);
+  const epoch = epochId
+    ? epochs.find(e => e.id === epochId)
+    : (sessions.length ? epochs.find(e => e.id === sessions[0].epoch_id) : null);
 
-  // Уникальные предметы для ряда с картинками (отсортировать по частоте)
-  const itemsSorted = Object.entries(catchById).sort((a, b) => b[1] - a[1]);
+  const itemsSorted = Object.entries(catchById).sort((a,b) => b[1]-a[1]);
 
-  // ── HTML ──
+  // Навыки компактно: только нужные для типа
+  const skillHtml = epoch ? (() => {
+    const chips = [];
+    if (epoch.zu) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.zu}ЗУ</span>`);
+    if (isDive && epoch.pu) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.pu}ПУ</span>`);
+    if (!isDive && epoch.un) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.un}УН</span>`);
+    if (!isDive && epoch.lu) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.lu}ЛУ</span>`);
+    return chips.join(' ');
+  })() : '—';
+
+  // Метрики: определяем самую частую группу
+  const topGroup = Object.entries(groupCounts).sort((a,b)=>b[1]-a[1])[0];
+  const topPct = totalAttempts ? (topGroup[1]/totalAttempts*100).toFixed(1) : '0';
+
   el.innerHTML = `
-    <!-- Ряд предметов -->
-    <div class="items-row fu">
-      <div class="items-row-inner" id="${prefix}-items-row"></div>
-      <div class="items-total-row">
-        <span class="items-total-label">Всего попыток</span>
-        <span class="items-total-val">${totalAttempts}</span>
+    <!-- Метрики -->
+    <div class="metrics-row fu">
+      <div class="metric-card mc-grey">
+        <div class="metric-label">Всего нырков</div>
+        <div class="metric-val">${totalAttempts}</div>
+        <div class="metric-sub">${sessions.length} сессий</div>
       </div>
+      <div class="metric-card mc-blue">
+        <div class="metric-label">Успешных</div>
+        <div class="metric-val">${totalCaught} <span class="pct">${successRate}%</span></div>
+        <div class="metric-sub">что-то нашёл</div>
+      </div>
+      <div class="metric-card mc-grey">
+        <div class="metric-label">Пустых</div>
+        <div class="metric-val">${pust} <span class="pct">${totalAttempts?(pust/totalAttempts*100).toFixed(1):0}%</span></div>
+        <div class="metric-sub">без улова</div>
+      </div>
+      <div class="metric-card mc-green">
+        <div class="metric-label">Лучшая группа</div>
+        <div class="metric-val">${topGroup[0]}</div>
+        <div class="metric-sub">${topGroup[1]} шт · ${topPct}%</div>
+      </div>
+      <div class="metric-card mc-teal">
+        <div class="metric-label">Навыки</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${skillHtml}</div>
+      </div>
+      ${isDive
+        ? `<div class="metric-card mc-gold">
+             <div class="metric-label">Комочки</div>
+             <div class="metric-val">${clumpFish+clumpShell}</div>
+             <div class="metric-sub">🐟 ${clumpFish} · 🐚 ${clumpShell}</div>
+           </div>`
+        : `<div class="metric-card mc-red">
+             <div class="metric-label">Отравлений</div>
+             <div class="metric-val">${poisoned} <span class="pct">${poisonPct}%</span></div>
+             <div class="metric-sub">пауки</div>
+           </div>`
+      }
     </div>
 
-    <!-- Сводная таблица -->
-    <div class="stat-block fu d1">
-      <div class="stat-block-title">${isDive ? 'Статистика нырков' : 'Статистика осмотров'}</div>
-      <table class="stat-table">
-        <thead><tr>
-          <th>Всего</th>
-          ${Object.keys(groups).map(g => `<th>${g}</th>`).join('')}
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td>${totalAttempts}</td>
-            ${Object.keys(groups).map(g => `<td>${groupCounts[g] || 0}</td>`).join('')}
-          </tr>
-          <tr class="pct"><th colspan="${Object.keys(groups).length + 1}" style="background:rgba(255,255,255,.03);color:var(--muted);font-size:10px;letter-spacing:1px;text-align:center;padding:6px">В процентах</th></tr>
-          <tr class="pct">
-            <td style="font-size:13px">${totalAttempts ? (pust/totalAttempts*100).toFixed(2) : 0}%<br><span style="font-size:10px;color:var(--muted)">пусто</span></td>
-            ${Object.keys(groups).map(g => `<td>${totalAttempts ? (groupCounts[g]/totalAttempts*100).toFixed(2) : 0}%</td>`).join('')}
-          </tr>
-        </tbody>
-      </table>
+    <!-- Предметы -->
+    <div class="items-block fu d1">
+      <div class="items-inner" id="${prefix}-items-row"></div>
     </div>
 
-    <!-- Специальные + Навыки -->
-    <div class="side-row fu d1">
-      <div class="side-card">
-        <div class="side-card-title">${isDive ? 'Комочки' : 'Гнёзда'}</div>
-        <div class="side-mini-table">
-          ${isDive
-            ? `<div class="side-mini-col"><div class="side-mini-label">Мальки</div><div class="side-mini-val">${clumpFish}</div></div>
-               <div class="side-mini-col"><div class="side-mini-label">Ракушки</div><div class="side-mini-val">${clumpShell}</div></div>`
-            : `<div class="side-mini-col"><div class="side-mini-label">Яйцо</div><div class="side-mini-val">${nestEgg}</div></div>
-               <div class="side-mini-col"><div class="side-mini-label">Перо</div><div class="side-mini-val">${nestFeather}</div></div>`
-          }
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:10px;flex:1">
-        <div class="skills-card">
-          <div class="skills-title">Навыки${epochId ? '' : ' (последняя эпоха)'}</div>
-          <div class="skills-chips">${epoch ? renderSkills(isDive, epoch) : '<span style="color:var(--muted)">—</span>'}</div>
-        </div>
-        ${!isDive ? `<div class="skills-card"><div class="skills-title">Шанс отравиться</div><div style="font-family:Philosopher,serif;font-size:22px;color:var(--red2)">${poisonPct}%</div></div>` : ''}
-      </div>
-    </div>
-
-    <!-- Графики -->
-    <div class="charts-row fu d2">
+    <!-- График + Пончик -->
+    <div class="charts-main fu d2">
       <div class="chart-box">
-        <div class="chart-label">Попытки в день (14 дней)</div>
+        <div class="chart-header">
+          <div class="chart-title">Нырки по дням</div>
+          <div class="range-btns" id="${prefix}-range-btns">
+            <button class="range-btn active" data-range="30" onclick="setRange('${prefix}',30,this)">30 дн</button>
+            <button class="range-btn" data-range="90" onclick="setRange('${prefix}',90,this)">3 мес</button>
+            <button class="range-btn" data-range="all" onclick="setRange('${prefix}','all',this)">Всё время</button>
+          </div>
+        </div>
         <canvas id="${prefix}-chart-days"></canvas>
       </div>
-      <div class="chart-box">
-        <div class="chart-label">Распределение</div>
-        <canvas id="${prefix}-chart-pie"></canvas>
+      <div class="pie-box">
+        <div class="chart-title" style="margin-bottom:12px">Распределение</div>
+        <div class="pie-canvas-wrap">
+          <canvas id="${prefix}-chart-pie"></canvas>
+        </div>
+        <div class="pie-legend" id="${prefix}-pie-legend"></div>
       </div>
     </div>
 
@@ -494,11 +667,10 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
     <div class="sessions-list fu d3" id="${prefix}-sessions"></div>
   `;
 
-  // Заполняем ряд предметов
+  // Предметы
   const itemsRow = document.getElementById(prefix + '-items-row');
   itemsSorted.forEach(([itemId, count]) => {
-    if (CLUMP_FISH_IDS.includes(+itemId) || CLUMP_SHELL_IDS.includes(+itemId) ||
-        EGG_IDS.includes(+itemId) || FEATHER_IDS.includes(+itemId)) return; // в отдельный блок
+    if ([...CLUMP_FISH,...CLUMP_SHELL,...EGG_IDS,...FEATHER_IDS].includes(+itemId)) return;
     const cell = document.createElement('div');
     cell.className = 'item-cell';
     cell.title = NAMES[itemId] || 'ID ' + itemId;
@@ -506,87 +678,163 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
     itemsRow.appendChild(cell);
   });
 
-  // Графики
-  drawDaysChart(prefix, sessions);
-  drawPieChart(prefix, groupCounts, pust, isDive);
+  // Сохраняем данные для перерисовки графика при смене диапазона
+  el._sessions = sessions;
+  el._groupCounts = groupCounts;
+  el._pust = pust;
+  el._isDive = isDive;
 
-  // Сессии
+  drawDaysChart(prefix, sessions, chartRange[prefix] || '30');
+  drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
   renderSessions(prefix, sessions, allCatches, isDive);
 }
 
-function getLastEpochWithSessions(epochs, sessions) {
-  if (!sessions.length) return null;
-  const lastEpochId = sessions[0].epoch_id;
-  return epochs.find(e => e.id === lastEpochId);
+// ── ДИАПАЗОН ГРАФИКА ──────────────────────────────────────────
+function setRange(prefix, range, btn) {
+  document.querySelectorAll('#' + prefix + '-range-btns .range-btn')
+    .forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  chartRange[prefix] = range;
+  const el = document.getElementById(prefix + '-content');
+  drawDaysChart(prefix, el._sessions, range);
 }
 
-function renderSkills(isDive, epoch) {
-  const chips = [];
-  if (epoch.zu) chips.push(`<span class="skill-chip">${epoch.zu}ЗУ</span>`);
-  if (isDive) {
-    if (epoch.pu) chips.push(`<span class="skill-chip">${epoch.pu}ПУ</span>`);
+function drawDaysChart(prefix, sessions, range) {
+  if (!sessions || !sessions.length) return;
+
+  const isAll = range === 'all';
+  const days = isAll ? null : parseInt(range);
+
+  if (isAll) {
+    // Группируем по неделям
+    const byWeek = {};
+    sessions.forEach(s => {
+      const d = new Date(s.started_at);
+      // Начало недели (понедельник)
+      const day = d.getDay() || 7;
+      d.setDate(d.getDate() - day + 1);
+      const key = d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
+      byWeek[key] = (byWeek[key] || 0) + (s.total_attempts || 0);
+    });
+    // Сортируем по дате
+    const sorted = Object.entries(byWeek).sort((a,b) => {
+      const pa = a[0].split('.').reverse().join('-');
+      const pb = b[0].split('.').reverse().join('-');
+      return pa.localeCompare(pb);
+    });
+    _drawBarChart(prefix, sorted.map(x=>x[0]), sorted.map(x=>x[1]));
   } else {
-    if (epoch.un) chips.push(`<span class="skill-chip">${epoch.un}УН</span>`);
-    if (epoch.lu) chips.push(`<span class="skill-chip">${epoch.lu}ЛУ</span>`);
+    // Последние N дней
+    const byDay = {};
+    sessions.forEach(s => {
+      const key = new Date(s.started_at).toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
+      byDay[key] = (byDay[key] || 0) + (s.total_attempts || 0);
+    });
+    const pts = Array.from({ length: days }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (days - 1 - i));
+      const l = d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
+      return { l, v: byDay[l] || 0 };
+    });
+    _drawBarChart(prefix, pts.map(p=>p.l), pts.map(p=>p.v));
   }
-  return chips.join('') || '<span style="color:var(--muted)">—</span>';
 }
 
-function drawDaysChart(prefix, sessions) {
-  const byDay = {};
-  sessions.forEach(s => {
-    const d = new Date(s.started_at).toLocaleDateString('ru', { day: '2-digit', month: '2-digit' });
-    byDay[d] = (byDay[d] || 0) + (s.total_attempts || 0);
-  });
-  const last14 = Array.from({ length: 14 }, (_, i) => {
-    const d = new Date(); d.setDate(d.getDate() - (13 - i));
-    const l = d.toLocaleDateString('ru', { day: '2-digit', month: '2-digit' });
-    return { l, v: byDay[l] || 0 };
-  });
+function _drawBarChart(prefix, labels, data) {
   const id = prefix + '-chart-days';
   if (CH[id]) CH[id].destroy();
-  const lc = prefix === 'div' ? '#4a9eff' : '#4aaa60';
+  const isDiv = prefix === 'div';
+  const color = isDiv ? '#4a8fd4' : '#4a8a5a';
   CH[id] = new Chart(document.getElementById(id), {
-    type: 'line',
-    data: { labels: last14.map(d => d.l), datasets: [{ data: last14.map(d => d.v), borderColor: lc, backgroundColor: lc + '22', pointBackgroundColor: lc, tension: .4, fill: true, pointRadius: 3 }] },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#666', font: { family: 'Martel Sans', size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: '#666', font: { family: 'Martel Sans', size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: color + '55',
+        borderColor: color,
+        borderWidth: 1,
+        borderRadius: 3,
+        hoverBackgroundColor: color + '99',
+      }]
+    },
+    options: {
+      responsive:true,
+      plugins: { legend:{ display:false } },
+      scales: {
+        x: {
+          ticks: { color:'#505870', font:{ family:'DM Sans', size:10 }, maxRotation:45 },
+          grid: { color:'rgba(100,140,200,0.06)' }
+        },
+        y: {
+          ticks: { color:'#505870', font:{ family:'DM Sans', size:10 } },
+          grid: { color:'rgba(100,140,200,0.06)' },
+          beginAtZero:true
+        }
+      }
+    }
   });
 }
 
-function drawPieChart(prefix, groupCounts, pust, isDive) {
-  const labels = [...Object.keys(groupCounts), 'Пусто'];
-  const data   = [...Object.values(groupCounts), pust];
-  const colors = isDive ? DIVE_COLORS : HOL_COLORS;
-  const id = prefix + '-chart-pie';
+function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
+  const labels  = [...Object.keys(groupCounts), 'Пусто'];
+  const data    = [...Object.values(groupCounts), pust];
+  const colors  = isDive ? DIVE_COLORS : HOL_COLORS;
+  const id      = prefix + '-chart-pie';
   if (CH[id]) CH[id].destroy();
+
   CH[id] = new Chart(document.getElementById(id), {
-    type: 'pie',
-    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
-    options: { plugins: { legend: { position: 'bottom', labels: { color: '#666', font: { family: 'Martel Sans', size: 11 }, boxWidth: 12, padding: 8 } } } }
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }] },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: { legend:{ display:false } },
+      cutout: '62%',
+    }
   });
+
+  // Легенда с процентами
+  const legend = document.getElementById(prefix + '-pie-legend');
+  if (!legend) return;
+  legend.innerHTML = labels.map((lbl, i) => {
+    const val = data[i] || 0;
+    const pct = totalAttempts ? (val/totalAttempts*100).toFixed(1) : '0.0';
+    return `<div class="pie-legend-item">
+      <div class="pie-legend-left">
+        <div class="pie-dot" style="background:${colors[i]}"></div>
+        <span class="pie-legend-name">${lbl}</span>
+      </div>
+      <div class="pie-legend-right">
+        <span class="pie-legend-count">${val}</span>
+        <span class="pie-legend-pct">${pct}%</span>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderSessions(prefix, sessions, allCatches, isDive) {
   const el = document.getElementById(prefix + '-sessions');
   if (!sessions.length) { el.innerHTML = '<div class="catch-empty">Нет сессий</div>'; return; }
   const byS = {};
-  allCatches.forEach(c => { if (!byS[c.session_id]) byS[c.session_id] = []; byS[c.session_id].push(c); });
-  el.innerHTML = sessions.slice(0, 40).map(s => {
-    const start = new Date(s.started_at);
-    const end   = s.ended_at ? new Date(s.ended_at) : null;
-    const dateStr = start.toLocaleDateString('ru', { day: 'numeric', month: 'long' });
-    const sT = start.toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
-    const eT = end ? end.toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' }) : '—';
-    const sc = byS[s.id] || [];
-    const bc = isDive ? 'dive' : 'hollow';
-    const bl = isDive ? 'нырки' : 'дупло';
-    const ch = sc.length
+  allCatches.forEach(c => { if(!byS[c.session_id]) byS[c.session_id]=[]; byS[c.session_id].push(c); });
+
+  el.innerHTML = sessions.slice(0, 50).map(s => {
+    const start  = new Date(s.started_at);
+    const end    = s.ended_at ? new Date(s.ended_at) : null;
+    const dateStr= start.toLocaleDateString('ru', { day:'numeric', month:'long' });
+    const sT     = start.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' });
+    const eT     = end ? end.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' }) : '…';
+    const sc     = byS[s.id] || [];
+    const bc     = isDive ? 'dive' : 'hollow';
+    const bl     = isDive ? 'нырки' : 'дупло';
+    const ch     = sc.length
       ? sc.map(c => {
-          const n = c.item_name || NAMES[c.item_id] || 'ID ' + c.item_id;
-          const t = new Date(c.caught_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
+          const n = c.item_name || NAMES[c.item_id] || 'ID '+c.item_id;
+          const t = new Date(c.caught_at).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
           return `<div class="catch-chip"><img src="${IMG(c.item_id)}" onerror="this.style.display='none'">${n}<span class="catch-t">${t}</span></div>`;
         }).join('')
-      : '<span class="catch-empty">Ничего не нашлось</span>';
+      : '<span class="catch-empty">Пусто</span>';
+
     return `<div class="sess">
 <div class="sess-head" onclick="togS(this)">
   <div class="sess-meta">
@@ -595,12 +843,12 @@ function renderSessions(prefix, sessions, allCatches, isDive) {
     <span class="sess-time">${sT} – ${eT}</span>
   </div>
   <div class="sess-stats">
-    <div class="sess-stat"><div class="sess-stat-v">${s.total_attempts || 0}</div><div class="sess-stat-l">попыток</div></div>
+    <div class="sess-stat"><div class="sess-stat-v">${s.total_attempts||0}</div><div class="sess-stat-l">попыток</div></div>
     <div class="sess-stat"><div class="sess-stat-v">${sc.length}</div><div class="sess-stat-l">находок</div></div>
     <span class="sess-arrow">▼</span>
   </div>
 </div>
-<div class="sess-body"><div class="catches-wrap">${ch}</div>${s.note ? `<div style="margin-top:10px;font-size:11px;color:var(--muted)">📝 ${s.note}</div>` : ''}</div>
+<div class="sess-body"><div class="catches-wrap">${ch}</div></div>
 </div>`;
   }).join('');
 }
