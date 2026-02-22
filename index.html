@@ -416,7 +416,7 @@ nav { display: flex; gap: 3px }
 }
 .rbtn:hover { color: var(--paper2); border-color: var(--line2) }
 .rbtn.active { color: var(--sea3); border-color: var(--sea2); background: rgba(58,132,204,0.08) }
-.cbox canvas { max-height: 240px }
+.cbox canvas { max-height: 320px }
 
 /* Donut */
 .pie-wrap {
@@ -885,15 +885,6 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
       }
     </div>
 
-    <!-- Предметы -->
-    <div class="items-strip fu d1">
-      <div class="items-strip-head">
-        <span>Найденные предметы</span>
-        <span style="color:var(--mist2);font-size:10px">(по убыванию)</span>
-      </div>
-      <div class="items-strip-body" id="${prefix}-items-row"></div>
-    </div>
-
     <!-- Графики -->
     <div class="charts-row fu d2">
       <div class="cbox">
@@ -918,24 +909,9 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
     <div class="section-head fu d3">
       <span class="section-head-title">Сессии</span>
       <span class="section-line"></span>
-      <span style="font-size:11px;color:var(--mist2)">${sessions.length}</span>
     </div>
     <div class="sess-list fu d3" id="${prefix}-sessions"></div>
   `;
-
-  // Наполняем предметы
-  const itemsRow = document.getElementById(prefix + '-items-row');
-  const extra = [...CLUMP_FISH,...CLUMP_SHELL,...EGG_IDS,...FEATHER_IDS];
-  Object.entries(catchById)
-    .filter(([id]) => !extra.includes(+id))
-    .sort((a,b) => b[1]-a[1])
-    .forEach(([itemId, count]) => {
-      const cell = document.createElement('div');
-      cell.className = 'item-cell';
-      cell.title = NAMES[itemId] || 'ID ' + itemId;
-      cell.innerHTML = `<img src="${IMG(itemId)}" onerror="this.style.display='none'"><span class="item-count">${count}</span>`;
-      itemsRow.appendChild(cell);
-    });
 
   // Кешируем для setRange
   el._sessions = sessions;
