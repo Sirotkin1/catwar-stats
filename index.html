@@ -4,360 +4,581 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Бортовой Журнал — Сирота</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
 :root {
-  --bg:     #0e1117;
-  --bg1:    #151820;
-  --bg2:    #1c2030;
-  --bg3:    #222840;
-  --border: rgba(100,140,200,0.12);
-  --border2:rgba(100,140,200,0.25);
-  --accent: #4a8fd4;
-  --accent2:#6eb3f7;
-  --gold:   #c8a84b;
-  --gold2:  #e8c870;
-  --teal:   #3ab8a0;
-  --red:    #e05050;
-  --text:   #e8eaf0;
-  --muted:  #7880a0;
-  --muted2: #505870;
-  --water:  #2a5a8a;
-  --water2: #4a8ab0;
-  --moss:   #2a5a3a;
-  --moss2:  #4a8a5a;
+  --ink:      #090c12;
+  --ink1:     #0d1119;
+  --ink2:     #111622;
+  --ink3:     #16202e;
+  --ink4:     #1c2a3a;
+  --line:     rgba(80,140,200,0.10);
+  --line2:    rgba(80,140,200,0.20);
+  --line3:    rgba(80,140,200,0.35);
+  --sea:      #2060a0;
+  --sea2:     #3a84cc;
+  --sea3:     #6ab4f0;
+  --foam:     #8dd4f8;
+  --tide:     #2a9080;
+  --tide2:    #40c0a8;
+  --amber:    #c89040;
+  --amber2:   #e8b860;
+  --coral:    #d04848;
+  --paper:    #e8eaf2;
+  --paper2:   #b0b8cc;
+  --mist:     #6878a0;
+  --mist2:    #485068;
+  --r: 6px;
 }
+
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
 html { scroll-behavior:smooth }
+
 body {
-  background:var(--bg);
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  font-weight:300;
-  min-height:100vh;
-  overflow-x:hidden;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
+
+/* Фоновая текстура — тонкая волновая сетка */
 body::before {
   content:'';
-  position:fixed; inset:0;
+  position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(74,143,212,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 80% 80%, rgba(58,184,160,0.04) 0%, transparent 60%);
-  pointer-events:none; z-index:0;
+    radial-gradient(ellipse 80% 50% at 15% 0%,   rgba(32,96,160,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 80% at 90% 90%,  rgba(42,144,128,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 30% at 60% 40%,  rgba(32,60,100,0.05) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
 }
 
-/* ── HEADER ── */
+/* Зернистость */
+body::after {
+  content:'';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  pointer-events: none; z-index: 0; opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
 header {
-  background:rgba(14,17,23,0.85);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border2);
-  position:sticky; top:0; z-index:100;
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(9,12,18,0.82);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--line2);
 }
 .header-inner {
-  max-width:1280px; margin:0 auto;
-  padding:0 32px;
-  display:flex; align-items:center; justify-content:space-between; height:58px;
+  max-width: 1320px; margin: 0 auto;
+  padding: 0 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
 }
 .logo {
-  font-family:'Playfair Display',serif;
-  font-size:17px; color:var(--accent2);
-  cursor:pointer; background:none; border:none;
-  font-style:italic; letter-spacing:0.3px;
+  display: flex; align-items: center; gap: 10px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 400; color: var(--paper);
+  letter-spacing: 0.2px;
+  transition: color .2s;
 }
-.logo span { color:var(--muted); font-style:normal; font-size:13px; margin-left:8px; }
-nav { display:flex; gap:2px }
+.logo:hover { color: var(--foam) }
+.logo-paw {
+  width: 28px; height: 28px;
+  background: var(--ink3);
+  border: 1px solid var(--line2);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.logo-sep { color: var(--mist2); font-style: italic; font-size: 14px; margin-left: 4px }
+
+nav { display: flex; gap: 3px }
 .nb {
-  padding:6px 18px;
-  border:1px solid transparent; border-radius:6px;
-  background:none;
-  font-family:'DM Sans',sans-serif; font-size:13px;
-  color:var(--muted); cursor:pointer;
-  transition:all .18s;
+  padding: 5px 16px;
+  border: 1px solid transparent; border-radius: 5px;
+  background: none;
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 300;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--mist); cursor: pointer;
+  transition: all .18s;
 }
-.nb:hover { color:var(--text); border-color:var(--border) }
+.nb:hover { color: var(--paper2); border-color: var(--line) }
 .nb.active {
-  color:var(--accent2); border-color:var(--border2);
-  background:rgba(74,143,212,0.08);
-  font-weight:500;
+  color: var(--foam);
+  border-color: var(--line3);
+  background: rgba(58,132,204,0.08);
+  font-weight: 400;
 }
 
-/* ── PAGES ── */
-.page { display:none } .page.active { display:block }
+/* ═══════════════════════════════════════════════
+   PAGES
+═══════════════════════════════════════════════ */
+.page { display: none; position: relative; z-index: 1 }
+.page.active { display: block }
 
-/* ── HOME ── */
+/* ═══════════════════════════════════════════════
+   HOME
+═══════════════════════════════════════════════ */
 .home-wrap {
-  max-width:860px; margin:0 auto;
-  padding:80px 32px 100px; text-align:center;
-  position:relative; z-index:1;
+  max-width: 1000px; margin: 0 auto;
+  padding: 96px 36px 120px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
 }
-.home-eyebrow {
-  font-size:10px; letter-spacing:4px; text-transform:uppercase;
-  color:var(--muted); margin-bottom:20px;
+
+.home-kicker {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--mist); margin-bottom: 28px;
+}
+.home-kicker::before,
+.home-kicker::after {
+  content:''; flex: 1; max-width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mist2));
+}
+.home-kicker::after { background: linear-gradient(90deg, var(--mist2), transparent) }
+
+.home-hero {
+  margin-bottom: 28px;
 }
 .home-title {
-  font-family:'Playfair Display',serif;
-  font-size:clamp(36px,5vw,60px); line-height:1.1;
-  color:var(--text); margin-bottom:18px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 8vw, 92px);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--paper);
+  letter-spacing: -1px;
 }
-.home-title em { color:var(--accent2); font-style:italic }
+.home-title em {
+  font-style: italic;
+  color: transparent;
+  background: linear-gradient(135deg, var(--sea3) 0%, var(--foam) 50%, var(--tide2) 100%);
+  -webkit-background-clip: text; background-clip: text;
+}
+
+.home-rule {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--line3), transparent);
+  margin: 28px auto;
+}
+
 .home-desc {
-  font-size:14px; line-height:1.9; color:var(--muted);
-  max-width:480px; margin:0 auto 60px;
+  font-size: 14px; line-height: 2; color: var(--mist);
+  max-width: 420px; margin: 0 auto 64px;
+  font-weight: 300;
 }
+
+/* Карточки */
 .cards {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px; max-width:640px; margin:0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; width: 100%; max-width: 600px;
 }
 .card {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:12px; padding:28px;
-  cursor:pointer; transition:all .25s; text-align:left;
-  position:relative; overflow:hidden;
+  position: relative; overflow: hidden;
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 32px 28px;
+  cursor: pointer;
+  transition: transform .3s cubic-bezier(.2,.8,.3,1), border-color .3s, box-shadow .3s;
+  text-align: left;
 }
 .card::before {
-  content:''; position:absolute; inset:0;
-  opacity:0; transition:opacity .25s;
+  content:''; position: absolute; inset: 0;
+  opacity: 0; transition: opacity .3s;
 }
-.card.water::before { background:linear-gradient(135deg,rgba(42,90,138,0.15),transparent 60%) }
-.card.moss::before  { background:linear-gradient(135deg,rgba(42,90,58,0.15),transparent 60%) }
-.card::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:2px; opacity:0; transition:opacity .25s;
+.card.c-sea::before  { background: radial-gradient(ellipse at 0% 100%, rgba(32,96,160,.18) 0%, transparent 60%) }
+.card.c-tide::before { background: radial-gradient(ellipse at 0% 100%, rgba(42,144,128,.14) 0%, transparent 60%) }
+.card-glow {
+  position: absolute; bottom: -40px; right: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  opacity: 0; transition: opacity .4s;
+  filter: blur(40px);
 }
-.card.water::after { background:linear-gradient(90deg,var(--water),var(--water2)) }
-.card.moss::after  { background:linear-gradient(90deg,var(--moss),var(--moss2)) }
-.card:hover { transform:translateY(-3px); border-color:var(--border2); box-shadow:0 12px 40px rgba(0,0,0,.5) }
-.card:hover::after,.card:hover::before { opacity:1 }
-.card-icon { font-size:28px; margin-bottom:14px; display:block }
-.card-title { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:6px; color:var(--text) }
-.card-desc { font-size:12px; color:var(--muted2); line-height:1.7; margin-bottom:16px }
-.card-arrow { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); font-weight:500 }
+.c-sea  .card-glow { background: var(--sea2) }
+.c-tide .card-glow { background: var(--tide) }
+.card:hover { transform: translateY(-4px); border-color: var(--line3); box-shadow: 0 20px 60px rgba(0,0,0,.6) }
+.card:hover::before { opacity: 1 }
+.card:hover .card-glow { opacity: 0.5 }
 
-/* ── STATS PAGE ── */
-.sp { max-width:1280px; margin:0 auto; padding:40px 32px 80px; position:relative; z-index:1 }
-.sp-head {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:28px; flex-wrap:wrap; gap:12px;
+.card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 20px;
+  border: 1px solid var(--line);
 }
-.sp-title-group {}
-.sp-title { font-family:'Playfair Display',serif; font-size:28px; color:var(--text) }
-.sp-sub { font-size:12px; color:var(--muted); margin-top:3px }
+.c-sea  .card-icon { background: rgba(32,96,160,.15) }
+.c-tide .card-icon { background: rgba(42,144,128,.12) }
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 400;
+  color: var(--paper); margin-bottom: 8px;
+}
+.card-desc {
+  font-size: 12px; color: var(--mist); line-height: 1.8;
+  margin-bottom: 24px;
+}
+.card-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  font-weight: 400;
+}
+.c-sea  .card-cta { color: var(--sea3) }
+.c-tide .card-cta { color: var(--tide2) }
+
+/* ═══════════════════════════════════════════════
+   STATS WRAPPER
+═══════════════════════════════════════════════ */
+.sp {
+  max-width: 1320px; margin: 0 auto;
+  padding: 44px 36px 100px;
+}
+.sp-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+}
+.sp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 300;
+  color: var(--paper); letter-spacing: -0.5px;
+}
+.sp-title em { font-style: italic; color: var(--foam) }
+.sp-sub {
+  font-size: 11px; color: var(--mist2); margin-top: 4px;
+  letter-spacing: 0.3px;
+}
+.sp-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--mist); padding: 6px 14px;
+  border: 1px solid var(--line); border-radius: 20px;
+  background: var(--ink2);
+}
+.sp-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--tide2); display: inline-block; animation: pulse 2s ease infinite }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
 /* Эпохи */
-.epochs-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px }
+.epochs-bar {
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap; margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.epochs-label {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--mist2); margin-right: 4px;
+}
 .epoch-btn {
-  padding:5px 14px; border:1px solid var(--border); border-radius:6px;
-  background:var(--bg1); color:var(--muted);
-  font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; transition:all .18s;
+  padding: 4px 14px;
+  border: 1px solid var(--line); border-radius: 20px;
+  background: var(--ink2);
+  font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 300;
+  color: var(--mist2); cursor: pointer;
+  transition: all .18s;
 }
-.epoch-btn:hover { border-color:var(--border2); color:var(--text) }
-.epoch-btn.active { border-color:var(--accent); color:var(--accent2); background:rgba(74,143,212,0.1) }
+.epoch-btn:hover { border-color: var(--line2); color: var(--paper2) }
+.epoch-btn.active {
+  border-color: var(--sea2); color: var(--sea3);
+  background: rgba(58,132,204,0.08);
+  font-weight: 400;
+}
 
-/* ── МЕТРИКИ (заменяют блок "всего попыток") ── */
+/* ═══════════════════════════════════════════════
+   МЕТРИКИ
+═══════════════════════════════════════════════ */
 .metrics-row {
-  display:grid;
+  display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap:12px; margin-bottom:20px;
+  gap: 10px; margin-bottom: 16px;
 }
-.metric-card {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:10px; padding:14px 16px;
-  position:relative; overflow:hidden;
-  transition:border-color .18s;
+.mcard {
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+  transition: border-color .2s, transform .2s;
+  cursor: default;
 }
-.metric-card:hover { border-color:var(--border2) }
-.metric-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+.mcard:hover { border-color: var(--line2); transform: translateY(-1px) }
+.mcard-stripe {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  border-radius: 10px 10px 0 0;
 }
-.mc-blue::before   { background:linear-gradient(90deg,#4a8fd4,#6eb3f7) }
-.mc-green::before  { background:linear-gradient(90deg,#3a8a50,#5ab870) }
-.mc-red::before    { background:linear-gradient(90deg,#c04040,#e06060) }
-.mc-teal::before   { background:linear-gradient(90deg,#3ab8a0,#5ad8c0) }
-.mc-gold::before   { background:linear-gradient(90deg,#b89040,#e8c870) }
-.mc-grey::before   { background:linear-gradient(90deg,#505870,#7880a0) }
-.metric-label {
-  font-size:9px; letter-spacing:2px; text-transform:uppercase;
-  color:var(--muted); margin-bottom:8px;
+.ms-blue  { background: linear-gradient(90deg, #3060c0, var(--sea3)) }
+.ms-teal  { background: linear-gradient(90deg, var(--tide), var(--tide2)) }
+.ms-amber { background: linear-gradient(90deg, #a07020, var(--amber2)) }
+.ms-coral { background: linear-gradient(90deg, #a03030, var(--coral)) }
+.ms-mist  { background: linear-gradient(90deg, var(--mist2), var(--mist)) }
+.ms-sea   { background: linear-gradient(90deg, #204080, var(--sea2)) }
+
+.mcard-label {
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--mist2); margin-bottom: 10px;
 }
-.metric-val {
-  font-family:'Playfair Display',serif;
-  font-size:26px; color:var(--text); line-height:1;
+.mcard-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px; font-weight: 300;
+  color: var(--paper); line-height: 1;
 }
-.metric-sub {
-  font-size:10px; color:var(--muted); margin-top:4px;
+.mcard-val .unit {
+  font-size: 14px; color: var(--mist); margin-left: 3px;
+  font-family: 'Outfit', sans-serif; font-weight: 300;
 }
-.metric-val .pct {
-  font-size:13px; color:var(--muted); margin-left:3px; font-family:'DM Sans',sans-serif;
+.mcard-sub {
+  font-size: 10px; color: var(--mist2); margin-top: 6px;
+}
+.mcard-skills {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;
+}
+.skill-chip {
+  font-size: 11px; color: var(--sea3);
+  background: rgba(58,132,204,0.10);
+  border: 1px solid rgba(58,132,204,0.22);
+  padding: 2px 9px; border-radius: 4px;
 }
 
-/* ── ПРЕДМЕТЫ ── */
-.items-block {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:10px; overflow:hidden; margin-bottom:20px;
+/* ═══════════════════════════════════════════════
+   ПРЕДМЕТЫ
+═══════════════════════════════════════════════ */
+.items-strip {
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
 }
-.items-inner {
-  display:flex; align-items:flex-end;
-  padding:14px 16px 0; gap:6px; flex-wrap:wrap; min-height:72px;
-  border-bottom:1px solid var(--border);
+.items-strip-head {
+  padding: 10px 18px;
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--mist2); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 8px;
+}
+.items-strip-body {
+  display: flex; align-items: flex-end; flex-wrap: wrap;
+  gap: 4px; padding: 12px 14px 14px;
+  min-height: 72px;
 }
 .item-cell {
-  display:flex; flex-direction:column; align-items:center;
-  gap:4px; padding:0 4px; min-width:44px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 6px 8px; border-radius: 7px;
+  background: var(--ink3); border: 1px solid var(--line);
+  transition: border-color .18s, background .18s;
+  cursor: default;
+  min-width: 48px;
 }
-.item-cell img { width:34px; height:34px; object-fit:contain; filter:drop-shadow(0 1px 4px rgba(0,0,0,.6)) }
+.item-cell:hover { border-color: var(--line2); background: var(--ink4) }
+.item-cell img { width: 30px; height: 30px; object-fit: contain }
 .item-count {
-  font-family:'Playfair Display',serif; font-size:13px;
-  color:var(--gold2); padding:2px 0 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; color: var(--amber2);
 }
 
-/* ── ОСНОВНОЙ БЛОК: ГРАФИК + ПОНЧИК ── */
-.charts-main {
-  display:grid; grid-template-columns:1fr 340px;
-  gap:16px; margin-bottom:20px;
+/* ═══════════════════════════════════════════════
+   CHARTS
+═══════════════════════════════════════════════ */
+.charts-row {
+  display: grid; grid-template-columns: 1fr 320px;
+  gap: 12px; margin-bottom: 12px;
 }
-.chart-box {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:10px; padding:20px 24px;
+.cbox {
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 22px 24px;
 }
-.chart-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:16px; flex-wrap:wrap; gap:8px;
+.cbox-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 8px;
 }
-.chart-title {
-  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+.cbox-title {
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--mist2);
 }
-.range-btns { display:flex; gap:4px }
-.range-btn {
-  padding:3px 10px; border:1px solid var(--border); border-radius:4px;
-  background:none; font-family:'DM Sans',sans-serif; font-size:11px;
-  color:var(--muted); cursor:pointer; transition:all .15s;
+.range-row { display: flex; gap: 3px }
+.rbtn {
+  padding: 3px 11px;
+  border: 1px solid var(--line); border-radius: 4px;
+  background: none;
+  font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 300;
+  color: var(--mist2); cursor: pointer; transition: all .15s;
+  letter-spacing: 0.5px;
 }
-.range-btn:hover { color:var(--text); border-color:var(--border2) }
-.range-btn.active { color:var(--accent2); border-color:var(--accent); background:rgba(74,143,212,0.1) }
-.chart-box canvas { max-height:260px }
+.rbtn:hover { color: var(--paper2); border-color: var(--line2) }
+.rbtn.active { color: var(--sea3); border-color: var(--sea2); background: rgba(58,132,204,0.08) }
+.cbox canvas { max-height: 240px }
 
-/* Пончик со статистикой */
-.pie-box {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:10px; padding:20px 24px;
-  display:flex; flex-direction:column;
+/* Donut */
+.pie-wrap {
+  position: relative; min-height: 170px; margin-bottom: 14px;
 }
-.pie-canvas-wrap { position:relative; flex:1; min-height:180px; margin-bottom:12px }
-.pie-legend { display:flex; flex-direction:column; gap:6px }
-.pie-legend-item {
-  display:flex; align-items:center; justify-content:space-between; gap:8px;
+.pie-legend { display: flex; flex-direction: column; gap: 5px }
+.pleg-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
 }
-.pie-legend-left { display:flex; align-items:center; gap:7px }
-.pie-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0 }
-.pie-legend-name { font-size:11px; color:var(--muted) }
-.pie-legend-right { display:flex; align-items:center; gap:8px }
-.pie-legend-count { font-size:11px; color:var(--text); font-weight:500 }
-.pie-legend-pct {
-  font-size:10px; color:var(--muted2);
-  background:var(--bg2); padding:1px 6px;
-  border-radius:4px; min-width:44px; text-align:right;
+.pleg-item:last-child { border: none }
+.pleg-left { display: flex; align-items: center; gap: 7px }
+.pleg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0 }
+.pleg-name { font-size: 11px; color: var(--mist) }
+.pleg-right { display: flex; align-items: center; gap: 8px }
+.pleg-n { font-size: 12px; color: var(--paper2); font-weight: 400 }
+.pleg-pct {
+  font-size: 10px; color: var(--mist2);
+  min-width: 40px; text-align: right;
 }
 
-/* ── КОМОЧКИ/ГНЁЗДА (компактно под графиком) ── */
-.bottom-row {
-  display:grid; grid-template-columns:auto 1fr;
-  gap:12px; margin-bottom:20px; align-items:start;
+/* ═══════════════════════════════════════════════
+   СЕКЦИИ
+═══════════════════════════════════════════════ */
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin: 36px 0 16px;
 }
-.extras-card {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:10px; padding:14px 20px;
-  display:flex; gap:24px; align-items:center;
+.section-head-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--paper); white-space: nowrap;
+  letter-spacing: -0.2px;
 }
-.extra-item { text-align:center }
-.extra-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted2); margin-bottom:6px }
-.extra-val { font-family:'Playfair Display',serif; font-size:22px; color:var(--gold2) }
-.extra-name { font-size:9px; color:var(--muted2); margin-top:2px }
+.section-line { flex: 1; height: 1px; background: var(--line) }
 
-/* Яд (дупло) */
-.poison-card {
-  background:var(--bg1); border:1px solid rgba(200,60,60,0.2);
-  border-radius:10px; padding:14px 20px;
-  display:flex; align-items:center; gap:16px;
-}
-.poison-pct { font-family:'Playfair Display',serif; font-size:28px; color:var(--red) }
-.poison-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted) }
-
-/* ── СЕССИИ ── */
-.section-title {
-  font-family:'Playfair Display',serif; font-size:18px;
-  color:var(--text); margin:32px 0 14px;
-  display:flex; align-items:center; gap:12px;
-}
-.section-title::after { content:''; flex:1; height:1px; background:var(--border) }
-.sessions-list { display:flex; flex-direction:column; gap:8px }
+/* ═══════════════════════════════════════════════
+   СЕССИИ
+═══════════════════════════════════════════════ */
+.sess-list { display: flex; flex-direction: column; gap: 6px }
 .sess {
-  background:var(--bg1); border:1px solid var(--border);
-  border-radius:8px; overflow:hidden; transition:border-color .18s;
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: 8px; overflow: hidden;
+  transition: border-color .2s;
 }
-.sess:hover { border-color:var(--border2) }
+.sess:hover { border-color: var(--line2) }
+
 .sess-head {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:11px 16px; cursor:pointer; user-select:none; gap:12px; flex-wrap:wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  cursor: pointer; user-select: none;
+  gap: 12px; flex-wrap: wrap;
 }
-.sess-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap }
-.sess-badge {
-  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
-  padding:2px 8px; border-radius:4px;
+.sess-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap }
+.sess-type {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 3px; font-weight: 400;
 }
-.sess-badge.dive   { background:rgba(42,90,138,.25); color:var(--water2) }
-.sess-badge.hollow { background:rgba(42,90,58,.25);  color:var(--moss2) }
-.sess-date { font-size:12px; color:var(--muted) }
-.sess-time { font-size:13px; font-weight:500; color:var(--text) }
-.sess-stats { display:flex; gap:20px; flex-shrink:0; align-items:center }
-.sess-stat { text-align:right }
-.sess-stat-v { font-family:'Playfair Display',serif; font-size:18px; color:var(--accent2) }
-.sess-stat-l { font-size:9px; color:var(--muted); letter-spacing:.5px }
-.sess-arrow { color:var(--muted); font-size:10px; transition:transform .18s; flex-shrink:0 }
-.sess-arrow.open { transform:rotate(180deg) }
-.sess-body { padding:12px 16px; display:none; border-top:1px solid var(--border) }
-.sess-body.open { display:block }
-.catches-wrap { display:flex; flex-wrap:wrap; gap:6px }
+.st-dive   { background: rgba(32,96,160,.18); color: var(--sea3); border: 1px solid rgba(58,132,204,.2) }
+.st-hollow { background: rgba(42,144,128,.15); color: var(--tide2); border: 1px solid rgba(64,192,168,.2) }
+.sess-date { font-size: 11px; color: var(--mist) }
+.sess-time { font-size: 13px; color: var(--paper2); font-weight: 400 }
+
+.sess-right { display: flex; align-items: center; gap: 24px; flex-shrink: 0 }
+.sess-stat { text-align: right }
+.sess-stat-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 300; color: var(--sea3); line-height: 1;
+}
+.sess-stat-l { font-size: 9px; color: var(--mist2); letter-spacing: 0.5px }
+.sess-chevron {
+  width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--mist2); font-size: 9px;
+  transition: transform .2s;
+}
+.sess-chevron.open { transform: rotate(180deg) }
+
+.sess-body {
+  display: none;
+  padding: 12px 18px 14px;
+  border-top: 1px solid var(--line);
+  background: rgba(9,12,18,.4);
+}
+.sess-body.open { display: block }
+.catches-row { display: flex; flex-wrap: wrap; gap: 5px }
 .catch-chip {
-  display:flex; align-items:center; gap:5px;
-  padding:3px 10px; border:1px solid var(--border);
-  border-radius:14px; background:var(--bg2); font-size:11px; color:var(--text);
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px;
+  background: var(--ink3); border: 1px solid var(--line);
+  border-radius: 20px; font-size: 11px; color: var(--paper2);
+  transition: border-color .15s;
 }
-.catch-chip img { width:16px; height:16px; object-fit:contain }
-.catch-t { font-size:9px; color:var(--muted); margin-left:2px }
-.catch-empty { font-size:12px; color:var(--muted); font-style:italic }
+.catch-chip:hover { border-color: var(--line2) }
+.catch-chip img { width: 15px; height: 15px; object-fit: contain }
+.catch-t { font-size: 9px; color: var(--mist2); margin-left: 2px }
+.catch-empty { font-size: 12px; color: var(--mist2); font-style: italic }
 
-/* ── UTILITY ── */
-.loading { text-align:center; padding:60px; color:var(--muted); font-style:italic; font-size:13px }
-.loading span::after { content:'.'; animation:ld 1s steps(3,end) infinite }
-@keyframes ld { 0%{content:'.'}33%{content:'..'}66%{content:'...'} }
+/* ═══════════════════════════════════════════════
+   UTIL
+═══════════════════════════════════════════════ */
+.loading-state {
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px 32px; color: var(--mist2);
+  font-size: 13px; letter-spacing: 1px;
+}
+.loading-dots::after {
+  content:'.'; animation: dots 1.2s steps(3,end) infinite;
+}
+@keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+
+/* Анимация появления */
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.fu  { animation: fadeUp .5s cubic-bezier(.3,.9,.4,1) both }
+.d1  { animation-delay: .08s }
+.d2  { animation-delay: .16s }
+.d3  { animation-delay: .24s }
+.d4  { animation-delay: .32s }
+
 footer {
-  border-top:1px solid var(--border); padding:20px;
-  text-align:center; font-size:11px; color:var(--muted2);
-  position:relative; z-index:1;
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--line);
+  padding: 20px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px;
 }
-footer a { color:var(--muted2); text-decoration:none }
-footer a:hover { color:var(--muted) }
+footer p { font-size: 11px; color: var(--mist2) }
+footer a { color: var(--mist); text-decoration: none; transition: color .15s }
+footer a:hover { color: var(--paper2) }
 
-@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-.fu { animation:fu .4s ease both }
-.d1 { animation-delay:.07s } .d2 { animation-delay:.14s } .d3 { animation-delay:.21s }
-
-@media(max-width:900px) {
-  .charts-main { grid-template-columns:1fr }
-  .metrics-row { grid-template-columns:repeat(3,1fr) }
-  .bottom-row { grid-template-columns:1fr }
-  .header-inner { padding:0 16px }
-  .sp { padding:28px 16px 60px }
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .metrics-row { grid-template-columns: repeat(3, 1fr) }
+  .charts-row  { grid-template-columns: 1fr }
 }
-@media(max-width:520px) {
-  .metrics-row { grid-template-columns:repeat(2,1fr) }
+@media (max-width: 700px) {
+  .header-inner { padding: 0 16px }
+  .sp { padding: 28px 16px 80px }
+  .home-wrap { padding: 60px 20px 80px }
+  .cards { grid-template-columns: 1fr }
+  .metrics-row { grid-template-columns: repeat(2, 1fr) }
+  footer { padding: 16px }
+}
+@media (max-width: 480px) {
+  .metrics-row { grid-template-columns: 1fr 1fr }
 }
 </style>
 </head>
 <body>
+
+<!-- ══ HEADER ══════════════════════════════════ -->
 <header>
   <div class="header-inner">
-    <button class="logo" onclick="showPage('home')">🐾 Бортовой Журнал <span>/ Сирота</span></button>
+    <button class="logo" onclick="showPage('home')">
+      <span class="logo-paw">🐾</span>
+      Бортовой Журнал
+      <span class="logo-sep">/ Сирота</span>
+    </button>
     <nav>
       <button class="nb active" data-page="home">Главная</button>
       <button class="nb" data-page="diving">Нырки</button>
@@ -366,59 +587,85 @@ footer a:hover { color:var(--muted) }
   </div>
 </header>
 
-<!-- HOME -->
+<!-- ══ HOME ════════════════════════════════════ -->
 <div id="page-home" class="page active">
   <div class="home-wrap">
-    <div class="home-eyebrow fu">Catwar.net · cw3 · личная статистика</div>
-    <h1 class="home-title fu d1">Журнал<br><em>Сироты</em></h1>
-    <p class="home-desc fu d2">Автоматический дневник ныряний и осмотров дупла. Данные собираются в реальном времени и разбиты по эпохам навыков.</p>
+    <div class="home-kicker fu">catwar.net · cw3 · личная статистика</div>
+
+    <div class="home-hero fu d1">
+      <h1 class="home-title">Журнал<br><em>Сироты</em></h1>
+    </div>
+
+    <div class="home-rule fu d2"></div>
+
+    <p class="home-desc fu d2">
+      Автоматический дневник ныряний и осмотров дупла.<br>
+      Данные разбиты по эпохам навыков и сессиям.
+    </p>
+
     <div class="cards fu d3">
-      <div class="card water" onclick="showPage('diving')">
-        <span class="card-icon">🌊</span>
+      <div class="card c-sea" onclick="showPage('diving')">
+        <div class="card-glow"></div>
+        <div class="card-icon">🌊</div>
         <div class="card-title">Нырки</div>
-        <div class="card-desc">Найденные предметы, процент успеха, динамика по сессиям, эпохи навыков ЗУ + ПУ.</div>
-        <div class="card-arrow">Открыть →</div>
+        <div class="card-desc">Найденные предметы, процент успеха, динамика по сессиям, эпохи навыков ЗУ и ПУ.</div>
+        <span class="card-cta">Открыть &thinsp;→</span>
       </div>
-      <div class="card moss" onclick="showPage('hollow')">
-        <span class="card-icon">🌲</span>
+      <div class="card c-tide" onclick="showPage('hollow')">
+        <div class="card-glow"></div>
+        <div class="card-icon">🌲</div>
         <div class="card-title">Дупло</div>
-        <div class="card-desc">Осмотры дупла: находки, шанс отравиться, эпохи навыков ЗУ + УН + ЛУ.</div>
-        <div class="card-arrow">Открыть →</div>
+        <div class="card-desc">Осмотры дупла: находки, шанс отравиться, эпохи навыков ЗУ, УН и ЛУ.</div>
+        <span class="card-cta">Открыть &thinsp;→</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- НЫРКИ -->
+<!-- ══ НЫРКИ ════════════════════════════════════ -->
 <div id="page-diving" class="page">
   <div class="sp">
-    <div class="sp-head fu">
-      <div class="sp-title-group">
-        <div class="sp-title">🌊 Нырки</div>
+    <div class="sp-header fu">
+      <div>
+        <h2 class="sp-title">🌊 <em>Нырки</em></h2>
         <div class="sp-sub" id="div-updated"></div>
       </div>
+      <div class="sp-badge"><span></span>live</div>
     </div>
-    <div class="epochs-nav fu d1" id="div-epochs"></div>
-    <div id="div-content"><div class="loading"><span></span></div></div>
+    <div class="epochs-bar fu d1">
+      <span class="epochs-label">Эпоха</span>
+      <div id="div-epochs" style="display:contents"></div>
+    </div>
+    <div id="div-content"><div class="loading-state"><span class="loading-dots"></span></div></div>
   </div>
 </div>
 
-<!-- ДУПЛО -->
+<!-- ══ ДУПЛО ════════════════════════════════════ -->
 <div id="page-hollow" class="page">
   <div class="sp">
-    <div class="sp-head fu">
-      <div class="sp-title-group">
-        <div class="sp-title">🌲 Дупло</div>
+    <div class="sp-header fu">
+      <div>
+        <h2 class="sp-title">🌲 <em>Дупло</em></h2>
         <div class="sp-sub" id="hol-updated"></div>
       </div>
+      <div class="sp-badge"><span></span>live</div>
     </div>
-    <div class="epochs-nav fu d1" id="hol-epochs"></div>
-    <div id="hol-content"><div class="loading"><span></span></div></div>
+    <div class="epochs-bar fu d1">
+      <span class="epochs-label">Эпоха</span>
+      <div id="hol-epochs" style="display:contents"></div>
+    </div>
+    <div id="hol-content"><div class="loading-state"><span class="loading-dots"></span></div></div>
   </div>
 </div>
 
-<footer>Бортовой Журнал · Сирота · catwar.net · <a href="https://sirotkin1.github.io/catwar-stats">sirotkin1.github.io/catwar-stats</a></footer>
+<footer>
+  <p>Бортовой Журнал · Сирота · catwar.net</p>
+  <a href="https://sirotkin1.github.io/catwar-stats">sirotkin1.github.io/catwar-stats</a>
+</footer>
 
+<!-- ══════════════════════════════════════════════
+     LOGIC (unchanged data layer, refreshed rendering)
+══════════════════════════════════════════════ -->
 <script>
 const SB_URL = 'https://bnjsevuuqgqvohfrvkvx.supabase.co';
 const SB_KEY = 'sb_publishable_PX2go4dTqu3IoT_NXjdLXQ_i7yTPGp0';
@@ -428,21 +675,22 @@ const DIVE_GROUPS = {
   'Гадость':  [3956,3958,3960,3962,3965,3966,3967,3968,3969,3970,3971,3973],
   'Ракушки':  [3994,3995,3997,3998,3999],
   'Камень':   [417,418,1034],
-  'Еда вода': [75,76,565,566],
+  'Еда/вода': [75,76,565,566],
 };
 const HOL_GROUPS = {
-  'Перо/гнездо':[2072,2075,2076,2077],
-  'Целебки':    [75,76,110],
-  'Гадость':    [8021,8022,8023,8024,8042,8043],
-  'Строчка':    [20,566],
-  'Камень':     [417,418,1034],
-  'Еда':        [565],
+  'Перо/гнездо': [2072,2075,2076,2077],
+  'Целебки':     [75,76,110],
+  'Гадость':     [8021,8022,8023,8024,8042,8043],
+  'Строчка':     [20,566],
+  'Камень':      [417,418,1034],
+  'Еда':         [565],
 };
-const POISON_IDS    = [8021,8022,8023,8024];
-const CLUMP_FISH    = [4008];
-const CLUMP_SHELL   = [4009];
-const EGG_IDS       = [2074];
-const FEATHER_IDS   = [2075,2076,2077];
+
+const POISON_IDS  = [8021,8022,8023,8024];
+const CLUMP_FISH  = [4008];
+const CLUMP_SHELL = [4009];
+const EGG_IDS     = [2074];
+const FEATHER_IDS = [2075,2076,2077];
 
 const NAMES = {
   20:'Паутина',21:'Целебная водоросль',75:'Мох',76:'Водный мох',110:'Мёд',
@@ -458,15 +706,13 @@ const NAMES = {
 };
 const IMG = id => `https://catwar.net/cw3/things/${id}.png`;
 
-// Цвета для пончика (порядок = порядок групп + пусто)
-const DIVE_COLORS = ['#4a8a50','#d04040','#4a8fd4','#888870','#c8a830','#404858'];
-const HOL_COLORS  = ['#9a6030','#4a8a50','#d04040','#c8a830','#888870','#4a8fd4','#404858'];
+/* Donut palette */
+const DIVE_PAL = ['#4a9a60','#c84040','#3a80c8','#a09040','#a070c0','#485868'];
+const HOL_PAL  = ['#9a5820','#4a9a60','#c84040','#d0a040','#a09040','#4a80c8','#485868'];
 
-let CH = {}, loaded = {};
-// Текущий диапазон графика по префиксу
-let chartRange = {};
+let CH = {}, loaded = {}, chartRange = {};
 
-// ── NAV ──────────────────────────────────────────────────────
+/* ── NAV ── */
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
@@ -478,7 +724,7 @@ function showPage(id) {
 }
 document.querySelectorAll('.nb').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
 
-// ── API ──────────────────────────────────────────────────────
+/* ── API ── */
 async function sbGet(path) {
   const r = await fetch(SB_URL + '/rest/v1/' + path, {
     headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
@@ -486,11 +732,11 @@ async function sbGet(path) {
   return r.json();
 }
 
-// ── LOAD ─────────────────────────────────────────────────────
+/* ── LOAD ── */
 async function loadPage(type) {
   const prefix = type === 'diving' ? 'div' : 'hol';
   const groups = type === 'diving' ? DIVE_GROUPS : HOL_GROUPS;
-  chartRange[prefix] = '30'; // дефолт: 30 дней
+  chartRange[prefix] = '30';
 
   const [epochs, sessions] = await Promise.all([
     sbGet('skill_epochs?select=*&order=started_at.asc'),
@@ -507,41 +753,44 @@ async function loadPage(type) {
 
   const usedEpochIds = new Set(sessions.map(s => s.epoch_id));
   const relevantEpochs = epochs.filter(e => usedEpochIds.has(e.id));
-
   const epEl = document.getElementById(prefix + '-epochs');
-  epEl.innerHTML = '';
-  const allBtn = document.createElement('button');
-  allBtn.className = 'epoch-btn active';
-  allBtn.textContent = 'Все';
-  allBtn.onclick = () => {
+
+  // Кнопка «Все»
+  const allBtn = makeEpochBtn('Все', true, () => {
     epEl.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
     allBtn.classList.add('active');
     renderContent(type, null, sessions, catches, epochs, groups, prefix);
-  };
+  });
   epEl.appendChild(allBtn);
 
   relevantEpochs.forEach(ep => {
-    const btn = document.createElement('button');
-    btn.className = 'epoch-btn';
     const sk = [];
     if (ep.zu) sk.push(ep.zu + 'ЗУ');
     if (ep.un) sk.push(ep.un + 'УН');
     if (ep.pu) sk.push(ep.pu + 'ПУ');
     if (ep.lu) sk.push(ep.lu + 'ЛУ');
-    btn.textContent = sk.join(' ') || 'Эпоха ' + ep.id;
-    btn.title = 'С ' + new Date(ep.started_at).toLocaleDateString('ru');
-    btn.onclick = () => {
+    const label = sk.join(' · ') || 'Эпоха ' + ep.id;
+    const btn = makeEpochBtn(label, false, () => {
       epEl.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderContent(type, ep.id, sessions, catches, epochs, groups, prefix);
-    };
+    });
+    btn.title = 'С ' + new Date(ep.started_at).toLocaleDateString('ru');
     epEl.appendChild(btn);
   });
 
   renderContent(type, null, sessions, catches, epochs, groups, prefix);
 }
 
-// ── RENDER ────────────────────────────────────────────────────
+function makeEpochBtn(label, active, cb) {
+  const b = document.createElement('button');
+  b.className = 'epoch-btn' + (active ? ' active' : '');
+  b.textContent = label;
+  b.onclick = cb;
+  return b;
+}
+
+/* ── RENDER ── */
 function renderContent(type, epochId, allSessions, allCatches, epochs, groups, prefix) {
   const isDive = type === 'diving';
   const sessions = epochId ? allSessions.filter(s => s.epoch_id === epochId) : allSessions;
@@ -550,7 +799,7 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
   const el = document.getElementById(prefix + '-content');
 
   if (!sessions.length) {
-    el.innerHTML = '<div class="loading" style="color:var(--muted)">Нет данных</div>';
+    el.innerHTML = '<div class="loading-state" style="color:var(--mist2)">Нет данных</div>';
     return;
   }
 
@@ -564,212 +813,217 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
     groupCounts[g] = ids.reduce((s, id) => s + (catchById[id] || 0), 0);
     totalCaught += groupCounts[g];
   });
-  const pust = totalAttempts - totalCaught;
-  const successRate = totalAttempts ? ((totalCaught / totalAttempts) * 100).toFixed(1) : '0.0';
 
-  const clumpFish  = CLUMP_FISH.reduce((s,id) => s + (catchById[id]||0), 0);
-  const clumpShell = CLUMP_SHELL.reduce((s,id) => s + (catchById[id]||0), 0);
-  const nestEgg    = EGG_IDS.reduce((s,id) => s + (catchById[id]||0), 0);
-  const nestFeather= FEATHER_IDS.reduce((s,id) => s + (catchById[id]||0), 0);
-  const poisoned   = POISON_IDS.reduce((s,id) => s + (catchById[id]||0), 0);
-  const poisonPct  = totalAttempts ? (poisoned/totalAttempts*100).toFixed(2) : '0.00';
+  const pust      = totalAttempts - totalCaught;
+  const succRate  = totalAttempts ? ((totalCaught / totalAttempts) * 100).toFixed(1) : '0.0';
+  const clumpFish = CLUMP_FISH.reduce((s,id)=>s+(catchById[id]||0),0);
+  const clumpShell= CLUMP_SHELL.reduce((s,id)=>s+(catchById[id]||0),0);
+  const poisoned  = POISON_IDS.reduce((s,id)=>s+(catchById[id]||0),0);
+  const poisonPct = totalAttempts ? (poisoned/totalAttempts*100).toFixed(2) : '0.00';
 
   const epoch = epochId
     ? epochs.find(e => e.id === epochId)
     : (sessions.length ? epochs.find(e => e.id === sessions[0].epoch_id) : null);
 
-  const itemsSorted = Object.entries(catchById).sort((a,b) => b[1]-a[1]);
-
-  // Навыки компактно: только нужные для типа
-  const skillHtml = epoch ? (() => {
-    const chips = [];
-    if (epoch.zu) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.zu}ЗУ</span>`);
-    if (isDive && epoch.pu) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.pu}ПУ</span>`);
-    if (!isDive && epoch.un) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.un}УН</span>`);
-    if (!isDive && epoch.lu) chips.push(`<span style="background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.25);padding:2px 10px;border-radius:4px;font-size:12px;color:var(--accent2)">${epoch.lu}ЛУ</span>`);
-    return chips.join(' ');
-  })() : '—';
-
-  // Метрики: определяем самую частую группу
   const topGroup = Object.entries(groupCounts).sort((a,b)=>b[1]-a[1])[0];
-  const topPct = totalAttempts ? (topGroup[1]/totalAttempts*100).toFixed(1) : '0';
+
+  // Навыки
+  const skillChips = epoch ? (() => {
+    const chips = [];
+    if (epoch.zu) chips.push(`<span class="skill-chip">${epoch.zu}ЗУ</span>`);
+    if (isDive && epoch.pu) chips.push(`<span class="skill-chip">${epoch.pu}ПУ</span>`);
+    if (!isDive && epoch.un) chips.push(`<span class="skill-chip">${epoch.un}УН</span>`);
+    if (!isDive && epoch.lu) chips.push(`<span class="skill-chip">${epoch.lu}ЛУ</span>`);
+    return chips.join('');
+  })() : '—';
 
   el.innerHTML = `
     <!-- Метрики -->
     <div class="metrics-row fu">
-      <div class="metric-card mc-grey">
-        <div class="metric-label">Всего нырков</div>
-        <div class="metric-val">${totalAttempts}</div>
-        <div class="metric-sub">${sessions.length} сессий</div>
+      <div class="mcard">
+        <div class="mcard-stripe ms-mist"></div>
+        <div class="mcard-label">Всего попыток</div>
+        <div class="mcard-val">${totalAttempts}</div>
+        <div class="mcard-sub">${sessions.length} сессий</div>
       </div>
-      <div class="metric-card mc-blue">
-        <div class="metric-label">Успешных</div>
-        <div class="metric-val">${totalCaught} <span class="pct">${successRate}%</span></div>
-        <div class="metric-sub">что-то нашёл</div>
+      <div class="mcard">
+        <div class="mcard-stripe ms-blue"></div>
+        <div class="mcard-label">Успешных</div>
+        <div class="mcard-val">${totalCaught}<span class="unit">${succRate}%</span></div>
+        <div class="mcard-sub">что-то нашёл</div>
       </div>
-      <div class="metric-card mc-grey">
-        <div class="metric-label">Пустых</div>
-        <div class="metric-val">${pust} <span class="pct">${totalAttempts?(pust/totalAttempts*100).toFixed(1):0}%</span></div>
-        <div class="metric-sub">без улова</div>
+      <div class="mcard">
+        <div class="mcard-stripe ms-mist"></div>
+        <div class="mcard-label">Пустых</div>
+        <div class="mcard-val">${pust}<span class="unit">${totalAttempts?(pust/totalAttempts*100).toFixed(1):0}%</span></div>
+        <div class="mcard-sub">без улова</div>
       </div>
-      <div class="metric-card mc-green">
-        <div class="metric-label">Лучшая группа</div>
-        <div class="metric-val">${topGroup[0]}</div>
-        <div class="metric-sub">${topGroup[1]} шт · ${topPct}%</div>
+      <div class="mcard">
+        <div class="mcard-stripe ms-teal"></div>
+        <div class="mcard-label">Топ группа</div>
+        <div class="mcard-val" style="font-size:20px;margin-top:4px">${topGroup[0]}</div>
+        <div class="mcard-sub">${topGroup[1]} шт · ${totalAttempts?(topGroup[1]/totalAttempts*100).toFixed(1):0}%</div>
       </div>
-      <div class="metric-card mc-teal">
-        <div class="metric-label">Навыки</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${skillHtml}</div>
+      <div class="mcard">
+        <div class="mcard-stripe ms-sea"></div>
+        <div class="mcard-label">Навыки</div>
+        <div class="mcard-skills">${skillChips}</div>
       </div>
       ${isDive
-        ? `<div class="metric-card mc-gold">
-             <div class="metric-label">Комочки</div>
-             <div class="metric-val">${clumpFish+clumpShell}</div>
-             <div class="metric-sub">🐟 ${clumpFish} · 🐚 ${clumpShell}</div>
+        ? `<div class="mcard">
+             <div class="mcard-stripe ms-amber"></div>
+             <div class="mcard-label">Комочки</div>
+             <div class="mcard-val">${clumpFish+clumpShell}</div>
+             <div class="mcard-sub">🐟 ${clumpFish} &nbsp;·&nbsp; 🐚 ${clumpShell}</div>
            </div>`
-        : `<div class="metric-card mc-red">
-             <div class="metric-label">Отравлений</div>
-             <div class="metric-val">${poisoned} <span class="pct">${poisonPct}%</span></div>
-             <div class="metric-sub">пауки</div>
+        : `<div class="mcard">
+             <div class="mcard-stripe ms-coral"></div>
+             <div class="mcard-label">Отравлений</div>
+             <div class="mcard-val">${poisoned}<span class="unit">${poisonPct}%</span></div>
+             <div class="mcard-sub">пауки</div>
            </div>`
       }
     </div>
 
     <!-- Предметы -->
-    <div class="items-block fu d1">
-      <div class="items-inner" id="${prefix}-items-row"></div>
+    <div class="items-strip fu d1">
+      <div class="items-strip-head">
+        <span>Найденные предметы</span>
+        <span style="color:var(--mist2);font-size:10px">(по убыванию)</span>
+      </div>
+      <div class="items-strip-body" id="${prefix}-items-row"></div>
     </div>
 
-    <!-- График + Пончик -->
-    <div class="charts-main fu d2">
-      <div class="chart-box">
-        <div class="chart-header">
-          <div class="chart-title">Нырки по дням</div>
-          <div class="range-btns" id="${prefix}-range-btns">
-            <button class="range-btn active" data-range="30" onclick="setRange('${prefix}',30,this)">30 дн</button>
-            <button class="range-btn" data-range="90" onclick="setRange('${prefix}',90,this)">3 мес</button>
-            <button class="range-btn" data-range="all" onclick="setRange('${prefix}','all',this)">Всё время</button>
+    <!-- Графики -->
+    <div class="charts-row fu d2">
+      <div class="cbox">
+        <div class="cbox-head">
+          <span class="cbox-title">Попытки по дням</span>
+          <div class="range-row" id="${prefix}-range-btns">
+            <button class="rbtn active" onclick="setRange('${prefix}',30,this)">30 дн</button>
+            <button class="rbtn" onclick="setRange('${prefix}',90,this)">3 мес</button>
+            <button class="rbtn" onclick="setRange('${prefix}','all',this)">Всё время</button>
           </div>
         </div>
         <canvas id="${prefix}-chart-days"></canvas>
       </div>
-      <div class="pie-box">
-        <div class="chart-title" style="margin-bottom:12px">Распределение</div>
-        <div class="pie-canvas-wrap">
-          <canvas id="${prefix}-chart-pie"></canvas>
-        </div>
+      <div class="cbox">
+        <div class="cbox-head"><span class="cbox-title">Распределение</span></div>
+        <div class="pie-wrap"><canvas id="${prefix}-chart-pie"></canvas></div>
         <div class="pie-legend" id="${prefix}-pie-legend"></div>
       </div>
     </div>
 
     <!-- Сессии -->
-    <div class="section-title fu d3">Сессии</div>
-    <div class="sessions-list fu d3" id="${prefix}-sessions"></div>
+    <div class="section-head fu d3">
+      <span class="section-head-title">Сессии</span>
+      <span class="section-line"></span>
+      <span style="font-size:11px;color:var(--mist2)">${sessions.length}</span>
+    </div>
+    <div class="sess-list fu d3" id="${prefix}-sessions"></div>
   `;
 
-  // Предметы
+  // Наполняем предметы
   const itemsRow = document.getElementById(prefix + '-items-row');
-  itemsSorted.forEach(([itemId, count]) => {
-    if ([...CLUMP_FISH,...CLUMP_SHELL,...EGG_IDS,...FEATHER_IDS].includes(+itemId)) return;
-    const cell = document.createElement('div');
-    cell.className = 'item-cell';
-    cell.title = NAMES[itemId] || 'ID ' + itemId;
-    cell.innerHTML = `<img src="${IMG(itemId)}" onerror="this.style.display='none'"><span class="item-count">${count}</span>`;
-    itemsRow.appendChild(cell);
-  });
+  const extra = [...CLUMP_FISH,...CLUMP_SHELL,...EGG_IDS,...FEATHER_IDS];
+  Object.entries(catchById)
+    .filter(([id]) => !extra.includes(+id))
+    .sort((a,b) => b[1]-a[1])
+    .forEach(([itemId, count]) => {
+      const cell = document.createElement('div');
+      cell.className = 'item-cell';
+      cell.title = NAMES[itemId] || 'ID ' + itemId;
+      cell.innerHTML = `<img src="${IMG(itemId)}" onerror="this.style.display='none'"><span class="item-count">${count}</span>`;
+      itemsRow.appendChild(cell);
+    });
 
-  // Сохраняем данные для перерисовки графика при смене диапазона
+  // Кешируем для setRange
   el._sessions = sessions;
   el._groupCounts = groupCounts;
-  el._pust = pust;
   el._isDive = isDive;
 
-  drawDaysChart(prefix, sessions, chartRange[prefix] || '30');
+  drawDaysChart(prefix, sessions, '30');
   drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
   renderSessions(prefix, sessions, allCatches, isDive);
 }
 
-// ── ДИАПАЗОН ГРАФИКА ──────────────────────────────────────────
+/* ── CHARTS ── */
 function setRange(prefix, range, btn) {
-  document.querySelectorAll('#' + prefix + '-range-btns .range-btn')
+  document.querySelectorAll('#' + prefix + '-range-btns .rbtn')
     .forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  chartRange[prefix] = range;
   const el = document.getElementById(prefix + '-content');
   drawDaysChart(prefix, el._sessions, range);
 }
 
 function drawDaysChart(prefix, sessions, range) {
-  if (!sessions || !sessions.length) return;
-
+  if (!sessions?.length) return;
   const isAll = range === 'all';
-  const days = isAll ? null : parseInt(range);
 
+  let labels, data;
   if (isAll) {
-    // Группируем по неделям
     const byWeek = {};
     sessions.forEach(s => {
       const d = new Date(s.started_at);
-      // Начало недели (понедельник)
       const day = d.getDay() || 7;
       d.setDate(d.getDate() - day + 1);
       const key = d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
-      byWeek[key] = (byWeek[key] || 0) + (s.total_attempts || 0);
+      byWeek[key] = (byWeek[key]||0) + (s.total_attempts||0);
     });
-    // Сортируем по дате
-    const sorted = Object.entries(byWeek).sort((a,b) => {
+    const sorted = Object.entries(byWeek).sort((a,b)=>{
       const pa = a[0].split('.').reverse().join('-');
       const pb = b[0].split('.').reverse().join('-');
       return pa.localeCompare(pb);
     });
-    _drawBarChart(prefix, sorted.map(x=>x[0]), sorted.map(x=>x[1]));
+    labels = sorted.map(x=>x[0]);
+    data   = sorted.map(x=>x[1]);
   } else {
-    // Последние N дней
+    const days = parseInt(range);
     const byDay = {};
     sessions.forEach(s => {
       const key = new Date(s.started_at).toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
-      byDay[key] = (byDay[key] || 0) + (s.total_attempts || 0);
+      byDay[key] = (byDay[key]||0) + (s.total_attempts||0);
     });
     const pts = Array.from({ length: days }, (_, i) => {
       const d = new Date();
-      d.setDate(d.getDate() - (days - 1 - i));
+      d.setDate(d.getDate() - (days-1-i));
       const l = d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
-      return { l, v: byDay[l] || 0 };
+      return { l, v: byDay[l]||0 };
     });
-    _drawBarChart(prefix, pts.map(p=>p.l), pts.map(p=>p.v));
+    labels = pts.map(p=>p.l);
+    data   = pts.map(p=>p.v);
   }
-}
 
-function _drawBarChart(prefix, labels, data) {
   const id = prefix + '-chart-days';
   if (CH[id]) CH[id].destroy();
-  const isDiv = prefix === 'div';
-  const color = isDiv ? '#4a8fd4' : '#4a8a5a';
+  const isDive = prefix === 'div';
+  const col = isDive ? '#3a84cc' : '#2a9080';
+
   CH[id] = new Chart(document.getElementById(id), {
     type: 'bar',
     data: {
       labels,
       datasets: [{
         data,
-        backgroundColor: color + '55',
-        borderColor: color,
+        backgroundColor: col + '33',
+        borderColor: col + 'aa',
         borderWidth: 1,
         borderRadius: 3,
-        hoverBackgroundColor: color + '99',
+        hoverBackgroundColor: col + '66',
       }]
     },
     options: {
-      responsive:true,
-      plugins: { legend:{ display:false } },
+      responsive: true,
+      plugins: { legend: { display: false } },
       scales: {
         x: {
-          ticks: { color:'#505870', font:{ family:'DM Sans', size:10 }, maxRotation:45 },
-          grid: { color:'rgba(100,140,200,0.06)' }
+          ticks: { color:'#485068', font: { family:'Outfit', size:10 }, maxRotation: 45 },
+          grid:  { color:'rgba(80,140,200,0.06)' },
         },
         y: {
-          ticks: { color:'#505870', font:{ family:'DM Sans', size:10 } },
-          grid: { color:'rgba(100,140,200,0.06)' },
-          beginAtZero:true
+          ticks: { color:'#485068', font: { family:'Outfit', size:10 } },
+          grid:  { color:'rgba(80,140,200,0.06)' },
+          beginAtZero: true,
         }
       }
     }
@@ -777,57 +1031,67 @@ function _drawBarChart(prefix, labels, data) {
 }
 
 function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
-  const labels  = [...Object.keys(groupCounts), 'Пусто'];
-  const data    = [...Object.values(groupCounts), pust];
-  const colors  = isDive ? DIVE_COLORS : HOL_COLORS;
-  const id      = prefix + '-chart-pie';
+  const labels = [...Object.keys(groupCounts), 'Пусто'];
+  const data   = [...Object.values(groupCounts), pust];
+  const pal    = isDive ? DIVE_PAL : HOL_PAL;
+  const id     = prefix + '-chart-pie';
   if (CH[id]) CH[id].destroy();
 
   CH[id] = new Chart(document.getElementById(id), {
     type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }] },
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: pal,
+        borderWidth: 0,
+        hoverOffset: 6,
+      }]
+    },
     options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins: { legend:{ display:false } },
-      cutout: '62%',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      cutout: '68%',
     }
   });
 
-  // Легенда с процентами
   const legend = document.getElementById(prefix + '-pie-legend');
   if (!legend) return;
   legend.innerHTML = labels.map((lbl, i) => {
     const val = data[i] || 0;
     const pct = totalAttempts ? (val/totalAttempts*100).toFixed(1) : '0.0';
-    return `<div class="pie-legend-item">
-      <div class="pie-legend-left">
-        <div class="pie-dot" style="background:${colors[i]}"></div>
-        <span class="pie-legend-name">${lbl}</span>
+    return `<div class="pleg-item">
+      <div class="pleg-left">
+        <div class="pleg-dot" style="background:${pal[i]}"></div>
+        <span class="pleg-name">${lbl}</span>
       </div>
-      <div class="pie-legend-right">
-        <span class="pie-legend-count">${val}</span>
-        <span class="pie-legend-pct">${pct}%</span>
+      <div class="pleg-right">
+        <span class="pleg-n">${val}</span>
+        <span class="pleg-pct">${pct}%</span>
       </div>
     </div>`;
   }).join('');
 }
 
+/* ── SESSIONS ── */
 function renderSessions(prefix, sessions, allCatches, isDive) {
   const el = document.getElementById(prefix + '-sessions');
   if (!sessions.length) { el.innerHTML = '<div class="catch-empty">Нет сессий</div>'; return; }
+
   const byS = {};
   allCatches.forEach(c => { if(!byS[c.session_id]) byS[c.session_id]=[]; byS[c.session_id].push(c); });
 
-  el.innerHTML = sessions.slice(0, 50).map(s => {
-    const start  = new Date(s.started_at);
-    const end    = s.ended_at ? new Date(s.ended_at) : null;
-    const dateStr= start.toLocaleDateString('ru', { day:'numeric', month:'long' });
-    const sT     = start.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' });
-    const eT     = end ? end.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' }) : '…';
-    const sc     = byS[s.id] || [];
-    const bc     = isDive ? 'dive' : 'hollow';
-    const bl     = isDive ? 'нырки' : 'дупло';
-    const ch     = sc.length
+  el.innerHTML = sessions.slice(0, 60).map(s => {
+    const start   = new Date(s.started_at);
+    const end     = s.ended_at ? new Date(s.ended_at) : null;
+    const dateStr = start.toLocaleDateString('ru', { day:'numeric', month:'long' });
+    const sT      = start.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' });
+    const eT      = end   ? end.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' }) : '…';
+    const sc      = byS[s.id] || [];
+    const bc      = isDive ? 'st-dive' : 'st-hollow';
+    const bl      = isDive ? 'нырки'   : 'дупло';
+
+    const ch = sc.length
       ? sc.map(c => {
           const n = c.item_name || NAMES[c.item_id] || 'ID '+c.item_id;
           const t = new Date(c.caught_at).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
@@ -837,25 +1101,31 @@ function renderSessions(prefix, sessions, allCatches, isDive) {
 
     return `<div class="sess">
 <div class="sess-head" onclick="togS(this)">
-  <div class="sess-meta">
-    <span class="sess-badge ${bc}">${bl}</span>
+  <div class="sess-left">
+    <span class="sess-type ${bc}">${bl}</span>
     <span class="sess-date">${dateStr}</span>
     <span class="sess-time">${sT} – ${eT}</span>
   </div>
-  <div class="sess-stats">
-    <div class="sess-stat"><div class="sess-stat-v">${s.total_attempts||0}</div><div class="sess-stat-l">попыток</div></div>
-    <div class="sess-stat"><div class="sess-stat-v">${sc.length}</div><div class="sess-stat-l">находок</div></div>
-    <span class="sess-arrow">▼</span>
+  <div class="sess-right">
+    <div class="sess-stat">
+      <div class="sess-stat-n">${s.total_attempts||0}</div>
+      <div class="sess-stat-l">попыток</div>
+    </div>
+    <div class="sess-stat">
+      <div class="sess-stat-n">${sc.length}</div>
+      <div class="sess-stat-l">находок</div>
+    </div>
+    <div class="sess-chevron">▼</div>
   </div>
 </div>
-<div class="sess-body"><div class="catches-wrap">${ch}</div></div>
+<div class="sess-body"><div class="catches-row">${ch}</div></div>
 </div>`;
   }).join('');
 }
 
 function togS(h) {
   h.nextElementSibling.classList.toggle('open');
-  h.querySelector('.sess-arrow').classList.toggle('open');
+  h.querySelector('.sess-chevron').classList.toggle('open');
 }
 </script>
 </body>
