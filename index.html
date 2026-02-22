@@ -128,11 +128,15 @@ nav { display: flex; gap: 3px }
 /* ═══════════════════════════════════════════════
    HOME
 ═══════════════════════════════════════════════ */
+/* HOME — hero */
 .home-wrap {
   max-width: 1000px; margin: 0 auto;
   padding: 96px 36px 120px;
   display: flex; flex-direction: column; align-items: center;
   text-align: center;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(20,10,40,0.55) 0%, transparent 70%);
+  border-radius: 0 0 40px 40px;
 }
 
 .home-kicker {
@@ -550,8 +554,54 @@ footer a { color: var(--mist); text-decoration: none; transition: color .15s }
 footer a:hover { color: var(--paper2) }
 
 /* ═══════════════════════════════════════════════
-   RESPONSIVE
+   PAGE THEMES
 ═══════════════════════════════════════════════ */
+
+/* HOME — глубокий noir, почти угольный */
+#page-home {
+  --page-glow-a: rgba(10,10,18,0.95);
+  --page-glow-b: rgba(20,14,28,0.6);
+  --page-glow-c: rgba(8,8,14,0.8);
+}
+#page-home::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 10%, rgba(30,20,50,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 80% 80%, rgba(10,10,22,0.6)  0%, transparent 55%),
+    radial-gradient(ellipse 100% 40% at 50% 50%, rgba(5,5,10,0.4)  0%, transparent 70%);
+}
+
+/* HOLLOW — землистые, коричнево-серые тона */
+#page-hollow {
+  --hol-accent:  #a07848;
+  --hol-accent2: #c8a060;
+  --hol-muted:   #6a5840;
+  --hol-line:    rgba(160,120,72,0.14);
+  --hol-line2:   rgba(160,120,72,0.28);
+}
+#page-hollow::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 45% at 20% 5%,  rgba(80,50,20,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 65% at 85% 85%,  rgba(60,40,20,0.08) 0%, transparent 55%);
+}
+
+/* Hollow — перекраска акцентов */
+#page-hollow .sp-title em              { color: #c8a060 }
+#page-hollow .sp-badge span            { background: #a07848 }
+#page-hollow .epoch-btn.active         { border-color:#a07848; color:#c8a060; background:rgba(160,120,72,0.09) }
+#page-hollow .epochs-bar               { border-bottom-color: rgba(160,120,72,0.18) }
+#page-hollow .mcard-stripe.ms-blue     { background: linear-gradient(90deg,#806030,#c8a060) }
+#page-hollow .mcard-stripe.ms-teal     { background: linear-gradient(90deg,#705028,#a07848) }
+#page-hollow .mcard-stripe.ms-sea      { background: linear-gradient(90deg,#504030,#806848) }
+#page-hollow .skill-chip               { color:#c8a060; background:rgba(160,120,72,0.10); border-color:rgba(160,120,72,0.26) }
+#page-hollow .cbox-title               { color: #8a7058 }
+#page-hollow .rbtn.active              { color:#c8a060; border-color:#a07848; background:rgba(160,120,72,0.09) }
+#page-hollow .section-head-title       { color: #d0b080 }
+
+
 @media (max-width: 1024px) {
   .metrics-row { grid-template-columns: repeat(3, 1fr) }
   .charts-row  { grid-template-columns: 1fr }
@@ -671,11 +721,11 @@ const SB_URL = 'https://bnjsevuuqgqvohfrvkvx.supabase.co';
 const SB_KEY = 'sb_publishable_PX2go4dTqu3IoT_NXjdLXQ_i7yTPGp0';
 
 const DIVE_GROUPS = {
-  'Целебки':  [21,3993],
-  'Гадость':  [3956,3958,3960,3962,3965,3966,3967,3968,3969,3970,3971,3973],
-  'Ракушки':  [3994,3995,3997,3998,3999],
-  'Камень':   [417,418,1034],
-  'Еда/вода': [75,76,565,566],
+  'Целебки':  [21, 3993, 75, 565, 566],           // водоросли, мох, ветки/вьюнок
+  'Гадость':  [3956, 3958, 3960, 3962, 3971, 3973], // раки, жаба, угри
+  'Ракушки':  [3994, 3995, 3997, 3998, 3999],
+  'Камень':   [417, 418, 1034],
+  'Еда/вода': [3965, 3966, 3967, 3968, 3969, 3970, 76], // рыбы + водяной мох
 };
 const HOL_GROUPS = {
   'Перо/гнездо': [2072,2075,2076,2077],
@@ -904,13 +954,6 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
         <div class="pie-legend" id="${prefix}-pie-legend"></div>
       </div>
     </div>
-
-    <!-- Сессии -->
-    <div class="section-head fu d3">
-      <span class="section-head-title">Сессии</span>
-      <span class="section-line"></span>
-    </div>
-    <div class="sess-list fu d3" id="${prefix}-sessions"></div>
   `;
 
   // Кешируем для setRange
@@ -920,7 +963,6 @@ function renderContent(type, epochId, allSessions, allCatches, epochs, groups, p
 
   drawDaysChart(prefix, sessions, '30');
   drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
-  renderSessions(prefix, sessions, allCatches, isDive);
 }
 
 /* ── CHARTS ── */
@@ -973,7 +1015,7 @@ function drawDaysChart(prefix, sessions, range) {
   const id = prefix + '-chart-days';
   if (CH[id]) CH[id].destroy();
   const isDive = prefix === 'div';
-  const col = isDive ? '#3a84cc' : '#2a9080';
+  const col = isDive ? '#3a84cc' : '#a07848';
 
   CH[id] = new Chart(document.getElementById(id), {
     type: 'bar',
