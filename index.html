@@ -152,6 +152,14 @@ body.th-hollow .bg-hollow { display: block }
     radial-gradient(ellipse 80% 30% at 50% 50%, rgba(10,16,6,.70) 0%, transparent 70%),
     linear-gradient(to bottom, #0c0e0a 0%, #0e1109 60%, #080a06 100%);
 }
+.bg-hollow::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 8% 12% at 25% 15%, rgba(80,120,40,.08) 0%, transparent 80%),
+    radial-gradient(ellipse 6% 10% at 70% 35%, rgba(70,100,35,.07) 0%, transparent 80%),
+    radial-gradient(ellipse 10% 8% at 45% 60%, rgba(60,90,30,.06) 0%, transparent 80%),
+    radial-gradient(ellipse 5% 8% at 85% 75%, rgba(80,110,40,.05) 0%, transparent 80%);
+}
 
 header {
   position: sticky; top: 0; z-index: 500;
@@ -166,14 +174,12 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
 .hdr {
   max-width: 1400px; margin: 0 auto; padding: 0 44px;
   display: flex; align-items: center; justify-content: space-between; height: 60px;
-  gap: 20px;
 }
 
 .logo-btn {
   display: flex; align-items: center; gap: 14px;
   background: none; border: none; cursor: pointer; color: var(--text);
   transition: color .2s;
-  min-width: 0;
 }
 .logo-btn:hover { color: var(--ac3) }
 
@@ -183,7 +189,6 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
   border: 1px solid var(--line2);
   display: flex; align-items: center; justify-content: center; font-size: 15px;
   overflow: hidden; transition: border-color .3s, box-shadow .3s;
-  flex-shrink: 0;
 }
 .logo-sigil::after {
   content: ''; position: absolute; inset: 0;
@@ -205,13 +210,12 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
   text-transform: uppercase; display: block; margin-top: 1px;
 }
 
-.nav { display: flex; gap: 2px; flex-wrap: wrap; justify-content: flex-end; }
+.nav { display: flex; gap: 2px }
 .nav-btn {
   padding: 6px 18px; border: 1px solid transparent; border-radius: 6px;
   background: none; font-family: 'Syne Mono', monospace;
   font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase;
   color: var(--text2); cursor: pointer; transition: all .2s;
-  white-space: nowrap;
 }
 .nav-btn:hover { color: var(--text); border-color: var(--line2) }
 .nav-btn.active {
@@ -328,6 +332,21 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
 .ocean-wave-wrap svg { position: absolute; bottom: 0; width: 200%; animation: waveScroll 12s linear infinite }
 @keyframes waveScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
+.depth-indicator {
+  position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
+  z-index: 100; display: none; flex-direction: column; align-items: center; gap: 8px;
+}
+body.th-dive .depth-indicator { display: flex }
+.depth-line {
+  width: 1px; height: 140px;
+  background: linear-gradient(to bottom, transparent, var(--ac3), transparent); opacity: .3;
+}
+.depth-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; letter-spacing: 2px; color: var(--text3);
+  writing-mode: vertical-rl; text-transform: uppercase;
+}
+
 .sp { max-width: 1400px; margin: 0 auto; padding: 48px 44px 120px; }
 .sp-header {
   display: flex; align-items: flex-start; justify-content: space-between;
@@ -354,52 +373,6 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
   background: var(--ac2); margin: 0 12px; box-shadow: 0 0 10px var(--ac2);
 }
 
-/* Сравнение эпох */
-.compare-btn {
-  padding: 8px 20px; border-radius: 6px;
-  border: 1px solid var(--line2); background: rgba(0,0,0,.2);
-  font-family: 'Syne Mono', monospace; font-size: 11px;
-  color: var(--text2); cursor: pointer; transition: all .2s;
-  white-space: nowrap;
-}
-.compare-btn:hover { 
-  border-color: var(--line3); color: var(--acl);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--ac3) 15%, transparent);
-}
-
-.modal {
-  display: none; position: fixed; inset: 0; z-index: 600;
-  background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
-  align-items: center; justify-content: center; padding: 20px;
-}
-.modal.active { display: flex }
-.modal-content {
-  background: var(--card-bg); border: 1px solid var(--card-bd);
-  border-radius: 8px; padding: 32px; max-width: 900px;
-  max-height: 85vh; overflow-y: auto; animation: modalIn .3s cubic-bezier(.22,.8,.32,1);
-}
-@keyframes modalIn { from { opacity: 0; scale: .95 } to { opacity: 1; scale: 1 } }
-.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-.modal-title { font-family: 'Cormorant', serif; font-size: 32px; font-weight: 700; }
-.modal-close {
-  width: 32px; height: 32px; border: none; background: none;
-  color: var(--text2); font-size: 20px; cursor: pointer;
-  transition: color .2s;
-}
-.modal-close:hover { color: var(--acl) }
-
-.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-.compare-select {
-  display: flex; flex-direction: column; gap: 8px;
-}
-.compare-select label { font-family: 'Syne Mono', monospace; font-size: 11px; color: var(--text2); text-transform: uppercase; }
-.compare-select select {
-  padding: 10px 12px; border: 1px solid var(--line2);
-  background: var(--bg2); color: var(--text); border-radius: 4px;
-  font-family: 'Syne', sans-serif; cursor: pointer;
-}
-.compare-select select:focus { outline: none; border-color: var(--line3) }
-
 .epochs-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
 .epochs-lbl {
   font-family: 'Syne Mono', monospace;
@@ -419,7 +392,7 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
   box-shadow: 0 0 12px color-mix(in srgb, var(--ac3) 20%, transparent);
 }
 
-.metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.metrics-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 12px; }
 .mcard {
   background: var(--card-bg); border: 1px solid var(--card-bd);
   border-radius: 6px; padding: 20px 18px;
@@ -438,6 +411,11 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
 .mg-coral { background: linear-gradient(90deg, transparent, #c03030, transparent); opacity: .7 }
 .mg-mist  { background: linear-gradient(90deg, transparent, var(--text3), transparent); opacity: .8 }
 .mg-teal  { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ac3) 70%, var(--ac2)), transparent); opacity: .6 }
+.mcard::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 0; height: 0; border-style: solid; border-width: 0 16px 16px 0;
+  border-color: transparent var(--bg3) transparent transparent; opacity: .5;
+}
 .mcard-label {
   font-family: 'Syne Mono', monospace;
   font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
@@ -455,17 +433,15 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
   font-family: 'Syne Mono', monospace;
   font-size: 11px; color: var(--text2); margin-top: 8px; letter-spacing: .5px;
 }
-.mcard-delta {
-  display: inline-block; padding: 4px 8px; border-radius: 3px;
-  font-size: 12px; margin-top: 8px; font-weight: 600;
-  font-family: 'Syne Mono', monospace;
+.mcard-skills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px }
+.skill-chip {
+  font-family: 'Syne Mono', monospace; font-size: 11px;
+  color: var(--acl); background: var(--chip-bg); border: 1px solid var(--chip-bd);
+  padding: 3px 10px; border-radius: 3px; letter-spacing: .5px;
 }
-.delta-up { background: rgba(112, 160, 80, 0.3); color: #70a050 }
-.delta-down { background: rgba(200, 40, 40, 0.3); color: #e84040 }
-.delta-neutral { background: rgba(112, 109, 106, 0.3); color: #a8b898 }
 
 .section-wrap { margin-bottom: 12px }
-.sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; flex-wrap: wrap; }
+.sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
 .sec-label {
   font-family: 'Syne Mono', monospace;
   font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
@@ -501,25 +477,36 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
   border-radius: 0 2px 0 0; opacity: .5;
 }
 
-.charts-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; }
-.charts-row.dual { grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)) }
+.loot-box { background: var(--card-bg); border: 1px solid var(--card-bd); border-radius: 6px; padding: 18px 20px; }
+.loot-items { display: flex; flex-wrap: wrap; gap: 8px }
+.loot-chip {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--bg3); border: 1px solid var(--line);
+  border-radius: 5px; padding: 10px 14px; transition: border-color .18s;
+}
+.loot-chip:hover { border-color: var(--line2) }
+.loot-chip img { width: 32px; height: 32px; object-fit: contain }
+.loot-chip-count { font-family: 'Cormorant', serif; font-size: 24px; font-weight: 700; color: var(--acl); line-height: 1; }
+.loot-chip-name { font-family: 'Syne Mono', monospace; font-size: 10px; color: var(--text2); margin-top: 3px; letter-spacing: .5px; }
+.loot-empty { font-family:'Syne Mono',monospace; font-size:11px; color:var(--text2); font-style:italic }
+
+.charts-row { display: grid; grid-template-columns: 1fr 340px; gap: 10px; margin-bottom: 12px; }
 .cbox { background: var(--card-bg); border: 1px solid var(--card-bd); border-radius: 6px; padding: 22px; }
 .cbox-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
 .cbox-title { font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
-.range-row { display: flex; gap: 3px; flex-wrap: wrap; }
+.range-row { display: flex; gap: 3px }
 .rbtn {
   padding: 4px 12px; border: 1px solid var(--line); border-radius: 3px;
   background: none; font-family: 'Syne Mono', monospace; font-size: 10px;
   color: var(--text2); cursor: pointer; transition: all .15s; letter-spacing: .5px;
-  white-space: nowrap;
 }
 .rbtn:hover { color: var(--text); border-color: var(--line2) }
 .rbtn.active { color: var(--ac3); border-color: var(--line2); background: var(--chip-bg) }
-.cbox canvas { max-height: 300px; width: 100% !important; }
+.cbox canvas { max-height: 300px }
 
 .pie-wrap { position: relative; min-height: 180px; margin-bottom: 16px }
 .pie-legend { display: flex; flex-direction: column; gap: 4px }
-.pleg-item { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.pleg-item { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--line); }
 .pleg-item:last-child { border: none }
 .pleg-left { display: flex; align-items: center; gap: 8px }
 .pleg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0 }
@@ -527,6 +514,11 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
 .pleg-right { display: flex; align-items: center; gap: 10px }
 .pleg-n { font-size: 14px; color: var(--text); font-family:'Cormorant',serif; font-weight:600 }
 .pleg-pct { font-family:'Syne Mono',monospace; font-size: 10px; color: var(--text2); min-width: 42px; text-align: right }
+
+body.th-dive .mcard:hover { box-shadow: 0 16px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(20,200,230,.08) inset; }
+body.th-dive .icard:hover { box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 20px rgba(20,200,230,.08); }
+body.th-hollow .sec-line { background: linear-gradient(90deg, var(--line), transparent); }
+body.th-hollow .sp-rule-dot { box-shadow: 0 0 8px rgba(80,140,50,.5); }
 
 .loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 32px; gap: 16px; }
 .loading-orb {
@@ -553,49 +545,24 @@ footer p { font-family:'Syne Mono',monospace; font-size:11px; color:var(--text2)
 footer a { font-family:'Syne Mono',monospace; font-size:11px; color:var(--text2); text-decoration:none; letter-spacing:1px; transition:color .15s }
 footer a:hover { color: var(--ac3) }
 
-/* Мобильная оптимизация */
 @media(max-width: 1100px) {
   .home-layout { grid-template-columns: 1fr; padding-top: 60px }
   .home-right { border-left: none; border-top: 1px solid var(--line2); padding-left: 0; padding-top: 40px }
-  .metrics-row { grid-template-columns: repeat(2, 1fr) }
-  .charts-row.dual { grid-template-columns: 1fr }
-  .modal-content { max-width: 95vw; padding: 24px }
-  .compare-grid { grid-template-columns: 1fr }
+  .metrics-row { grid-template-columns: repeat(3,1fr) }
+  .charts-row  { grid-template-columns: 1fr }
+  .depth-indicator { display: none !important }
 }
-
 @media(max-width: 700px) {
-  .hdr { padding: 0 18px; }
-  .sp { padding-left: 18px; padding-right: 18px }
-  footer { padding-left: 18px; padding-right: 18px }
+  .hdr { padding: 0 18px }
+  .sp, footer { padding-left: 18px; padding-right: 18px }
   .home-layout { padding: 50px 18px 60px }
-  .metrics-row { grid-template-columns: 1fr }
+  .metrics-row { grid-template-columns: repeat(2,1fr) }
   .home-h1 { font-size: clamp(52px, 14vw, 80px) }
   .home-right { padding-top: 32px }
-  .sp-header { flex-direction: column; align-items: stretch; }
-  .compare-btn { width: 100%; }
-  .nav-btn { padding: 6px 12px; font-size: 10px; }
-  .logo-title { font-size: 15px }
-  .logo-sub { font-size: 8px }
-  .sp-title { font-size: 36px }
-  .cbox { padding: 16px }
-  .items-grid { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)) }
-  .range-row { width: 100%; }
-  .rbtn { flex: 1; padding: 6px 8px; font-size: 9px }
 }
-
 @media(max-width: 460px) {
-  .items-grid { grid-template-columns: repeat(2, 1fr) }
-  .metrics-row { grid-template-columns: 1fr }
-  .mcard-val { font-size: 28px }
-  .hdr { height: auto; min-height: 60px; flex-wrap: wrap; padding: 12px 18px }
-  .logo-btn { gap: 10px }
-  .nav { gap: 2px; width: 100%; margin-top: 10px; }
-  .nav-btn { flex: 1; padding: 8px 6px; font-size: 9px; }
-  .sp { padding: 32px 18px 60px }
-  .sp-title { font-size: 28px }
-  .pleg-item { font-size: 12px; padding: 4px 0 }
-  .pleg-name { font-size: 10px }
-  .modal-content { padding: 20px }
+  .items-grid { grid-template-columns: repeat(auto-fill,minmax(78px,1fr)) }
+  .metrics-row { grid-template-columns: 1fr 1fr }
 }
 </style>
 </head>
@@ -608,6 +575,12 @@ footer a:hover { color: var(--ac3) }
   <div class="bubbles" id="bubbles-container"></div>
 </div>
 <div class="bg-hollow"></div>
+
+<div class="depth-indicator">
+  <div class="depth-label">Глубина</div>
+  <div class="depth-line"></div>
+  <div class="depth-label">∞</div>
+</div>
 
 <header>
   <div class="hdr">
@@ -636,21 +609,21 @@ footer a:hover { color: var(--ac3) }
         <div class="home-rule-line"></div>
         <div class="home-rule-line"></div>
       </div>
-      <p class="home-desc">Автоматический дневник ныряний и осмотров расщелины. Данные разбиты по эпохам навыков и сессиям. Сравнивайте эпохи, анализируйте тренды.</p>
+      <p class="home-desc">Автоматический дневник ныряний и осмотров расщелины. Данные разбиты по эпохам навыков и сессиям.</p>
     </div>
     <div class="home-right">
       <div class="journal-card jcard-sea" onclick="showPage('diving')">
         <div class="jcard-num">Запись 01 &mdash; нырки</div>
         <span class="jcard-icon">🌊</span>
         <div class="jcard-title">Морская бездна</div>
-        <div class="jcard-desc">Найденные предметы, процент успеха, динамика по дням, сравнение эпох.</div>
+        <div class="jcard-desc">Найденные предметы, процент успеха, динамика по сессиям, эпохи навыков ЗУ и ПУ.</div>
         <span class="jcard-cta">Открыть записи →</span>
       </div>
       <div class="journal-card jcard-cave" onclick="showPage('hollow')">
         <div class="jcard-num">Запись 02 &mdash; расщелина</div>
         <span class="jcard-icon">🌿</span>
         <div class="jcard-title">Лесная расщелина</div>
-        <div class="jcard-desc">Осмотры, находки, риск отравления, детальная аналитика по видам животных.</div>
+        <div class="jcard-desc">Осмотры расщелины: находки, шанс отравиться, комочки, гнёзда, эпохи ЗУ, УН и ЛУ.</div>
         <span class="jcard-cta" style="color:#70a050">Открыть записи →</span>
       </div>
     </div>
@@ -670,7 +643,6 @@ footer a:hover { color: var(--ac3) }
         <div class="sp-title">🌊&ensp;<em>Нырки</em></div>
         <div class="sp-meta" id="div-updated"></div>
       </div>
-      <button class="compare-btn" onclick="showCompare('diving')">⚖️ Сравнить эпохи</button>
     </div>
     <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
     <div class="epochs-row fu d1">
@@ -690,7 +662,6 @@ footer a:hover { color: var(--ac3) }
         <div class="sp-title">🌿&ensp;<em>Расщелина</em></div>
         <div class="sp-meta" id="hol-updated"></div>
       </div>
-      <button class="compare-btn" onclick="showCompare('hollow')">⚖️ Сравнить эпохи</button>
     </div>
     <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
     <div class="epochs-row fu d1">
@@ -700,27 +671,6 @@ footer a:hover { color: var(--ac3) }
     <div id="hol-content">
       <div class="loading-wrap"><div class="loading-orb"></div><div class="loading-text">Осмотр</div></div>
     </div>
-  </div>
-</div>
-
-<!-- Модальное окно сравнения эпох -->
-<div id="compare-modal" class="modal">
-  <div class="modal-content">
-    <div class="modal-head">
-      <div class="modal-title">⚖️ Сравнение эпох</div>
-      <button class="modal-close" onclick="closeCompare()">✕</button>
-    </div>
-    <div class="compare-grid">
-      <div class="compare-select">
-        <label>Эпоха 1</label>
-        <select id="compare-epoch1" onchange="updateComparison()"></select>
-      </div>
-      <div class="compare-select">
-        <label>Эпоха 2</label>
-        <select id="compare-epoch2" onchange="updateComparison()"></select>
-      </div>
-    </div>
-    <div id="compare-content"></div>
   </div>
 </div>
 
@@ -741,6 +691,7 @@ const DIVE_GROUPS = {
   'Еда/вода': [3965, 3966, 3967, 3968, 3969, 3970, 3420],
 };
 
+// ── РАСЩЕЛИНА: все предметы с фото ──────────────────────────
 const HOL_GROUPS = {
   'Перо/гнездо': [2072, 2073, 2074, 2075, 2076, 2077],
   'Целебки':     [75, 76, 110],
@@ -752,12 +703,16 @@ const HOL_GROUPS = {
   'Разное':      [20, 566, 417, 1034, 565],
 };
 
+// Пауки + ядовитые змеи = отравление
 const POISON_IDS = [8019, 8020, 8021, 8022, 8023, 8024, 8027, 8028];
+const CLUMP_IDS  = new Set([4008, 4009]);
 
 const NAMES = {
+  // общие
   20:'Паутина', 75:'Мох', 76:'Водяной мох', 110:'Мёд',
   417:'Камень 2м', 418:'Камень 3м', 1034:'Малый камень',
   565:'Ветка', 566:'Вьюнок',
+  // нырки
   21:'Целеб. водоросль', 3420:'Водяной мох',
   2072:'Гнездо', 2073:'Гнездо с яйцами', 2074:'Яйцо',
   2075:'Чёрн. перо', 2076:'Коричн. перо', 2077:'Голуб. перо',
@@ -767,20 +722,25 @@ const NAMES = {
   3994:'Ракушка +20', 3995:'Ракушка +30', 3997:'Ракушка сон',
   3998:'Ракушка +15', 3999:'Ракушка +28',
   4008:'Комок (мальки)', 4009:'Комок (ракушки)',
+  // расщелина — пауки/насекомые
   8019:'Рой пчёл', 8020:'Пчела', 8021:'Паук', 8022:'Паук', 8023:'Паук', 8024:'Тёмн. паук',
+  // расщелина — змеи
   8025:'Змея', 8026:'Змея (кр.)', 8027:'Ядов. змея', 8028:'Ядов. змея (кр.)',
+  // расщелина — птицы
   8029:'Птица', 8030:'Птица', 8031:'Птица', 8032:'Птица',
+  // расщелина — грызуны/летуны
   8033:'Мышь', 8035:'Мышь (бурая)', 8036:'Белка', 8037:'Мышь (лесн.)',
   8038:'Летучая мышь', 8042:'Мышь', 8043:'Упит. мышь',
+  // расщелина — рептилии
   8039:'Ящерица (кр.)', 8040:'Лягушка', 8041:'Ящерица',
 };
 
 const IMG = id => `https://wsrv.nl/?url=catwar.net/cw3/things/${id}.png&n=-1`;
+
 const DIVE_PAL = ['#1a9090','#c04040','#1a70c0','#a09040','#4090b0','#405868'];
 const HOL_PAL  = ['#7a7228','#4a8058','#b06040','#c04040','#4a70a0','#8a6838','#4a8870','#485868','#606848'];
 
-let CH = {}, loaded = {}, cache = { epochs: null, diving: null, hollow: null };
-let compareState = { type: null, epochs: null, allSessions: null, allCatches: null, allLoot: null };
+let CH = {}, loaded = {};
 
 function spawnBubbles() {
   const c = document.getElementById('bubbles-container');
@@ -814,53 +774,32 @@ window.addEventListener('hashchange', () => { const id = location.hash.slice(1);
 (function() { const id = location.hash.slice(1); showPage(PAGES.includes(id) ? id : 'home'); })();
 
 async function sbGet(path) {
-  try {
-    const r = await fetch(SB_URL + '/rest/v1/' + path, {
-      headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
-    });
-    if (!r.ok) {
-      console.error('API error:', r.status);
-      return [];
-    }
-    return r.json();
-  } catch (e) {
-    console.error('Fetch error:', e);
-    return [];
-  }
+  const r = await fetch(SB_URL + '/rest/v1/' + path, {
+    headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
+  });
+  if (!r.ok) return [];
+  return r.json();
 }
 
 async function loadPage(type) {
   const prefix = type === 'diving' ? 'div' : 'hol';
   const groups = type === 'diving' ? DIVE_GROUPS : HOL_GROUPS;
-  
-  let epochs = cache.epochs;
-  if (!epochs) {
-    epochs = await sbGet('skill_epochs?select=*&order=started_at.asc');
-    cache.epochs = epochs;
-  }
-
-  const sessions = await sbGet('sessions?type=eq.'+type+'&select=*&order=started_at.desc');
-  compareState.allSessions = sessions;
-  
+  const [epochs, sessions] = await Promise.all([
+    sbGet('skill_epochs?select=*&order=started_at.asc'),
+    sbGet('sessions?type=eq.'+type+'&select=*&order=started_at.desc'),
+  ]);
   if (!sessions.length) {
     document.getElementById(prefix+'-content').innerHTML = '<div class="loading-wrap"><div class="loading-text">Нет данных</div></div>';
     return;
   }
-  
   const ids = sessions.map(s => s.id).join(',');
   const [catches, lootEvents] = await Promise.all([
     sbGet('catches?session_id=in.('+ids+')&select=*&order=caught_at.desc'),
     sbGet('loot_events?session_id=in.('+ids+')&select=*&order=happened_at.desc'),
   ]);
-  
-  compareState.allCatches = catches;
-  compareState.allLoot = lootEvents;
-  compareState.epochs = epochs;
-  
   const last = new Date(sessions[0].started_at);
   document.getElementById(prefix+'-updated').textContent =
     'Последняя активность: ' + last.toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'});
-  
   const usedIds = new Set(sessions.map(s => s.epoch_id));
   const epEl = document.getElementById(prefix+'-epochs');
   const allBtn = makeEpochBtn('Все', true, () => {
@@ -869,7 +808,6 @@ async function loadPage(type) {
     renderContent(type, null, sessions, catches, lootEvents, epochs, groups, prefix);
   });
   epEl.appendChild(allBtn);
-  
   epochs.filter(e => usedIds.has(e.id)).forEach(ep => {
     const sk = [];
     if (ep.zu) sk.push(ep.zu+'ЗУ');
@@ -884,30 +822,24 @@ async function loadPage(type) {
     btn.title = 'С '+new Date(ep.started_at).toLocaleDateString('ru');
     epEl.appendChild(btn);
   });
-  
   renderContent(type, null, sessions, catches, lootEvents, epochs, groups, prefix);
 }
 
 function makeEpochBtn(label, active, cb) {
   const b = document.createElement('button');
   b.className = 'epoch-btn'+(active?' active':'');
-  b.textContent = label;
-  b.onclick = cb;
+  b.textContent = label; b.onclick = cb;
   return b;
 }
 
 function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, groups, prefix) {
-  const isDive = type === 'diving';
+  const isDive   = type === 'diving';
   const sessions = epochId ? allSessions.filter(s => s.epoch_id===epochId) : allSessions;
-  const sessIds = new Set(sessions.map(s => s.id));
-  const catches = allCatches.filter(c => sessIds.has(c.session_id));
-  const loot = Array.isArray(allLoot) ? allLoot.filter(e => sessIds.has(e.session_id)) : [];
-  const el = document.getElementById(prefix+'-content');
-  
-  if (!sessions.length) {
-    el.innerHTML = '<div class="loading-wrap"><div class="loading-text">Нет данных</div></div>';
-    return;
-  }
+  const sessIds  = new Set(sessions.map(s => s.id));
+  const catches  = allCatches.filter(c => sessIds.has(c.session_id));
+  const loot     = Array.isArray(allLoot) ? allLoot.filter(e => sessIds.has(e.session_id)) : [];
+  const el       = document.getElementById(prefix+'-content');
+  if (!sessions.length) { el.innerHTML = '<div class="loading-wrap"><div class="loading-text">Нет данных</div></div>'; return; }
 
   const totalAttempts = sessions.reduce((s,x) => s+(x.total_attempts||0), 0);
   const catchById = {};
@@ -920,14 +852,14 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
     totalCaught += groupCounts[g];
   });
 
-  const pust = totalAttempts - totalCaught;
-  const succRate = totalAttempts ? ((totalCaught/totalAttempts)*100).toFixed(1) : '0.0';
-  const poisoned = POISON_IDS.reduce((s,id) => s+(catchById[id]||0), 0);
+  const pust      = totalAttempts - totalCaught;
+  const succRate  = totalAttempts ? ((totalCaught/totalAttempts)*100).toFixed(1) : '0.0';
+  const poisoned  = POISON_IDS.reduce((s,id) => s+(catchById[id]||0), 0);
   const poisonPct = totalAttempts ? (poisoned/totalAttempts*100).toFixed(2) : '0.00';
 
   const oldClumps = (catchById[4008]||0)+(catchById[4009]||0);
   const newClumps = loot.filter(e => e.event_type==='clump');
-  const newNests = loot.filter(e => e.event_type==='nest');
+  const newNests  = loot.filter(e => e.event_type==='nest');
 
   function lootMap(arr) {
     const m={};
@@ -935,7 +867,7 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
     return m;
   }
   const clumpLoot = lootMap(newClumps);
-  const nestLoot = lootMap(newNests);
+  const nestLoot  = lootMap(newNests);
 
   const epoch = epochId
     ? epochs.find(e => e.id===epochId)
@@ -973,7 +905,7 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
     <div class="charts-row fu d3">
       <div class="cbox">
         <div class="cbox-head">
-          <span class="cbox-title">Активность по дням</span>
+          <span class="cbox-title">Попытки по дням</span>
           <div class="range-row" id="${prefix}-range-btns">
             <button class="rbtn active" onclick="setRange('${prefix}',30,this)">30 дн</button>
             <button class="rbtn" onclick="setRange('${prefix}',90,this)">3 мес</button>
@@ -982,16 +914,10 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
         </div>
         <canvas id="${prefix}-chart-days"></canvas>
       </div>
-    </div>
-    <div class="charts-row fu d3">
       <div class="cbox">
         <div class="cbox-head"><span class="cbox-title">Распределение улова</span></div>
         <div class="pie-wrap"><canvas id="${prefix}-chart-pie"></canvas></div>
         <div class="pie-legend" id="${prefix}-pie-legend"></div>
-      </div>
-      <div class="cbox">
-        <div class="cbox-head"><span class="cbox-title">Средний улов за сессию</span></div>
-        <canvas id="${prefix}-chart-session"></canvas>
       </div>
     </div>
   `;
@@ -1000,15 +926,14 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
   el._sessions = sessions;
   drawDaysChart(prefix, sessions, '30');
   drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
-  drawSessionChart(prefix, sessions, isDive);
 }
 
 function renderLootSection(isDive, oldClumps, newClumpCount, clumpLoot, nestCount, nestLoot) {
-  const total = isDive ? (oldClumps+newClumpCount) : nestCount;
+  const total   = isDive ? (oldClumps+newClumpCount) : nestCount;
   const lootMap = isDive ? clumpLoot : nestLoot;
   if (total===0 && Object.keys(lootMap).length===0) return '';
-  const hasNew = Object.keys(lootMap).length > 0;
-  const icon = isDive ? '🐟' : '🪺';
+  const hasNew    = Object.keys(lootMap).length > 0;
+  const icon      = isDive ? '🐟' : '🪺';
   const titleText = isDive ? `Комочки — встречено ${total} раз` : `Гнёзда — встречено ${nestCount} раз`;
   const items = Object.entries(lootMap).sort((a,b)=>b[1]-a[1]).map(([id,cnt]) => `
     <div class="loot-chip">
@@ -1029,14 +954,11 @@ function buildItemsGrid(prefix, catchById) {
   const grid = document.getElementById(prefix+'-items-grid');
   if (!grid) return;
   const sorted = Object.entries(catchById).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
-  if (!sorted.length) {
-    grid.innerHTML = '<span style="font-family:Syne Mono,monospace;font-size:11px;color:var(--text2)">Нет данных</span>';
-    return;
-  }
+  if (!sorted.length) { grid.innerHTML = '<span style="font-family:Syne Mono,monospace;font-size:11px;color:var(--text2)">Нет данных</span>'; return; }
   const max = sorted[0][1];
   grid.innerHTML = sorted.map(([itemId,count]) => {
     const name = NAMES[itemId]||'ID '+itemId;
-    const bw = Math.max(8, Math.round(count/max*100));
+    const bw   = Math.max(8, Math.round(count/max*100));
     return `<div class="icard" title="${name}: ${count}">
       <div class="icard-img-wrap">
         <img src="${IMG(itemId)}" alt="" loading="lazy"
@@ -1067,8 +989,7 @@ function drawDaysChart(prefix, sessions, range) {
       byWeek[key]=(byWeek[key]||0)+(s.total_attempts||0);
     });
     const sorted=Object.entries(byWeek).sort((a,b)=>a[0].split('.').reverse().join('-').localeCompare(b[0].split('.').reverse().join('-')));
-    labels=sorted.map(x=>x[0]);
-    data=sorted.map(x=>x[1]);
+    labels=sorted.map(x=>x[0]); data=sorted.map(x=>x[1]);
   } else {
     const days=parseInt(range), byDay={};
     sessions.forEach(s => {
@@ -1076,86 +997,23 @@ function drawDaysChart(prefix, sessions, range) {
       byDay[key]=(byDay[key]||0)+(s.total_attempts||0);
     });
     const pts=Array.from({length:days},(_,i)=>{
-      const d=new Date();
-      d.setDate(d.getDate()-(days-1-i));
+      const d=new Date(); d.setDate(d.getDate()-(days-1-i));
       const l=d.toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});
       return {l, v:byDay[l]||0};
     });
-    labels=pts.map(p=>p.l);
-    data=pts.map(p=>p.v);
+    labels=pts.map(p=>p.l); data=pts.map(p=>p.v);
   }
   const id=prefix+'-chart-days';
   if (CH[id]) CH[id].destroy();
   const col=getComputedStyle(document.body).getPropertyValue('--ac2').trim()||'#1498c0';
   CH[id]=new Chart(document.getElementById(id),{
     type:'bar',
-    data:{
-      labels,
-      datasets:[{
-        data,
-        backgroundColor:col+'22',
-        borderColor:col+'88',
-        borderWidth:1,
-        borderRadius:3,
-        hoverBackgroundColor:col+'44'
-      }]
-    },
+    data:{ labels, datasets:[{ data, backgroundColor:col+'22', borderColor:col+'88', borderWidth:1, borderRadius:3, hoverBackgroundColor:col+'44' }] },
     options:{
-      responsive:true,
-      maintainAspectRatio:true,
-      plugins:{legend:{display:false}},
+      responsive:true, plugins:{legend:{display:false}},
       scales:{
-        x:{
-          ticks:{color:'var(--text2)',font:{family:'Syne Mono',size:10},maxRotation:45},
-          grid:{color:'rgba(255,255,255,.03)'}
-        },
-        y:{
-          ticks:{color:'var(--text2)',font:{family:'Syne Mono',size:10}},
-          grid:{color:'rgba(255,255,255,.03)'},
-          beginAtZero:true
-        }
-      }
-    }
-  });
-}
-
-function drawSessionChart(prefix, sessions, isDive) {
-  const avgAttempts = sessions.reduce((s,x) => s+(x.total_attempts||0), 0) / sessions.length;
-  const avgSuccess = sessions.reduce((s,x) => s+(x.successful_catches||0), 0) / sessions.length;
-  
-  const id = prefix+'-chart-session';
-  if (CH[id]) CH[id].destroy();
-  const col1 = getComputedStyle(document.body).getPropertyValue('--ac2').trim() || '#1498c0';
-  const col2 = getComputedStyle(document.body).getPropertyValue('--ac3').trim() || '#20c8e8';
-  
-  CH[id] = new Chart(document.getElementById(id), {
-    type: 'radar',
-    data: {
-      labels: ['Попыток', 'Успешных', 'Средн. улов'],
-      datasets: [{
-        label: 'Средние значения',
-        data: [
-          Math.round(avgAttempts),
-          Math.round(avgSuccess),
-          Math.round(avgSuccess / (avgAttempts || 1) * 100)
-        ],
-        borderColor: col1,
-        backgroundColor: col1 + '22',
-        borderWidth: 2,
-        pointBackgroundColor: col2,
-        pointBorderColor: col1,
-        pointRadius: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        r: {
-          ticks: { color: 'var(--text2)', font: { family: 'Syne Mono', size: 9 } },
-          grid: { color: 'rgba(255,255,255,.05)' }
-        }
+        x:{ ticks:{color:'var(--text2)',font:{family:'Syne Mono',size:10},maxRotation:45}, grid:{color:'rgba(255,255,255,.03)'} },
+        y:{ ticks:{color:'var(--text2)',font:{family:'Syne Mono',size:10}}, grid:{color:'rgba(255,255,255,.03)'}, beginAtZero:true }
       }
     }
   });
@@ -1183,232 +1041,6 @@ function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
     </div>`;
   }).join('');
 }
-
-// ── СРАВНЕНИЕ ЭПОХ ──────────────────────────────────────────
-function showCompare(type) {
-  compareState.type = type;
-  const modal = document.getElementById('compare-modal');
-  const prefix = type === 'diving' ? 'div' : 'hol';
-  const groups = type === 'diving' ? DIVE_GROUPS : HOL_GROUPS;
-  
-  const e1 = document.getElementById('compare-epoch1');
-  const e2 = document.getElementById('compare-epoch2');
-  e1.innerHTML = '';
-  e2.innerHTML = '';
-  
-  const epochs = compareState.epochs || [];
-  const usedIds = new Set((compareState.allSessions || []).map(s => s.epoch_id));
-  
-  epochs.filter(ep => usedIds.has(ep.id)).forEach(ep => {
-    const sk = [];
-    if (ep.zu) sk.push(ep.zu+'ЗУ');
-    if (ep.un) sk.push(ep.un+'УН');
-    if (ep.pu) sk.push(ep.pu+'ПУ');
-    if (ep.lu) sk.push(ep.lu+'ЛУ');
-    const label = sk.join(' · ') || 'Эпоха '+ep.id;
-    
-    const opt1 = document.createElement('option');
-    opt1.value = ep.id;
-    opt1.textContent = label;
-    e1.appendChild(opt1);
-    
-    const opt2 = document.createElement('option');
-    opt2.value = ep.id;
-    opt2.textContent = label;
-    e2.appendChild(opt2);
-  });
-  
-  if (e2.children.length > 1) e2.selectedIndex = 1;
-  
-  modal.classList.add('active');
-  updateComparison();
-}
-
-function closeCompare() {
-  document.getElementById('compare-modal').classList.remove('active');
-}
-
-function updateComparison() {
-  const e1Id = parseInt(document.getElementById('compare-epoch1').value);
-  const e2Id = parseInt(document.getElementById('compare-epoch2').value);
-  if (!e1Id || !e2Id) return;
-  
-  const type = compareState.type;
-  const isDive = type === 'diving';
-  const groups = isDive ? DIVE_GROUPS : HOL_GROUPS;
-  
-  const sessions1 = compareState.allSessions.filter(s => s.epoch_id === e1Id);
-  const sessions2 = compareState.allSessions.filter(s => s.epoch_id === e2Id);
-  
-  const sessIds1 = new Set(sessions1.map(s => s.id));
-  const sessIds2 = new Set(sessions2.map(s => s.id));
-  
-  const catches1 = compareState.allCatches.filter(c => sessIds1.has(c.session_id));
-  const catches2 = compareState.allCatches.filter(c => sessIds2.has(c.session_id));
-  
-  const stats1 = getEpochStats(sessions1, catches1, groups);
-  const stats2 = getEpochStats(sessions2, catches2, groups);
-  
-  const comp = document.getElementById('compare-content');
-  const pal = isDive ? DIVE_PAL : HOL_PAL;
-  
-  comp.innerHTML = `
-    <div class="metrics-row fu">
-      <div class="mcard"><div class="mcard-glow mg-mist"></div><div class="mcard-label">Попыток эпоха 1</div><div class="mcard-val">${stats1.attempts}</div><div class="mcard-sub">${stats1.sessions} сессий</div></div>
-      <div class="mcard"><div class="mcard-glow mg-mist"></div><div class="mcard-label">Попыток эпоха 2</div><div class="mcard-val">${stats2.attempts}</div><div class="mcard-sub">${stats2.sessions} сессий</div></div>
-      <div class="mcard"><div class="mcard-glow mg-blue"></div><div class="mcard-label">Успех эпоха 1</div><div class="mcard-val">${stats1.successRate.toFixed(1)}<span class="unit">%</span></div>${makeDelta(stats1.successRate, stats2.successRate)}</div>
-      <div class="mcard"><div class="mcard-glow mg-blue"></div><div class="mcard-label">Успех эпоха 2</div><div class="mcard-val">${stats2.successRate.toFixed(1)}<span class="unit">%</span></div>${makeDelta(stats2.successRate, stats1.successRate)}</div>
-    </div>
-    <div class="section-wrap fu d1">
-      <div class="sec-head"><span class="sec-label">Сравнение групп</span><span class="sec-line"></span><span class="sec-dot"></span></div>
-      <canvas id="compare-chart-groups"></canvas>
-    </div>
-    <div class="charts-row dual fu d2">
-      <div class="cbox">
-        <div class="cbox-head"><span class="cbox-title">Распределение эпоха 1</span></div>
-        <div class="pie-wrap"><canvas id="compare-pie-1"></canvas></div>
-        <div class="pie-legend" id="compare-legend-1"></div>
-      </div>
-      <div class="cbox">
-        <div class="cbox-head"><span class="cbox-title">Распределение эпоха 2</span></div>
-        <div class="pie-wrap"><canvas id="compare-pie-2"></canvas></div>
-        <div class="pie-legend" id="compare-legend-2"></div>
-      </div>
-    </div>
-  `;
-  
-  drawComparisonChart(stats1, stats2);
-  drawComparePies(stats1, stats2, pal);
-}
-
-function getEpochStats(sessions, catches, groups) {
-  const attempts = sessions.reduce((s,x) => s+(x.total_attempts||0), 0);
-  const successful = catches.length;
-  const successRate = attempts ? (successful/attempts*100) : 0;
-  
-  const catchById = {};
-  catches.forEach(c => { catchById[c.item_id] = (catchById[c.item_id]||0)+1 });
-  
-  const groupCounts = {};
-  Object.entries(groups).forEach(([g,ids]) => {
-    groupCounts[g] = ids.reduce((s,id) => s+(catchById[id]||0), 0);
-  });
-  
-  return {
-    attempts,
-    sessions: sessions.length,
-    successful,
-    successRate,
-    groupCounts
-  };
-}
-
-function makeDelta(val1, val2) {
-  const diff = val1 - val2;
-  if (Math.abs(diff) < 0.1) {
-    return '<div class="mcard-delta delta-neutral">≈ без изменений</div>';
-  }
-  const sign = diff > 0 ? '↑' : '↓';
-  const cls = diff > 0 ? 'delta-up' : 'delta-down';
-  return `<div class="mcard-delta ${cls}">${sign} ${Math.abs(diff).toFixed(1)}%</div>`;
-}
-
-function drawComparisonChart(stats1, stats2) {
-  const id = 'compare-chart-groups';
-  if (CH[id]) CH[id].destroy();
-  
-  const groups = Object.keys(stats1.groupCounts);
-  const data1 = groups.map(g => stats1.groupCounts[g] || 0);
-  const data2 = groups.map(g => stats2.groupCounts[g] || 0);
-  const col1 = getComputedStyle(document.body).getPropertyValue('--ac2').trim() || '#1498c0';
-  const col2 = getComputedStyle(document.body).getPropertyValue('--ac3').trim() || '#20c8e8';
-  
-  CH[id] = new Chart(document.getElementById(id), {
-    type: 'bar',
-    data: {
-      labels: groups,
-      datasets: [
-        {
-          label: 'Эпоха 1',
-          data: data1,
-          backgroundColor: col1 + '66',
-          borderColor: col1,
-          borderWidth: 1,
-          borderRadius: 3
-        },
-        {
-          label: 'Эпоха 2',
-          data: data2,
-          backgroundColor: col2 + '66',
-          borderColor: col2,
-          borderWidth: 1,
-          borderRadius: 3
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: true, labels: { color: 'var(--text2)', font: { family: 'Syne Mono', size: 11 } } }
-      },
-      scales: {
-        x: { ticks: { color: 'var(--text2)', font: { family: 'Syne Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,.03)' } },
-        y: { ticks: { color: 'var(--text2)', font: { family: 'Syne Mono', size: 10 } }, grid: { color: 'rgba(255,255,255,.03)' }, beginAtZero: true }
-      }
-    }
-  });
-}
-
-function drawComparePies(stats1, stats2, pal) {
-  const groups = Object.keys(stats1.groupCounts);
-  const data1 = [...groups.map(g => stats1.groupCounts[g] || 0), stats1.attempts - groups.reduce((s,g) => s+(stats1.groupCounts[g]||0), 0)];
-  const data2 = [...groups.map(g => stats2.groupCounts[g] || 0), stats2.attempts - groups.reduce((s,g) => s+(stats2.groupCounts[g]||0), 0)];
-  const labels = [...groups, 'Пусто'];
-  
-  const id1 = 'compare-pie-1';
-  const id2 = 'compare-pie-2';
-  if (CH[id1]) CH[id1].destroy();
-  if (CH[id2]) CH[id2].destroy();
-  
-  CH[id1] = new Chart(document.getElementById(id1), {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data: data1, backgroundColor: pal, borderWidth: 0, hoverOffset: 8 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '72%' }
-  });
-  
-  CH[id2] = new Chart(document.getElementById(id2), {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data: data2, backgroundColor: pal, borderWidth: 0, hoverOffset: 8 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '72%' }
-  });
-  
-  const leg1 = document.getElementById('compare-legend-1');
-  const leg2 = document.getElementById('compare-legend-2');
-  
-  leg1.innerHTML = labels.map((lbl,i) => {
-    const val = data1[i] || 0;
-    const pct = stats1.attempts ? (val/stats1.attempts*100).toFixed(1) : '0.0';
-    return `<div class="pleg-item">
-      <div class="pleg-left"><div class="pleg-dot" style="background:${pal[i]}"></div><span class="pleg-name">${lbl}</span></div>
-      <div class="pleg-right"><span class="pleg-n">${val}</span><span class="pleg-pct">${pct}%</span></div>
-    </div>`;
-  }).join('');
-  
-  leg2.innerHTML = labels.map((lbl,i) => {
-    const val = data2[i] || 0;
-    const pct = stats2.attempts ? (val/stats2.attempts*100).toFixed(1) : '0.0';
-    return `<div class="pleg-item">
-      <div class="pleg-left"><div class="pleg-dot" style="background:${pal[i]}"></div><span class="pleg-name">${lbl}</span></div>
-      <div class="pleg-right"><span class="pleg-n">${val}</span><span class="pleg-pct">${pct}%</span></div>
-    </div>`;
-  }).join('');
-}
-
-// Закрытие модала по клику снаружи
-document.getElementById('compare-modal')?.addEventListener('click', (e) => {
-  if (e.target.id === 'compare-modal') closeCompare();
-});
 </script>
 </body>
 </html>
