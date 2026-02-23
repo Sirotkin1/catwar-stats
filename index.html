@@ -4,782 +4,926 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Бортовой Журнал — Сирота</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Syne+Mono&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-/* ══════════════════════════════════
-   TOKENS
-══════════════════════════════════ */
-:root {
-  --ink:  #07090f;
-  --ink2: #0d1120;
-  --ink3: #121828;
-  --ink4: #182030;
-
-  --paper:  #dde2ef;
-  --paper2: #9aa4c0;
-  --mist:   #5a6890;
-  --mist2:  #3a4560;
-
-  /* Theme tokens (overridden per-page) */
-  --ac1: #2a6cb0;
-  --ac2: #5aa0e0;
-  --ac3: #8accf8;
-
-  --glow-a: rgba(30,90,180,.14);
-  --glow-b: rgba(20,120,110,.10);
-  --glow-c: rgba(10,40,80,.06);
-
-  --line:  rgba(80,140,220,.07);
-  --line2: rgba(80,140,220,.15);
-  --line3: rgba(80,140,220,.30);
-
-  --nav-c: #8accf8;
-  --nav-bg: rgba(50,120,200,.10);
-  --nav-bd: rgba(100,180,250,.35);
-
-  --chip-bg: rgba(50,120,200,.12);
-  --chip-bd: rgba(100,180,250,.25);
-
-  --epoch-c: #5aa0e0;
-  --epoch-bd: rgba(90,160,220,.35);
-
-  --bar-col: #2a6cb0;
-  --cbox-tit: #3a4560;
-
-  --stripe-a: #204880;
-  --stripe-b: #5aa0e0;
-  --stripe-t-a: #206878;
-  --stripe-t-b: #40c0a8;
-}
-
-body.th-home {
-  --ac1: #8a1a1a;
-  --ac2: #c83030;
-  --ac3: #f06060;
-  --glow-a: rgba(140,20,20,.16);
-  --glow-b: rgba(60,8,8,.22);
-  --glow-c: rgba(12,4,4,.40);
-  --line:  rgba(180,40,40,.07);
-  --line2: rgba(180,40,40,.16);
-  --line3: rgba(180,40,40,.32);
-  --nav-c: #f06060;
-  --nav-bg: rgba(160,30,30,.10);
-  --nav-bd: rgba(200,60,60,.40);
-}
-
-body.th-hollow {
-  --ac1: #3a5e2c;
-  --ac2: #68a048;
-  --ac3: #96cc78;
-  --glow-a: rgba(48,80,24,.20);
-  --glow-b: rgba(16,28,8,.28);
-  --glow-c: rgba(8,14,4,.40);
-  --line:  rgba(80,120,50,.08);
-  --line2: rgba(80,120,50,.18);
-  --line3: rgba(80,120,50,.36);
-  --nav-c: #96cc78;
-  --nav-bg: rgba(68,120,48,.10);
-  --nav-bd: rgba(80,140,55,.42);
-  --chip-bg: rgba(68,120,48,.12);
-  --chip-bd: rgba(100,160,70,.28);
-  --epoch-c: #68a048;
-  --epoch-bd: rgba(80,140,55,.38);
-  --bar-col: #3a5e2c;
-  --cbox-tit: #3a5030;
-  --stripe-a: #1e3814;
-  --stripe-b: #68a048;
-  --stripe-t-a: #162c10;
-  --stripe-t-b: #3a6028;
-}
-
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
-html { scroll-behavior:smooth }
+/* ══════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { scroll-behavior: smooth }
 
 body {
-  background: var(--ink);
-  color: var(--paper);
-  font-family: 'Jost', sans-serif;
-  font-weight: 300;
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
   min-height: 100vh;
   overflow-x: hidden;
-  transition: background .6s;
+  transition: background-color 1s ease, color .5s ease;
 }
 
-/* ── Grain texture ── */
-body::after {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size:220px 220px;
+/* ══════════════════════════════════════════════════
+   ████  ТЕМА: ГЛАВНАЯ — НОЧНОЙ ЖУРНАЛ
+══════════════════════════════════════════════════ */
+body.th-home {
+  --bg:      #0a0a0b;
+  --bg2:     #111114;
+  --bg3:     #161619;
+  --bg4:     #1c1c21;
+  --text:    #e2e0db;
+  --text2:   #8a8880;
+  --text3:   #4a4845;
+  --ac:      #9b1e1e;
+  --ac2:     #c42828;
+  --ac3:     #e84040;
+  --acl:     #ff7070;
+  --line:    rgba(200,40,40,.08);
+  --line2:   rgba(200,40,40,.18);
+  --line3:   rgba(200,40,40,.35);
+  --card-bg: #0e0e10;
+  --card-bd: rgba(160,30,30,.18);
+  --chip-bg: rgba(155,30,30,.14);
+  --chip-bd: rgba(200,40,40,.28);
+  background-color: var(--bg);
+  color: var(--text);
 }
 
-/* ── Atmospheric glow ── */
-body::before {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+/* ══════════════════════════════════════════════════
+   ████  ТЕМА: НЫРКИ — МОРСКАЯ БЕЗДНА
+══════════════════════════════════════════════════ */
+body.th-dive {
+  --bg:      #020c18;
+  --bg2:     #051422;
+  --bg3:     #071c30;
+  --bg4:     #0a243c;
+  --text:    #d0e8f8;
+  --text2:   #6090b8;
+  --text3:   #304860;
+  --ac:      #0a6888;
+  --ac2:     #1498c0;
+  --ac3:     #20c8e8;
+  --acl:     #70e8ff;
+  --line:    rgba(20,152,192,.08);
+  --line2:   rgba(20,152,192,.18);
+  --line3:   rgba(20,152,192,.38);
+  --card-bg: #040f1c;
+  --card-bd: rgba(16,120,160,.20);
+  --chip-bg: rgba(10,104,136,.16);
+  --chip-bd: rgba(20,152,192,.28);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* ══════════════════════════════════════════════════
+   ████  ТЕМА: РАСЩЕЛИНА — ТЁМНЫЙ ЛЕС
+══════════════════════════════════════════════════ */
+body.th-hollow {
+  --bg:      #0c0e0a;
+  --bg2:     #111410;
+  --bg3:     #171b14;
+  --bg4:     #1e2419;
+  --text:    #d4d8c8;
+  --text2:   #7a8a6a;
+  --text3:   #3e4a34;
+  --ac:      #2a4020;
+  --ac2:     #4a7035;
+  --ac3:     #70a050;
+  --acl:     #a0c878;
+  --line:    rgba(70,110,50,.09);
+  --line2:   rgba(70,110,50,.20);
+  --line3:   rgba(70,110,50,.38);
+  --card-bg: #0e1109;
+  --card-bd: rgba(55,85,40,.22);
+  --chip-bg: rgba(42,64,32,.18);
+  --chip-bd: rgba(74,112,53,.30);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* ══════════════════════════════════════════════════
+   GRAIN OVERLAY
+══════════════════════════════════════════════════ */
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ══════════════════════════════════════════════════
+   HOME BG — атмосфера чернильного ночного журнала
+══════════════════════════════════════════════════ */
+.bg-home {
+  display: none; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+body.th-home .bg-home { display: block }
+
+.bg-home::before {
+  content: '';
+  position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 90% 60% at 10%  -10%, var(--glow-a) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 90% at 95%  95%, var(--glow-b) 0%, transparent 55%),
-    radial-gradient(ellipse 40% 40% at 50%  50%, var(--glow-c) 0%, transparent 50%);
-  transition: background .8s ease;
+    radial-gradient(ellipse 70% 50% at 80% 10%, rgba(120,15,15,.22) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 0% 100%, rgba(80,8,8,.30) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 50% at 50% 50%, rgba(4,2,2,.60) 0%, transparent 80%);
 }
 
-/* ── Vignette ── */
-.vignette {
-  position:fixed; inset:0; pointer-events:none; z-index:0;
-  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 50%, rgba(0,0,0,.55) 100%);
+/* Декоративная диагональная линия — только на главной */
+.bg-home::after {
+  content: '';
+  position: absolute;
+  top: -10%; left: 58%;
+  width: 1px; height: 120%;
+  background: linear-gradient(to bottom, transparent, rgba(180,30,30,.14) 30%, rgba(180,30,30,.14) 70%, transparent);
+  transform: rotate(8deg);
 }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
+   DIVE BG — глубоководная бездна
+══════════════════════════════════════════════════ */
+.bg-dive {
+  display: none; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+body.th-dive .bg-dive { display: block }
+
+.bg-dive::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 100% 40% at 50% 0%, rgba(6,30,58,.80) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 20% 80%, rgba(8,80,120,.25) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 80% 60%, rgba(0,100,140,.18) 0%, transparent 45%),
+    linear-gradient(to bottom, #020c18 0%, #030e1e 40%, #040a14 100%);
+}
+
+/* Биолюминесценция */
+.bio-1, .bio-2, .bio-3 {
+  position: absolute; border-radius: 50%;
+  filter: blur(60px); animation: bioPulse 6s ease-in-out infinite;
+}
+.bio-1 { width:300px; height:200px; top:30%; left:10%; background: rgba(0,200,230,.06); animation-delay:0s }
+.bio-2 { width:200px; height:300px; top:60%; right:15%; background: rgba(0,180,200,.05); animation-delay:-2.5s }
+.bio-3 { width:150px; height:150px; top:20%; right:30%; background: rgba(20,220,255,.04); animation-delay:-4s }
+
+@keyframes bioPulse {
+  0%, 100% { opacity: .6; transform: scale(1) }
+  50% { opacity: 1; transform: scale(1.15) }
+}
+
+/* Пузырьки */
+.bubbles { position: absolute; inset: 0; overflow: hidden }
+.bubble {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(100,200,240,.15);
+  animation: rise linear infinite;
+  bottom: -20px;
+}
+@keyframes rise {
+  0%   { transform: translateY(0) translateX(0); opacity: 0 }
+  10%  { opacity: .6 }
+  90%  { opacity: .3 }
+  100% { transform: translateY(-110vh) translateX(20px); opacity: 0 }
+}
+
+/* ══════════════════════════════════════════════════
+   HOLLOW BG — тёмный лес, расщелина
+══════════════════════════════════════════════════ */
+.bg-hollow {
+  display: none; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+body.th-hollow .bg-hollow { display: block }
+
+.bg-hollow::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 70% at 15% 100%, rgba(30,50,15,.55) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 85% 20%, rgba(20,35,10,.40) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 30% at 50% 50%, rgba(10,16,6,.70) 0%, transparent 70%),
+    linear-gradient(to bottom, #0c0e0a 0%, #0e1109 60%, #080a06 100%);
+}
+
+/* Дапплинг — пятна "просвета через листья" */
+.bg-hollow::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 8% 12% at 25% 15%, rgba(80,120,40,.08) 0%, transparent 80%),
+    radial-gradient(ellipse 6% 10% at 70% 35%, rgba(70,100,35,.07) 0%, transparent 80%),
+    radial-gradient(ellipse 10% 8% at 45% 60%, rgba(60,90,30,.06) 0%, transparent 80%),
+    radial-gradient(ellipse 5% 8% at 85% 75%, rgba(80,110,40,.05) 0%, transparent 80%);
+}
+
+/* ══════════════════════════════════════════════════
    HEADER
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 header {
-  position:sticky; top:0; z-index:200;
-  background: rgba(7,9,15,.82);
-  backdrop-filter: blur(24px) saturate(1.6);
+  position: sticky; top: 0; z-index: 500;
+  backdrop-filter: blur(28px) saturate(1.4);
   border-bottom: 1px solid var(--line2);
-  transition: border-color .5s;
+  transition: border-color .6s, background .6s;
+}
+body.th-home   header { background: rgba(10,10,11,.85) }
+body.th-dive   header { background: rgba(2,12,24,.88) }
+body.th-hollow header { background: rgba(12,14,10,.86) }
+
+.hdr {
+  max-width: 1400px; margin: 0 auto; padding: 0 44px;
+  display: flex; align-items: center; justify-content: space-between; height: 60px;
 }
 
-.header-inner {
-  max-width: 1360px; margin: 0 auto; padding: 0 40px;
-  display: flex; align-items: center; justify-content: space-between; height: 58px;
+.logo-btn {
+  display: flex; align-items: center; gap: 14px;
+  background: none; border: none; cursor: pointer; color: var(--text);
+  transition: color .2s;
 }
+.logo-btn:hover { color: var(--ac3) }
 
-.logo {
-  display: flex; align-items: center; gap: 11px;
-  background: none; border: none; cursor: pointer;
-  color: var(--paper); transition: color .2s;
-  text-decoration: none;
-}
-.logo:hover { color: var(--ac3) }
-
-.logo-mark {
-  width: 30px; height: 30px; border-radius: 8px;
-  background: var(--ink3);
+.logo-sigil {
+  position: relative; width: 32px; height: 32px;
+  border-radius: 8px; background: var(--bg3);
   border: 1px solid var(--line2);
-  display: flex; align-items:center; justify-content:center;
-  font-size: 15px;
-  box-shadow: 0 0 12px var(--glow-a);
-  transition: box-shadow .3s, border-color .3s;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+  overflow: hidden;
+  transition: border-color .3s, box-shadow .3s;
 }
-.logo:hover .logo-mark { border-color: var(--line3); box-shadow: 0 0 20px var(--glow-a) }
+.logo-sigil::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.04));
+}
+.logo-btn:hover .logo-sigil {
+  border-color: var(--line3);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--ac3) 25%, transparent);
+}
 
-.logo-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px; font-weight: 400; letter-spacing: .3px;
+.logo-words {}
+.logo-title {
+  font-family: 'Cormorant', serif;
+  font-size: 17px; font-weight: 600; letter-spacing: .5px;
+  display: block; line-height: 1.1;
 }
 .logo-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; color: var(--mist); letter-spacing: 1px;
-  margin-top: 1px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; color: var(--text3); letter-spacing: 1.5px;
+  text-transform: uppercase; display: block; margin-top: 1px;
 }
-.logo-info { display:flex; flex-direction:column; gap:0 }
 
-nav { display:flex; gap:2px; align-items:center }
-
-.nb {
-  position: relative;
+.nav { display: flex; gap: 2px }
+.nav-btn {
   padding: 6px 18px; border: 1px solid transparent; border-radius: 6px;
-  background: none; font-family: 'DM Mono', monospace;
-  font-size: 11px; font-weight: 300; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--mist); cursor: pointer;
-  transition: all .2s;
+  background: none; font-family: 'Syne Mono', monospace;
+  font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--text3); cursor: pointer; transition: all .2s;
 }
-.nb:hover { color: var(--paper2); border-color: var(--line2) }
-.nb.active {
-  color: var(--nav-c);
-  border-color: var(--nav-bd);
-  background: var(--nav-bg);
-  font-weight: 400;
-}
-
-/* ══════════════════════════════════
-   PAGES — transitions
-══════════════════════════════════ */
-.page { display:none; position:relative; z-index:1 }
-.page.active { display:block; animation: pageIn .4s cubic-bezier(.25,.8,.3,1) both }
-
-@keyframes pageIn {
-  from { opacity:0; transform: translateY(10px) }
-  to   { opacity:1; transform: translateY(0) }
+.nav-btn:hover { color: var(--text2); border-color: var(--line2) }
+.nav-btn.active {
+  color: var(--acl);
+  border-color: var(--line3);
+  background: linear-gradient(135deg, transparent, rgba(0,0,0,.3));
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--ac) 20%, transparent);
+  font-weight: 700;
 }
 
-/* ══════════════════════════════════
-   HOME
-══════════════════════════════════ */
-.home-wrap {
-  max-width: 1000px; margin: 0 auto;
-  padding: 110px 40px 140px;
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center;
+/* ══════════════════════════════════════════════════
+   PAGES
+══════════════════════════════════════════════════ */
+.page { display: none; position: relative; z-index: 1 }
+.page.active { display: block; animation: pageReveal .5s cubic-bezier(.22,.8,.32,1) both }
+@keyframes pageReveal {
+  from { opacity: 0; transform: translateY(12px) }
+  to   { opacity: 1; transform: translateY(0) }
 }
 
-.home-eyebrow {
-  display: flex; align-items: center; gap: 12px;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; letter-spacing: 3.5px; text-transform: uppercase;
-  color: var(--mist); margin-bottom: 36px;
-  animation: slideDown .6s cubic-bezier(.3,.9,.4,1) both;
-}
-.home-eyebrow::before,
-.home-eyebrow::after {
-  content:''; flex:1; max-width:72px; height:1px;
-  background: linear-gradient(90deg, transparent, var(--mist2));
-}
-.home-eyebrow::after { background: linear-gradient(90deg, var(--mist2), transparent) }
-
-@keyframes slideDown {
-  from { opacity:0; transform:translateY(-8px) }
-  to   { opacity:1; transform:translateY(0) }
+/* ══════════════════════════════════════════════════
+   ████  HOME PAGE
+══════════════════════════════════════════════════ */
+.home-layout {
+  max-width: 1400px; margin: 0 auto; padding: 0 44px;
+  min-height: calc(100vh - 60px);
+  display: grid; grid-template-columns: 1fr 420px;
+  align-items: center; gap: 0;
 }
 
-.home-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(58px, 9vw, 104px);
-  font-weight: 900; line-height: .92; letter-spacing: -2px;
-  color: var(--paper); margin-bottom: 32px;
-  animation: heroReveal .8s cubic-bezier(.2,.8,.3,1) .1s both;
+/* LEFT — текст */
+.home-left { padding: 80px 0 80px }
+
+.home-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text3); margin-bottom: 44px;
+  animation: homeSlide .7s cubic-bezier(.25,.9,.3,1) both;
 }
-@keyframes heroReveal {
-  from { opacity:0; transform:translateY(22px) scale(.98) }
-  to   { opacity:1; transform:translateY(0) scale(1) }
-}
-.home-title .italic-block {
-  display: block;
-  font-style: italic; font-weight: 400;
-  background: linear-gradient(135deg, var(--ac2) 0%, var(--ac3) 50%, var(--ac1) 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+.home-tag::before {
+  content: '';
+  display: block; width: 28px; height: 1px;
+  background: var(--ac2);
 }
 
-.home-divider {
-  width: 1px; height: 60px; margin: 0 auto 32px;
-  background: linear-gradient(to bottom, transparent, var(--line3), transparent);
-  animation: fadeIn .6s .3s both;
+@keyframes homeSlide {
+  from { opacity: 0; transform: translateX(-20px) }
+  to   { opacity: 1; transform: translateX(0) }
+}
+
+.home-h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(64px, 7.5vw, 112px);
+  font-weight: 700; line-height: .90;
+  color: var(--text); letter-spacing: -2px;
+  margin-bottom: 36px;
+  animation: homeSlide .7s .1s cubic-bezier(.25,.9,.3,1) both;
+}
+.home-h1 .name-line {
+  display: block; font-style: italic; font-weight: 300;
+  color: var(--ac3);
+  text-shadow: 0 0 60px color-mix(in srgb, var(--ac3) 40%, transparent);
+}
+
+/* Декоративные линейки — как в журнале */
+.home-rules {
+  display: flex; flex-direction: column; gap: 5px;
+  margin: 36px 0; width: 220px;
+  animation: homeSlide .7s .2s cubic-bezier(.25,.9,.3,1) both;
+}
+.home-rule-line {
+  height: 1px;
+  background: linear-gradient(90deg, var(--ac2), transparent);
+}
+.home-rule-line:nth-child(2) { opacity: .5; width: 70% }
+.home-rule-line:nth-child(3) { opacity: .25; width: 40% }
+
+.home-desc {
+  font-size: 13px; line-height: 2.1; color: var(--text2);
+  max-width: 380px; margin-bottom: 56px;
+  animation: homeSlide .7s .3s cubic-bezier(.25,.9,.3,1) both;
+}
+
+/* RIGHT — карточки-журналы */
+.home-right {
+  height: 100%; display: flex; flex-direction: column;
+  justify-content: center; gap: 16px;
+  padding: 80px 0;
+  border-left: 1px solid var(--line2);
+  padding-left: 44px;
+  animation: fadeIn .8s .4s both;
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-.home-desc {
-  font-size: 14px; line-height: 2; color: var(--mist);
-  max-width: 400px; margin: 0 auto 80px;
-  animation: fadeIn .6s .35s both;
+.journal-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 4px; /* Угловатее — как страница журнала */
+  padding: 30px 28px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: transform .3s cubic-bezier(.2,.8,.3,1), border-color .3s, box-shadow .3s;
 }
+.journal-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  transition: background .3s;
+}
+.jcard-sea::before  { background: linear-gradient(to bottom, transparent, #14a0d0, transparent) }
+.jcard-cave::before { background: linear-gradient(to bottom, transparent, #4a7035, transparent) }
 
-/* ── HERO CARDS ── */
-.hero-cards {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 18px; width: 100%; max-width: 640px;
-  animation: fadeIn .6s .45s both;
-}
-
-.hcard {
-  position: relative; overflow: hidden;
-  background: var(--ink2); border-radius: 18px;
-  border: 1px solid var(--line);
-  padding: 36px 30px 30px;
-  cursor: pointer; text-align: left;
-  transition: transform .35s cubic-bezier(.2,.8,.3,1),
-              border-color .35s, box-shadow .35s;
-}
-.hcard::before {
-  content:''; position:absolute; inset:0; opacity:0; transition:opacity .4s;
-  border-radius:inherit;
-}
-.hcard-sea::before  { background: radial-gradient(ellipse at 0% 110%, rgba(30,90,180,.18) 0%, transparent 55%) }
-.hcard-cave::before { background: radial-gradient(ellipse at 0% 110%, rgba(50,100,30,.16) 0%, transparent 55%) }
-
-.hcard:hover {
-  transform: translateY(-6px) scale(1.01);
+.journal-card:hover {
+  transform: translateX(4px);
   border-color: var(--line3);
-  box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 30px rgba(0,0,0,.3);
+  box-shadow: -4px 0 40px rgba(0,0,0,.6), 8px 0 60px rgba(0,0,0,.3);
 }
-.hcard:hover::before { opacity:1 }
 
-.hcard-accent-line {
-  position: absolute; top:0; left:24px; right:24px; height:2px;
-  border-radius: 0 0 4px 4px;
-  transition: opacity .3s;
+/* Номер записи — как в журнале */
+.jcard-num {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; color: var(--text3); letter-spacing: 2px;
+  margin-bottom: 14px; text-transform: uppercase;
 }
-.hcard-sea  .hcard-accent-line { background: linear-gradient(90deg,#1a5090,var(--ac3)) }
-.hcard-cave .hcard-accent-line { background: linear-gradient(90deg,#1e4012,#96cc78) }
+.jcard-sea  .jcard-num { color: rgba(20,160,208,.5) }
+.jcard-cave .jcard-num { color: rgba(74,112,53,.6) }
 
-.hcard-icon {
-  width: 46px; height: 46px; border-radius: 12px;
-  display: flex; align-items:center; justify-content:center;
-  font-size: 22px; margin-bottom: 22px;
-  border: 1px solid var(--line);
-}
-.hcard-sea  .hcard-icon { background: rgba(30,90,180,.14) }
-.hcard-cave .hcard-icon { background: rgba(50,100,30,.14) }
+.jcard-icon { font-size: 28px; margin-bottom: 14px; display: block }
 
-.hcard-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px; font-weight: 700; color: var(--paper); margin-bottom: 10px;
+.jcard-title {
+  font-family: 'Cormorant', serif;
+  font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 10px;
 }
-.hcard-desc { font-size: 12px; color: var(--mist); line-height: 1.9; margin-bottom: 28px }
+.jcard-sea  .jcard-title { color: #c0e0f8 }
+.jcard-cave .jcard-title { color: #c0d4a8 }
 
-.hcard-cta {
-  display: inline-flex; align-items:center; gap:7px;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-}
-.hcard-sea  .hcard-cta { color: var(--ac3) }
-.hcard-cave .hcard-cta { color: #96cc78 }
-.hcard-cta-arrow {
-  transition: transform .25s;
-}
-.hcard:hover .hcard-cta-arrow { transform: translateX(4px) }
+.jcard-desc { font-size: 12px; color: var(--text3); line-height: 1.9; margin-bottom: 22px }
 
-/* ── HOME STATS PREVIEW ── */
-.home-footer-strip {
-  margin-top: 60px; width: 100%; max-width: 500px;
-  display: flex; gap: 1px; border: 1px solid var(--line);
-  border-radius: 12px; overflow: hidden;
-  animation: fadeIn .6s .55s both;
+.jcard-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  transition: gap .2s;
 }
-.hfs-item {
-  flex:1; padding: 16px 20px; background: var(--ink2);
-  text-align:center;
-}
-.hfs-item + .hfs-item { border-left: 1px solid var(--line) }
-.hfs-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; color: var(--paper);
-}
-.hfs-lbl { font-size: 10px; color: var(--mist); letter-spacing:2px; text-transform:uppercase; margin-top: 4px }
+.jcard-sea  .jcard-cta { color: #20c8e8 }
+.jcard-cave .jcard-cta { color: #70a050 }
+.journal-card:hover .jcard-cta { gap: 14px }
 
-/* ══════════════════════════════════
-   STATS PAGE
-══════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   ████  DIVE PAGE — ОКЕАНСКАЯ ТЕМА
+══════════════════════════════════════════════════ */
+/* Волна SVG сверху */
+.ocean-wave-wrap {
+  position: relative; height: 70px; overflow: hidden; pointer-events: none;
+  margin-bottom: -4px;
+}
+.ocean-wave-wrap svg { position: absolute; bottom: 0; width: 200%; animation: waveScroll 12s linear infinite }
+@keyframes waveScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* Depth strip — полоса глубины слева */
+.depth-indicator {
+  position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
+  z-index: 100; display: none;
+  flex-direction: column; align-items: center; gap: 8px;
+}
+body.th-dive .depth-indicator { display: flex }
+.depth-line {
+  width: 1px; height: 140px;
+  background: linear-gradient(to bottom, transparent, var(--ac3), transparent);
+  opacity: .3;
+}
+.depth-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; letter-spacing: 2px; color: var(--text3);
+  writing-mode: vertical-rl; text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════════════
+   STATS PAGE WRAPPER
+══════════════════════════════════════════════════ */
 .sp {
-  max-width: 1360px; margin: 0 auto;
-  padding: 48px 40px 120px;
+  max-width: 1400px; margin: 0 auto;
+  padding: 48px 44px 120px;
 }
 
 .sp-header {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  margin-bottom: 36px; flex-wrap: wrap; gap: 16px;
-  padding-bottom: 24px; border-bottom: 1px solid var(--line);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
 }
 
-.sp-title-wrap {}
-
+.sp-title-block {}
 .sp-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 40px; font-weight: 700;
-  color: var(--paper); letter-spacing: -.5px;
-  display: flex; align-items: center; gap: 12px;
+  font-family: 'Cormorant', serif;
+  font-size: 48px; font-weight: 700; letter-spacing: -1px;
+  color: var(--text); line-height: 1; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 14px;
 }
 .sp-title em {
-  font-style: italic; font-weight: 400;
-  color: transparent;
-  background: linear-gradient(135deg, var(--ac2), var(--ac3));
-  -webkit-background-clip: text; background-clip: text;
+  font-style: italic; font-weight: 300;
+  color: var(--ac3);
+  text-shadow: 0 0 40px color-mix(in srgb, var(--ac3) 50%, transparent);
 }
-
 .sp-meta {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; color: var(--mist); letter-spacing:1px; margin-top:8px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px; color: var(--text3); letter-spacing: 1px;
 }
 
-/* ── EPOCH BAR ── */
+/* Горизонтальный разделитель с акцентом */
+.sp-rule {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 24px;
+}
+.sp-rule-line { flex: 1; height: 1px; background: var(--line2) }
+.sp-rule-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--ac2); margin: 0 12px;
+  box-shadow: 0 0 10px var(--ac2);
+}
+
+/* ══════════════════════════════════════════════════
+   EPOCHS
+══════════════════════════════════════════════════ */
 .epochs-row {
-  display: flex; align-items: center; gap: 6px;
-  flex-wrap: wrap; margin-bottom: 28px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 28px;
 }
 .epochs-lbl {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--mist2); margin-right: 6px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--text3); margin-right: 4px;
 }
 .epoch-btn {
-  padding: 5px 16px; border-radius: 20px;
-  border: 1px solid var(--line); background: var(--ink2);
-  font-family: 'DM Mono', monospace;
-  font-size: 11px; font-weight: 300; color: var(--mist2);
-  cursor: pointer; transition: all .18s; letter-spacing:.5px;
+  padding: 5px 16px; border-radius: 3px;
+  border: 1px solid var(--line); background: var(--bg2);
+  font-family: 'Syne Mono', monospace; font-size: 10px; font-weight: 400;
+  color: var(--text3); cursor: pointer; transition: all .18s; letter-spacing: .5px;
 }
-.epoch-btn:hover { border-color: var(--line2); color: var(--paper2) }
+.epoch-btn:hover { border-color: var(--line2); color: var(--text2) }
 .epoch-btn.active {
-  border-color: var(--epoch-bd);
-  color: var(--epoch-c);
-  background: rgba(80,140,220,.07);
-  font-weight: 400;
+  border-color: var(--line3); color: var(--ac3);
+  background: color-mix(in srgb, var(--ac) 12%, var(--bg2));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--ac3) 20%, transparent);
 }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    METRIC CARDS
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 .metrics-row {
-  display: grid; grid-template-columns: repeat(6,1fr);
-  gap: 10px; margin-bottom: 14px;
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  gap: 10px; margin-bottom: 12px;
 }
 
 .mcard {
-  background: var(--ink2);
-  border: 1px solid var(--line);
-  border-radius: 12px; padding: 18px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 6px; padding: 20px 18px;
   position: relative; overflow: hidden;
-  transition: border-color .2s, transform .2s, box-shadow .2s;
-  cursor: default;
+  transition: border-color .2s, transform .25s, box-shadow .25s;
 }
 .mcard:hover {
-  border-color: var(--line2);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+  border-color: var(--line2); transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0,0,0,.55);
 }
 
-.mcard-top {
-  height: 2px; border-radius: 2px 2px 0 0;
-  position: absolute; top:0; left:0; right:0;
+/* Акцентная полоса — более стильная, с градиентом и свечением */
+.mcard-glow {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  transition: height .2s, opacity .2s;
 }
-.ms-blue   { background: linear-gradient(90deg, var(--stripe-a), var(--stripe-b)) }
-.ms-teal   { background: linear-gradient(90deg, var(--stripe-t-a), var(--stripe-t-b)) }
-.ms-amber  { background: linear-gradient(90deg,#7a4a10,#e8a840) }
-.ms-coral  { background: linear-gradient(90deg,#7a1818,#d04040) }
-.ms-mist   { background: linear-gradient(90deg,#2a3048,#6070a0) }
-.ms-sea    { background: linear-gradient(90deg, var(--stripe-a), var(--stripe-b), var(--stripe-t-b)) }
+.mcard:hover .mcard-glow { height: 2px }
+
+.mg-blue  { background: linear-gradient(90deg, transparent, var(--ac2), transparent); opacity: .7 }
+.mg-cyan  { background: linear-gradient(90deg, transparent, var(--ac3), transparent); opacity: .6 }
+.mg-amber { background: linear-gradient(90deg, transparent, #d09020, transparent); opacity: .7 }
+.mg-coral { background: linear-gradient(90deg, transparent, #c03030, transparent); opacity: .7 }
+.mg-mist  { background: linear-gradient(90deg, transparent, var(--text3), transparent); opacity: .8 }
+.mg-teal  { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ac3) 70%, var(--ac2)), transparent); opacity: .6 }
+
+/* Угловой маркер */
+.mcard::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid; border-width: 0 16px 16px 0;
+  border-color: transparent var(--bg3) transparent transparent;
+  opacity: .5;
+}
 
 .mcard-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
-  color: var(--mist2); margin-bottom: 12px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text3); margin-bottom: 12px;
 }
 .mcard-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px; font-weight: 700;
-  color: var(--paper); line-height: 1;
+  font-family: 'Cormorant', serif;
+  font-size: 36px; font-weight: 700; color: var(--text); line-height: 1;
 }
 .mcard-val .unit {
-  font-family: 'DM Mono', monospace;
-  font-size: 13px; color: var(--mist); margin-left:4px; font-weight:300;
+  font-family: 'Syne Mono', monospace;
+  font-size: 12px; color: var(--text3); margin-left: 4px; font-weight: 400;
 }
 .mcard-sub {
-  font-size: 10px; color: var(--mist2); margin-top: 8px;
-  font-family: 'DM Mono', monospace; letter-spacing:.5px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; color: var(--text3); margin-top: 8px; letter-spacing: .5px;
 }
-.mcard-skills { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px }
+.mcard-skills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px }
 .skill-chip {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px; color: var(--ac2);
-  background: var(--chip-bg); border: 1px solid var(--chip-bd);
-  padding: 3px 10px; border-radius: 5px; letter-spacing:.5px;
+  font-family: 'Syne Mono', monospace; font-size: 10px;
+  color: var(--acl); background: var(--chip-bg); border: 1px solid var(--chip-bd);
+  padding: 3px 10px; border-radius: 3px; letter-spacing: .5px;
 }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════════════════ */
+.section-wrap { margin-bottom: 12px }
+.sec-head {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 12px;
+}
+.sec-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text3); white-space: nowrap;
+}
+.sec-line { flex: 1; height: 1px; background: var(--line) }
+.sec-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ac2); flex-shrink: 0 }
+
+/* ══════════════════════════════════════════════════
    ITEMS GRID
-══════════════════════════════════ */
-.section-head {
-  display: flex; align-items: center; gap: 16px; margin-bottom: 12px;
-}
-.section-title {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; letter-spacing:3px; text-transform:uppercase;
-  color: var(--mist2); white-space: nowrap;
-}
-.section-line { flex:1; height:1px; background: var(--line) }
-
-.items-section, .loot-section { margin-bottom: 14px }
-
+══════════════════════════════════════════════════ */
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
   gap: 8px;
 }
 
 .icard {
-  background: var(--ink2);
-  border: 1px solid var(--line);
-  border-radius: 12px; padding: 16px 10px 13px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 6px; padding: 16px 10px 13px;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   position: relative; overflow: hidden;
-  transition: border-color .2s, transform .2s, background .2s;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
   cursor: default;
 }
 .icard:hover {
-  border-color: rgba(100,160,240,.3);
-  transform: translateY(-3px); background: var(--ink3);
+  border-color: var(--line2); transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
 }
-
-.icard-img-wrap { width:48px; height:48px; display:flex; align-items:center; justify-content:center }
-.icard img { width:48px; height:48px; object-fit:contain; filter:drop-shadow(0 3px 8px rgba(0,0,0,.6)) }
-.icard-fallback { font-size:9px; color:var(--mist2); text-align:center; width:48px; line-height:1.4 }
+.icard-img-wrap { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center }
+.icard img { width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 3px 8px rgba(0,0,0,.7)) }
+.icard-fallback { font-family:'Syne Mono',monospace; font-size:8px; color:var(--text3); text-align:center; width:48px; line-height:1.4 }
 
 .icard-count {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; font-weight: 700;
-  color: var(--ac3); line-height: 1;
+  font-family: 'Cormorant', serif;
+  font-size: 30px; font-weight: 700; color: var(--acl); line-height: 1;
+  text-shadow: 0 0 20px color-mix(in srgb, var(--acl) 40%, transparent);
 }
 .icard-name {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; color: var(--mist2); text-align: center;
-  line-height: 1.4; letter-spacing:.3px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; color: var(--text3); text-align: center; line-height: 1.5; letter-spacing: .3px;
 }
 .icard-bar {
-  position:absolute; bottom:0; left:0; height:2px;
-  background: var(--ac1); opacity:.45; border-radius:0 2px 0 0;
+  position: absolute; bottom: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--ac), var(--ac3));
+  border-radius: 0 2px 0 0; opacity: .5;
 }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    LOOT SECTION
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 .loot-box {
-  background: var(--ink2); border: 1px solid var(--line);
-  border-radius: 12px; padding: 18px 20px;
+  background: var(--card-bg); border: 1px solid var(--card-bd);
+  border-radius: 6px; padding: 18px 20px;
 }
-.loot-items { display:flex; flex-wrap:wrap; gap:8px }
+.loot-items { display: flex; flex-wrap: wrap; gap: 8px }
 .loot-chip {
-  display: inline-flex; align-items:center; gap:10px;
-  background: var(--ink3); border: 1px solid var(--line);
-  border-radius: 10px; padding: 10px 14px;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--bg3); border: 1px solid var(--line);
+  border-radius: 5px; padding: 10px 14px;
   transition: border-color .18s;
 }
 .loot-chip:hover { border-color: var(--line2) }
-.loot-chip img { width:34px; height:34px; object-fit:contain }
+.loot-chip img { width: 32px; height: 32px; object-fit: contain }
 .loot-chip-count {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px; font-weight: 700; color: var(--ac3); line-height:1;
+  font-family: 'Cormorant', serif;
+  font-size: 24px; font-weight: 700; color: var(--acl); line-height: 1;
 }
 .loot-chip-name {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; color: var(--mist2); margin-top:3px; letter-spacing:.5px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; color: var(--text3); margin-top: 3px; letter-spacing: .5px;
 }
-.loot-empty { font-size:11px; color:var(--mist2); font-style:italic }
+.loot-empty { font-family:'Syne Mono',monospace; font-size:10px; color:var(--text3); font-style:italic }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    CHARTS
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 .charts-row {
   display: grid; grid-template-columns: 1fr 340px;
-  gap: 12px; margin-bottom: 14px;
+  gap: 10px; margin-bottom: 12px;
 }
-
 .cbox {
-  background: var(--ink2); border: 1px solid var(--line);
-  border-radius: 12px; padding: 24px;
+  background: var(--card-bg); border: 1px solid var(--card-bd);
+  border-radius: 6px; padding: 22px;
 }
 .cbox-head {
-  display: flex; align-items:center; justify-content:space-between;
-  margin-bottom: 22px; flex-wrap: wrap; gap: 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 8px;
 }
 .cbox-title {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; letter-spacing:3px; text-transform:uppercase;
-  color: var(--cbox-tit); transition: color .5s;
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--text3);
 }
-.range-row { display:flex; gap:3px }
+.range-row { display: flex; gap: 3px }
 .rbtn {
-  padding: 4px 13px; border: 1px solid var(--line); border-radius:5px;
-  background: none; font-family: 'DM Mono', monospace;
-  font-size: 10px; font-weight:300; color: var(--mist2);
-  cursor:pointer; transition:all .15s; letter-spacing:.5px;
+  padding: 4px 12px; border: 1px solid var(--line); border-radius: 3px;
+  background: none; font-family: 'Syne Mono', monospace; font-size: 9px;
+  color: var(--text3); cursor: pointer; transition: all .15s; letter-spacing: .5px;
 }
-.rbtn:hover { color:var(--paper2); border-color:var(--line2) }
-.rbtn.active { color:var(--ac2); border-color:var(--ac1); background:var(--chip-bg) }
-.cbox canvas { max-height:300px }
+.rbtn:hover { color: var(--text2); border-color: var(--line2) }
+.rbtn.active { color: var(--ac3); border-color: var(--line2); background: var(--chip-bg) }
+.cbox canvas { max-height: 300px }
 
-.pie-wrap { position:relative; min-height:180px; margin-bottom:16px }
-.pie-legend { display:flex; flex-direction:column; gap:5px }
+.pie-wrap { position: relative; min-height: 180px; margin-bottom: 16px }
+.pie-legend { display: flex; flex-direction: column; gap: 4px }
 .pleg-item {
-  display: flex; align-items:center; justify-content:space-between;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 5px 0; border-bottom: 1px solid var(--line);
 }
-.pleg-item:last-child { border:none }
-.pleg-left { display:flex; align-items:center; gap:8px }
-.pleg-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0 }
-.pleg-name {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; color: var(--mist);
+.pleg-item:last-child { border: none }
+.pleg-left { display: flex; align-items: center; gap: 8px }
+.pleg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0 }
+.pleg-name { font-family:'Syne Mono',monospace; font-size: 9px; color: var(--text2) }
+.pleg-right { display: flex; align-items: center; gap: 10px }
+.pleg-n { font-size: 13px; color: var(--text); font-family:'Cormorant',serif; font-weight:600 }
+.pleg-pct { font-family:'Syne Mono',monospace; font-size: 9px; color: var(--text3); min-width: 42px; text-align: right }
+
+/* ══════════════════════════════════════════════════
+   DIVING SPECIFIC: SONAR EFFECT ON CARDS
+══════════════════════════════════════════════════ */
+body.th-dive .mcard:hover {
+  box-shadow: 0 16px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(20,200,230,.08) inset;
 }
-.pleg-right { display:flex; align-items:center; gap:10px }
-.pleg-n { font-size:13px; color:var(--paper2); font-weight:400 }
-.pleg-pct {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; color: var(--mist2); min-width:42px; text-align:right;
+body.th-dive .icard:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 20px rgba(20,200,230,.08);
 }
 
-/* ══════════════════════════════════
-   LOADING / SKELETON
-══════════════════════════════════ */
-.skeleton-row {
-  display: grid; grid-template-columns: repeat(6,1fr);
-  gap: 10px; margin-bottom: 14px;
+/* ══════════════════════════════════════════════════
+   HOLLOW SPECIFIC: TWIG DIVIDERS
+══════════════════════════════════════════════════ */
+body.th-hollow .sec-line {
+  background: linear-gradient(90deg, var(--line), transparent);
 }
-.skeleton-card {
-  background: var(--ink2); border: 1px solid var(--line);
-  border-radius: 12px; padding: 18px 20px; height: 100px;
-  position: relative; overflow: hidden;
-}
-.skeleton-card::after {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.03), transparent);
-  animation: shimmer 1.8s infinite;
-}
-@keyframes shimmer {
-  from { transform:translateX(-100%) }
-  to   { transform:translateX(100%) }
+body.th-hollow .sp-rule-dot {
+  box-shadow: 0 0 8px rgba(80,140,50,.5);
 }
 
+/* ══════════════════════════════════════════════════
+   LOADING
+══════════════════════════════════════════════════ */
 .loading-wrap {
-  display: flex; align-items:center; justify-content:center;
-  padding: 100px 32px; flex-direction:column; gap: 14px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 100px 32px; gap: 16px;
 }
-.loading-icon { font-size: 28px; animation: spin 3s linear infinite; opacity: .5 }
+.loading-orb {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--line2);
+  border-top-color: var(--ac3);
+  animation: spin 1.5s linear infinite;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--ac3) 30%, transparent);
+}
 @keyframes spin { to { transform: rotate(360deg) } }
 .loading-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px; color: var(--mist2); letter-spacing: 2px;
-  text-transform: uppercase;
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px; color: var(--text3); letter-spacing: 3px; text-transform: uppercase;
 }
 
-/* ══════════════════════════════════
-   ANIMATIONS HELPERS
-══════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════ */
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(16px) }
-  to   { opacity:1; transform:translateY(0) }
+  from { opacity: 0; transform: translateY(14px) }
+  to   { opacity: 1; transform: translateY(0) }
 }
-.fu { animation: fadeUp .5s cubic-bezier(.3,.9,.4,1) both }
-.d1 { animation-delay:.08s }
-.d2 { animation-delay:.16s }
-.d3 { animation-delay:.24s }
-.d4 { animation-delay:.32s }
+.fu  { animation: fadeUp .5s cubic-bezier(.3,.9,.4,1) both }
+.d1  { animation-delay: .08s }
+.d2  { animation-delay: .16s }
+.d3  { animation-delay: .24s }
+.d4  { animation-delay: .32s }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    FOOTER
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 footer {
-  position: relative; z-index:1;
-  border-top: 1px solid var(--line);
-  padding: 22px 40px;
-  display: flex; align-items:center; justify-content:space-between;
-  flex-wrap: wrap; gap: 10px;
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--line2);
+  padding: 22px 44px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
 }
-footer p {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; color: var(--mist2); letter-spacing:1px;
-}
-footer a {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px; color: var(--mist); letter-spacing: 1px;
-  text-decoration: none; transition: color .15s;
-}
-footer a:hover { color: var(--paper2) }
+footer p { font-family:'Syne Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:1px }
+footer a { font-family:'Syne Mono',monospace; font-size:10px; color:var(--text3); text-decoration:none; letter-spacing:1px; transition:color .15s }
+footer a:hover { color: var(--ac3) }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    RESPONSIVE
-══════════════════════════════════ */
-@media(max-width:1100px) {
+══════════════════════════════════════════════════ */
+@media(max-width: 1100px) {
+  .home-layout { grid-template-columns: 1fr; padding-top: 60px }
+  .home-right { border-left: none; border-top: 1px solid var(--line2); padding-left: 0; padding-top: 40px }
   .metrics-row { grid-template-columns: repeat(3,1fr) }
   .charts-row  { grid-template-columns: 1fr }
-  .items-grid  { grid-template-columns: repeat(auto-fill,minmax(80px,1fr)) }
+  .depth-indicator { display: none !important }
 }
-@media(max-width:700px) {
-  .header-inner { padding:0 18px }
-  .sp { padding:28px 18px 80px }
-  .home-wrap { padding:70px 22px 90px }
-  .hero-cards { grid-template-columns: 1fr }
+@media(max-width: 700px) {
+  .hdr { padding: 0 18px }
+  .sp, footer { padding-left: 18px; padding-right: 18px }
+  .home-layout { padding: 50px 18px 60px }
   .metrics-row { grid-template-columns: repeat(2,1fr) }
-  footer { padding:16px 18px }
-  .home-title { font-size: clamp(46px,13vw,80px) }
+  .home-h1 { font-size: clamp(52px, 14vw, 80px) }
+  .home-right { padding-top: 32px }
 }
-@media(max-width:460px) {
-  .items-grid { grid-template-columns: repeat(auto-fill,minmax(74px,1fr)) }
+@media(max-width: 460px) {
+  .items-grid { grid-template-columns: repeat(auto-fill,minmax(78px,1fr)) }
   .metrics-row { grid-template-columns: 1fr 1fr }
 }
 </style>
 </head>
 <body class="th-home">
 
-<div class="vignette"></div>
+<!-- Слои фона -->
+<div class="grain"></div>
+<div class="bg-home"></div>
+
+<div class="bg-dive">
+  <div class="bio-1"></div>
+  <div class="bio-2"></div>
+  <div class="bio-3"></div>
+  <div class="bubbles" id="bubbles-container"></div>
+</div>
+
+<div class="bg-hollow"></div>
+
+<!-- Индикатор глубины -->
+<div class="depth-indicator">
+  <div class="depth-label">Глубина</div>
+  <div class="depth-line"></div>
+  <div class="depth-label">∞</div>
+</div>
 
 <header>
-  <div class="header-inner">
-    <button class="logo" onclick="showPage('home')">
-      <span class="logo-mark">🐾</span>
-      <div class="logo-info">
-        <span class="logo-text">Бортовой Журнал</span>
-        <span class="logo-sub">Сирота · catwar.net</span>
+  <div class="hdr">
+    <button class="logo-btn" onclick="showPage('home')">
+      <span class="logo-sigil">🐾</span>
+      <div class="logo-words">
+        <span class="logo-title">Бортовой Журнал</span>
+        <span class="logo-sub">Сирота &middot; catwar.net</span>
       </div>
     </button>
-    <nav>
-      <button class="nb" data-page="home">Главная</button>
-      <button class="nb" data-page="diving">Нырки</button>
-      <button class="nb" data-page="hollow">Расщелина</button>
+    <nav class="nav">
+      <button class="nav-btn" data-page="home">Главная</button>
+      <button class="nav-btn" data-page="diving">Нырки</button>
+      <button class="nav-btn" data-page="hollow">Расщелина</button>
     </nav>
   </div>
 </header>
 
-<!-- HOME -->
+<!-- ════════════════════ HOME ════════════════════ -->
 <div id="page-home" class="page">
-  <div class="home-wrap">
-    <div class="home-eyebrow">catwar.net &middot; cw3 &middot; личная статистика</div>
-    <h1 class="home-title">
-      Дневник<br>
-      <span class="italic-block">Сироты</span>
-    </h1>
-    <div class="home-divider"></div>
-    <p class="home-desc">
-      Автоматический дневник ныряний и осмотров расщелины.<br>
-      Данные разбиты по эпохам навыков и сессиям.
-    </p>
-    <div class="hero-cards">
-      <div class="hcard hcard-sea" onclick="showPage('diving')">
-        <div class="hcard-accent-line"></div>
-        <div class="hcard-icon">🌊</div>
-        <div class="hcard-name">Нырки</div>
-        <div class="hcard-desc">Найденные предметы, процент успеха, динамика по сессиям, эпохи навыков ЗУ и ПУ.</div>
-        <span class="hcard-cta">Открыть <span class="hcard-cta-arrow">→</span></span>
+  <div class="home-layout">
+    <div class="home-left">
+      <div class="home-tag">catwar.net &middot; cw3 &middot; личная статистика</div>
+      <h1 class="home-h1">
+        Дневник<br>
+        <span class="name-line">Сироты</span>
+      </h1>
+      <div class="home-rules">
+        <div class="home-rule-line"></div>
+        <div class="home-rule-line"></div>
+        <div class="home-rule-line"></div>
       </div>
-      <div class="hcard hcard-cave" onclick="showPage('hollow')">
-        <div class="hcard-accent-line"></div>
-        <div class="hcard-icon">🌿</div>
-        <div class="hcard-name">Расщелина</div>
-        <div class="hcard-desc">Осмотры расщелины: находки, шанс отравиться, комочки, гнёзда, эпохи ЗУ, УН и ЛУ.</div>
-        <span class="hcard-cta" style="color:#96cc78">Открыть <span class="hcard-cta-arrow">→</span></span>
+      <p class="home-desc">
+        Автоматический дневник ныряний и осмотров расщелины.
+        Данные разбиты по эпохам навыков и сессиям.
+      </p>
+    </div>
+
+    <div class="home-right">
+      <div class="journal-card jcard-sea" onclick="showPage('diving')">
+        <div class="jcard-num">Запись 01 &mdash; нырки</div>
+        <span class="jcard-icon">🌊</span>
+        <div class="jcard-title">Морская бездна</div>
+        <div class="jcard-desc">Найденные предметы, процент успеха, динамика по сессиям, эпохи навыков ЗУ и ПУ.</div>
+        <span class="jcard-cta">Открыть записи →</span>
+      </div>
+      <div class="journal-card jcard-cave" onclick="showPage('hollow')">
+        <div class="jcard-num">Запись 02 &mdash; расщелина</div>
+        <span class="jcard-icon">🌿</span>
+        <div class="jcard-title">Лесная расщелина</div>
+        <div class="jcard-desc">Осмотры расщелины: находки, шанс отравиться, комочки, гнёзда, эпохи ЗУ, УН и ЛУ.</div>
+        <span class="jcard-cta" style="color:#70a050">Открыть записи →</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- НЫРКИ -->
+<!-- ════════════════════ НЫРКИ ════════════════════ -->
 <div id="page-diving" class="page">
+  <!-- Волна сверху -->
+  <div class="ocean-wave-wrap">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" height="70" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="rgba(10,104,136,0.07)"/>
+      <path d="M0,40 C200,10 440,55 720,35 C1000,15 1220,50 1440,38 L1440,60 L0,60 Z" fill="rgba(20,152,192,0.05)"/>
+    </svg>
+  </div>
+
   <div class="sp">
     <div class="sp-header fu">
-      <div class="sp-title-wrap">
-        <div class="sp-title">🌊 &thinsp;<em>Нырки</em></div>
+      <div class="sp-title-block">
+        <div class="sp-title">🌊&ensp;<em>Нырки</em></div>
         <div class="sp-meta" id="div-updated"></div>
       </div>
     </div>
+    <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
     <div class="epochs-row fu d1">
       <span class="epochs-lbl">Эпоха</span>
       <div id="div-epochs" style="display:contents"></div>
     </div>
     <div id="div-content">
       <div class="loading-wrap">
-        <div class="loading-icon">🌊</div>
-        <div class="loading-text">Загружаю данные</div>
+        <div class="loading-orb"></div>
+        <div class="loading-text">Погружение</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- РАСЩЕЛИНА -->
+<!-- ════════════════════ РАСЩЕЛИНА ════════════════════ -->
 <div id="page-hollow" class="page">
   <div class="sp">
     <div class="sp-header fu">
-      <div class="sp-title-wrap">
-        <div class="sp-title">🌿 &thinsp;<em>Расщелина</em></div>
+      <div class="sp-title-block">
+        <div class="sp-title">🌿&ensp;<em>Расщелина</em></div>
         <div class="sp-meta" id="hol-updated"></div>
       </div>
     </div>
+    <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
     <div class="epochs-row fu d1">
       <span class="epochs-lbl">Эпоха</span>
       <div id="hol-epochs" style="display:contents"></div>
     </div>
     <div id="hol-content">
       <div class="loading-wrap">
-        <div class="loading-icon">🌿</div>
-        <div class="loading-text">Загружаю данные</div>
+        <div class="loading-orb"></div>
+        <div class="loading-text">Осмотр</div>
       </div>
     </div>
   </div>
@@ -791,9 +935,9 @@ footer a:hover { color: var(--paper2) }
 </footer>
 
 <script>
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    CONFIG
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 const SB_URL = 'https://bnjsevuuqgqvohfrvkvx.supabase.co';
 const SB_KEY = 'sb_publishable_PX2go4dTqu3IoT_NXjdLXQ_i7yTPGp0';
 
@@ -812,53 +956,72 @@ const HOL_GROUPS = {
   'Камень':      [417, 418, 1034],
   'Еда':         [565],
 };
-
 const POISON_IDS = [8021, 8022, 8023, 8024];
 const CLUMP_IDS  = new Set([4008, 4009]);
-
 const NAMES = {
   20:'Паутина', 21:'Целеб. водоросль', 75:'Мох', 3420:'Водяной мох',
   110:'Мёд', 417:'Камень 2м', 418:'Камень 3м', 1034:'Малый камень',
   565:'Ветка', 566:'Вьюнок', 2072:'Гнездо', 2074:'Яйцо',
   2075:'Чёрн. перо', 2076:'Коричн. перо', 2077:'Голуб. перо',
-  3956:'Рак', 3958:'Рак', 3960:'Рак',
-  3962:'Жерлянка', 3963:'Жерлянка', 3965:'Карась',
-  3966:'Рыба', 3967:'Рыба', 3968:'Рыба', 3969:'Рыба', 3970:'Рыба',
-  3971:'Угорь', 3973:'Угорь',
-  3993:'Плотная водор.', 3994:'Ракушка +20', 3995:'Ракушка +30',
-  3997:'Ракушка сон', 3998:'Ракушка +15', 3999:'Ракушка +28',
+  3956:'Рак', 3958:'Рак', 3960:'Рак', 3962:'Жерлянка', 3963:'Жерлянка',
+  3965:'Карась', 3966:'Рыба', 3967:'Рыба', 3968:'Рыба', 3969:'Рыба', 3970:'Рыба',
+  3971:'Угорь', 3973:'Угорь', 3993:'Плотная водор.',
+  3994:'Ракушка +20', 3995:'Ракушка +30', 3997:'Ракушка сон',
+  3998:'Ракушка +15', 3999:'Ракушка +28',
   4008:'Комок (мальки)', 4009:'Комок (ракушки)',
   8021:'Паук', 8022:'Паук', 8023:'Паук', 8024:'Тёмн. паук',
   8042:'Мышь', 8043:'Мышь',
 };
-
 const IMG = id => `https://wsrv.nl/?url=catwar.net/cw3/things/${id}.png&n=-1`;
 
-const DIVE_PAL = ['#4a9a60','#c84040','#3a80c8','#a09040','#4090b0','#485868'];
-const HOL_PAL  = ['#7a6828','#4a8058','#c84040','#c8a040','#888060','#5a7870','#485868'];
+/* Цвета пальм для графиков — под каждую тему */
+const DIVE_PAL  = ['#1a9090','#c04040','#1a70c0','#a09040','#4090b0','#405868'];
+const HOL_PAL   = ['#7a7228','#4a8058','#c04040','#c0a040','#788060','#4a7870','#485868'];
 
 let CH = {}, loaded = {};
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
+   BUBBLES (только на dive странице)
+══════════════════════════════════════════════════ */
+function spawnBubbles() {
+  const c = document.getElementById('bubbles-container');
+  if (!c) return;
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 3 + Math.random() * 10;
+    b.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      animation-duration:${8+Math.random()*16}s;
+      animation-delay:${Math.random()*12}s;
+      opacity:${0.15+Math.random()*0.4};
+    `;
+    c.appendChild(b);
+  }
+}
+spawnBubbles();
+
+/* ══════════════════════════════════════════════════
    ROUTING
-═══════════════════════════════════════════ */
-const PAGES  = ['home','diving','hollow'];
+══════════════════════════════════════════════════ */
+const PAGES  = ['home', 'diving', 'hollow'];
 const THEMES = { home:'th-home', diving:'th-dive', hollow:'th-hollow' };
 
 function showPage(id) {
   if (!PAGES.includes(id)) id = 'home';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id)?.classList.add('active');
-  document.querySelector('[data-page="' + id + '"]')?.classList.add('active');
-  document.body.className = THEMES[id] || 'th-dive';
-  if (location.hash !== '#' + id) history.replaceState(null,'','#'+id);
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id)?.classList.add('active');
+  document.querySelector('[data-page="'+id+'"]')?.classList.add('active');
+  document.body.className = THEMES[id] || 'th-home';
+  if (location.hash !== '#'+id) history.replaceState(null, '', '#'+id);
   if ((id === 'diving' || id === 'hollow') && !loaded[id]) {
     loadPage(id); loaded[id] = true;
   }
 }
 
-document.querySelectorAll('.nb').forEach(b =>
+document.querySelectorAll('.nav-btn').forEach(b =>
   b.addEventListener('click', () => showPage(b.dataset.page))
 );
 window.addEventListener('hashchange', () => {
@@ -870,9 +1033,9 @@ window.addEventListener('hashchange', () => {
   showPage(PAGES.includes(id) ? id : 'home');
 })();
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    API
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 async function sbGet(path) {
   const r = await fetch(SB_URL + '/rest/v1/' + path, {
     headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
@@ -881,16 +1044,16 @@ async function sbGet(path) {
   return r.json();
 }
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    LOAD
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 async function loadPage(type) {
   const prefix = type === 'diving' ? 'div' : 'hol';
   const groups = type === 'diving' ? DIVE_GROUPS : HOL_GROUPS;
 
   const [epochs, sessions] = await Promise.all([
     sbGet('skill_epochs?select=*&order=started_at.asc'),
-    sbGet('sessions?type=eq.' + type + '&select=*&order=started_at.desc'),
+    sbGet('sessions?type=eq.'+type+'&select=*&order=started_at.desc'),
   ]);
 
   if (!sessions.length) {
@@ -910,7 +1073,7 @@ async function loadPage(type) {
     'Последняя активность: ' + last.toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'});
 
   const usedIds = new Set(sessions.map(s => s.epoch_id));
-  const epEl   = document.getElementById(prefix+'-epochs');
+  const epEl = document.getElementById(prefix+'-epochs');
 
   const allBtn = makeEpochBtn('Все', true, () => {
     epEl.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
@@ -930,7 +1093,7 @@ async function loadPage(type) {
       btn.classList.add('active');
       renderContent(type, ep.id, sessions, catches, lootEvents, epochs, groups, prefix);
     });
-    btn.title = 'С ' + new Date(ep.started_at).toLocaleDateString('ru');
+    btn.title = 'С '+new Date(ep.started_at).toLocaleDateString('ru');
     epEl.appendChild(btn);
   });
 
@@ -939,14 +1102,14 @@ async function loadPage(type) {
 
 function makeEpochBtn(label, active, cb) {
   const b = document.createElement('button');
-  b.className = 'epoch-btn' + (active ? ' active' : '');
+  b.className = 'epoch-btn'+(active?' active':'');
   b.textContent = label; b.onclick = cb;
   return b;
 }
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    RENDER
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, groups, prefix) {
   const isDive   = type === 'diving';
   const sessions = epochId ? allSessions.filter(s => s.epoch_id===epochId) : allSessions;
@@ -956,7 +1119,7 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
   const el       = document.getElementById(prefix+'-content');
 
   if (!sessions.length) {
-    el.innerHTML='<div class="loading-wrap"><div class="loading-text">Нет данных</div></div>';
+    el.innerHTML = '<div class="loading-wrap"><div class="loading-text">Нет данных</div></div>';
     return;
   }
 
@@ -972,9 +1135,9 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
     totalCaught += groupCounts[g];
   });
 
-  const pust     = totalAttempts - totalCaught;
-  const succRate = totalAttempts ? ((totalCaught/totalAttempts)*100).toFixed(1) : '0.0';
-  const poisoned = POISON_IDS.reduce((s,id) => s+(catchById[id]||0), 0);
+  const pust      = totalAttempts - totalCaught;
+  const succRate  = totalAttempts ? ((totalCaught/totalAttempts)*100).toFixed(1) : '0.0';
+  const poisoned  = POISON_IDS.reduce((s,id) => s+(catchById[id]||0), 0);
   const poisonPct = totalAttempts ? (poisoned/totalAttempts*100).toFixed(2) : '0.00';
 
   const oldClumps = (catchById[4008]||0)+(catchById[4009]||0);
@@ -998,7 +1161,7 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
   const skillChips = epoch ? (() => {
     const c=[];
     if(epoch.zu) c.push(`<span class="skill-chip">${epoch.zu}&thinsp;ЗУ</span>`);
-    if(isDive  && epoch.pu) c.push(`<span class="skill-chip">${epoch.pu}&thinsp;ПУ</span>`);
+    if(isDive && epoch.pu) c.push(`<span class="skill-chip">${epoch.pu}&thinsp;ПУ</span>`);
     if(!isDive && epoch.un) c.push(`<span class="skill-chip">${epoch.un}&thinsp;УН</span>`);
     if(!isDive && epoch.lu) c.push(`<span class="skill-chip">${epoch.lu}&thinsp;ЛУ</span>`);
     return c.join('');
@@ -1006,58 +1169,57 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
 
   const clumpMetric = isDive
     ? `<div class="mcard">
-         <div class="mcard-top ms-amber"></div>
-         <div class="mcard-label">Комочки встречено</div>
-         <div class="mcard-val">${oldClumps+newClumps.length}</div>
-         <div class="mcard-sub">
-           старых: ${oldClumps}${newClumps.length?' · новых: '+newClumps.length:''}
-         </div>
+        <div class="mcard-glow mg-amber"></div>
+        <div class="mcard-label">Комочки встречено</div>
+        <div class="mcard-val">${oldClumps+newClumps.length}</div>
+        <div class="mcard-sub">стар: ${oldClumps}${newClumps.length?' · нов: '+newClumps.length:''}</div>
        </div>`
     : `<div class="mcard">
-         <div class="mcard-top ms-coral"></div>
-         <div class="mcard-label">Отравлений</div>
-         <div class="mcard-val">${poisoned}<span class="unit">${poisonPct}%</span></div>
-         <div class="mcard-sub">пауки · на попытку</div>
+        <div class="mcard-glow mg-coral"></div>
+        <div class="mcard-label">Отравлений</div>
+        <div class="mcard-val">${poisoned}<span class="unit">${poisonPct}%</span></div>
+        <div class="mcard-sub">пауки</div>
        </div>`;
 
   el.innerHTML = `
     <div class="metrics-row fu">
       <div class="mcard">
-        <div class="mcard-top ms-mist"></div>
+        <div class="mcard-glow mg-mist"></div>
         <div class="mcard-label">Всего попыток</div>
         <div class="mcard-val">${totalAttempts.toLocaleString('ru')}</div>
         <div class="mcard-sub">${sessions.length} сессий</div>
       </div>
       <div class="mcard">
-        <div class="mcard-top ms-blue"></div>
+        <div class="mcard-glow mg-blue"></div>
         <div class="mcard-label">Успешных</div>
         <div class="mcard-val">${totalCaught.toLocaleString('ru')}<span class="unit">${succRate}%</span></div>
         <div class="mcard-sub">что-то нашёл</div>
       </div>
       <div class="mcard">
-        <div class="mcard-top ms-mist"></div>
+        <div class="mcard-glow mg-mist"></div>
         <div class="mcard-label">Пустых</div>
         <div class="mcard-val">${pust.toLocaleString('ru')}<span class="unit">${totalAttempts?(pust/totalAttempts*100).toFixed(1):0}%</span></div>
         <div class="mcard-sub">без улова</div>
       </div>
       <div class="mcard">
-        <div class="mcard-top ms-teal"></div>
+        <div class="mcard-glow mg-teal"></div>
         <div class="mcard-label">Топ группа</div>
         <div class="mcard-val" style="font-size:22px;margin-top:6px">${topGroup[0]}</div>
-        <div class="mcard-sub">${topGroup[1]} шт · ${totalAttempts?(topGroup[1]/totalAttempts*100).toFixed(1):0}%</div>
+        <div class="mcard-sub">${topGroup[1]} шт &middot; ${totalAttempts?(topGroup[1]/totalAttempts*100).toFixed(1):0}%</div>
       </div>
       <div class="mcard">
-        <div class="mcard-top ms-sea"></div>
+        <div class="mcard-glow mg-cyan"></div>
         <div class="mcard-label">Навыки эпохи</div>
         <div class="mcard-skills">${skillChips}</div>
       </div>
       ${clumpMetric}
     </div>
 
-    <div class="items-section fu d1">
-      <div class="section-head">
-        <span class="section-title">Найдено предметов</span>
-        <span class="section-line"></span>
+    <div class="section-wrap fu d1">
+      <div class="sec-head">
+        <span class="sec-label">Найдено предметов</span>
+        <span class="sec-line"></span>
+        <span class="sec-dot"></span>
       </div>
       <div class="items-grid" id="${prefix}-items-grid"></div>
     </div>
@@ -1090,60 +1252,57 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
   drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
 }
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    LOOT SECTION
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function renderLootSection(isDive, oldClumps, newClumpCount, clumpLoot, nestCount, nestLoot) {
-  const total   = isDive ? (oldClumps + newClumpCount) : nestCount;
+  const total   = isDive ? (oldClumps+newClumpCount) : nestCount;
   const lootMap = isDive ? clumpLoot : nestLoot;
   if (total===0 && Object.keys(lootMap).length===0) return '';
 
   const hasNew    = Object.keys(lootMap).length > 0;
   const icon      = isDive ? '🐟' : '🪺';
-  const titleText = isDive
-    ? `Комочки — встречено ${total} раз`
-    : `Гнёзда — встречено ${nestCount} раз`;
+  const titleText = isDive ? `Комочки — встречено ${total} раз` : `Гнёзда — встречено ${nestCount} раз`;
 
-  const items = Object.entries(lootMap)
-    .sort((a,b) => b[1]-a[1])
-    .map(([id,cnt]) => `
-      <div class="loot-chip">
-        <img src="${IMG(id)}" alt="" loading="lazy" onerror="this.style.display='none'">
-        <div>
-          <div class="loot-chip-count">${cnt}</div>
-          <div class="loot-chip-name">${NAMES[id]||'ID '+id}</div>
-        </div>
-      </div>`).join('');
+  const items = Object.entries(lootMap).sort((a,b)=>b[1]-a[1]).map(([id,cnt]) => `
+    <div class="loot-chip">
+      <img src="${IMG(id)}" alt="" loading="lazy" onerror="this.style.display='none'">
+      <div>
+        <div class="loot-chip-count">${cnt}</div>
+        <div class="loot-chip-name">${NAMES[id]||'ID '+id}</div>
+      </div>
+    </div>`).join('');
 
   const body = hasNew
     ? `<div class="loot-items">${items}</div>`
-    : `<span class="loot-empty">${total>0?'Содержимое не фиксировалось (старые данные)':'Пока не встречались'}</span>`;
+    : `<span class="loot-empty">${total>0?'Содержимое не фиксировалось':'Пока не встречались'}</span>`;
 
   return `
-    <div class="loot-section fu d2">
-      <div class="section-head">
-        <span class="section-title">${icon} ${titleText}</span>
-        <span class="section-line"></span>
+    <div class="section-wrap fu d2">
+      <div class="sec-head">
+        <span class="sec-label">${icon} ${titleText}</span>
+        <span class="sec-line"></span>
+        <span class="sec-dot"></span>
       </div>
       <div class="loot-box">${body}</div>
     </div>`;
 }
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    ITEMS GRID
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function buildItemsGrid(prefix, catchById) {
   const grid = document.getElementById(prefix+'-items-grid');
   if (!grid) return;
-  const sorted = Object.entries(catchById).filter(([,n]) => n>0).sort((a,b) => b[1]-a[1]);
+  const sorted = Object.entries(catchById).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
   if (!sorted.length) {
-    grid.innerHTML='<span style="font-size:12px;color:var(--mist2);font-style:italic">Нет данных</span>';
+    grid.innerHTML = '<span style="font-family:Syne Mono,monospace;font-size:10px;color:var(--text3)">Нет данных</span>';
     return;
   }
   const max = sorted[0][1];
-  grid.innerHTML = sorted.map(([itemId, count]) => {
-    const name     = NAMES[itemId] || 'ID '+itemId;
-    const barWidth = Math.max(8, Math.round(count/max*100));
+  grid.innerHTML = sorted.map(([itemId,count]) => {
+    const name = NAMES[itemId]||'ID '+itemId;
+    const bw   = Math.max(8, Math.round(count/max*100));
     return `<div class="icard" title="${name}: ${count}">
       <div class="icard-img-wrap">
         <img src="${IMG(itemId)}" alt="" loading="lazy"
@@ -1151,16 +1310,16 @@ function buildItemsGrid(prefix, catchById) {
       </div>
       <span class="icard-count">${count}</span>
       <span class="icard-name">${name}</span>
-      <div class="icard-bar" style="width:${barWidth}%"></div>
+      <div class="icard-bar" style="width:${bw}%"></div>
     </div>`;
   }).join('');
 }
 
-/* ═══════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    CHARTS
-═══════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function setRange(prefix, range, btn) {
-  document.querySelectorAll('#'+prefix+'-range-btns .rbtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#'+prefix+'-range-btns .rbtn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   drawDaysChart(prefix, document.getElementById(prefix+'-content')._sessions, range);
 }
@@ -1170,14 +1329,14 @@ function drawDaysChart(prefix, sessions, range) {
   let labels, data;
 
   if (range === 'all') {
-    const byWeek={};
+    const byWeek = {};
     sessions.forEach(s => {
       const d=new Date(s.started_at), day=d.getDay()||7;
       d.setDate(d.getDate()-day+1);
       const key=d.toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});
       byWeek[key]=(byWeek[key]||0)+(s.total_attempts||0);
     });
-    const sorted=Object.entries(byWeek).sort((a,b) =>
+    const sorted=Object.entries(byWeek).sort((a,b)=>
       a[0].split('.').reverse().join('-').localeCompare(b[0].split('.').reverse().join('-'))
     );
     labels=sorted.map(x=>x[0]); data=sorted.map(x=>x[1]);
@@ -1187,7 +1346,7 @@ function drawDaysChart(prefix, sessions, range) {
       const key=new Date(s.started_at).toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});
       byDay[key]=(byDay[key]||0)+(s.total_attempts||0);
     });
-    const pts=Array.from({length:days},(_,i) => {
+    const pts=Array.from({length:days},(_,i)=>{
       const d=new Date(); d.setDate(d.getDate()-(days-1-i));
       const l=d.toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});
       return {l, v:byDay[l]||0};
@@ -1197,7 +1356,7 @@ function drawDaysChart(prefix, sessions, range) {
 
   const id=prefix+'-chart-days';
   if (CH[id]) CH[id].destroy();
-  const col = getComputedStyle(document.body).getPropertyValue('--ac1').trim() || '#2a6cb0';
+  const col=getComputedStyle(document.body).getPropertyValue('--ac2').trim()||'#1498c0';
 
   CH[id]=new Chart(document.getElementById(id),{
     type:'bar',
@@ -1205,25 +1364,18 @@ function drawDaysChart(prefix, sessions, range) {
       labels,
       datasets:[{
         data,
-        backgroundColor: col+'28',
-        borderColor:      col+'99',
-        borderWidth:1, borderRadius:4,
-        hoverBackgroundColor: col+'55',
+        backgroundColor: col+'22',
+        borderColor: col+'88',
+        borderWidth:1, borderRadius:3,
+        hoverBackgroundColor: col+'44',
       }]
     },
     options:{
       responsive:true,
-      plugins:{ legend:{display:false} },
+      plugins:{legend:{display:false}},
       scales:{
-        x:{
-          ticks:{ color:'#3a4560', font:{family:'DM Mono',size:10}, maxRotation:45 },
-          grid:{ color:'rgba(80,140,220,.04)' }
-        },
-        y:{
-          ticks:{ color:'#3a4560', font:{family:'DM Mono',size:10} },
-          grid:{ color:'rgba(80,140,220,.04)' },
-          beginAtZero:true
-        }
+        x:{ ticks:{color:'var(--text3)',font:{family:'Syne Mono',size:9},maxRotation:45}, grid:{color:'rgba(255,255,255,.03)'} },
+        y:{ ticks:{color:'var(--text3)',font:{family:'Syne Mono',size:9}}, grid:{color:'rgba(255,255,255,.03)'}, beginAtZero:true }
       }
     }
   });
@@ -1239,16 +1391,12 @@ function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
   CH[id]=new Chart(document.getElementById(id),{
     type:'doughnut',
     data:{labels, datasets:[{data, backgroundColor:pal, borderWidth:0, hoverOffset:8}]},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      cutout:'70%'
-    }
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'72%'}
   });
 
   const legend=document.getElementById(prefix+'-pie-legend');
   if (!legend) return;
-  legend.innerHTML=labels.map((lbl,i) => {
+  legend.innerHTML=labels.map((lbl,i)=>{
     const val=data[i]||0;
     const pct=totalAttempts?(val/totalAttempts*100).toFixed(1):'0.0';
     return `<div class="pleg-item">
