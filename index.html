@@ -471,10 +471,17 @@ body.th-dive .depth-indicator { display: flex }
   font-family: 'Syne Mono', monospace;
   font-size: 9px; color: var(--text2); text-align: center; line-height: 1.5; letter-spacing: .3px;
 }
+.icard-sub {
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; color: var(--text3); text-align: center;
+}
+.icard-chance {
+  font-family: 'Syne Mono', monospace;
+  font-size: 8px; color: var(--text2); text-align: center;
+}
 .icard-bar {
   position: absolute; bottom: 0; left: 0; height: 2px;
-  background: linear-gradient(90deg, var(--ac), var(--ac3));
-  border-radius: 0 2px 0 0; opacity: .5;
+  border-radius: 0 2px 0 0; opacity: .6;
 }
 
 .loot-box { background: var(--card-bg); border: 1px solid var(--card-bd); border-radius: 6px; padding: 18px 20px; }
@@ -683,24 +690,27 @@ footer a:hover { color: var(--ac3) }
 const SB_URL = 'https://bnjsevuuqgqvohfrvkvx.supabase.co';
 const SB_KEY = 'sb_publishable_PX2go4dTqu3IoT_NXjdLXQ_i7yTPGp0';
 
+// ── НЫРКИ: категоризированные группы ──────────────────────────
 const DIVE_GROUPS = {
-  'Целебки':  [21, 3993, 75, 565, 566],
-  'Гадость':  [3956, 3958, 3960, 3962, 3963, 3971, 3973],
-  'Ракушки':  [3994, 3995, 3997, 3998, 3999],
-  'Камень':   [417, 418, 1034],
-  'Еда/вода': [3965, 3966, 3967, 3968, 3969, 3970, 3420],
+  'Сокровища': [3994, 3995, 3997, 3998, 3999],     // ракушки - золотая
+  'Гадость':   [3956, 3958, 3960, 3962, 3963, 3971, 3973], // жабы, угри, раки - красная
+  'Целебки':   [21, 3993, 75, 565, 566],           // водоросль, мох, ветка - зеленая
+  'Еда':       [3965, 3966, 3967, 3968, 3969, 3970, 3420], // рыба, водяной мох - бирюзовая
+  'Камни':     [417, 418, 1034],                   // камни - светло-серая
+  'Комок':     [4008, 4009],                       // комок - фиолетовый
 };
 
-// ── РАСЩЕЛИНА: все предметы с фото ──────────────────────────
+// ── РАСЩЕЛИНА: категоризированные группы ──────────────────────────
 const HOL_GROUPS = {
-  'Перо/гнездо': [2072, 2073, 2074, 2075, 2076, 2077],
-  'Целебки':     [75, 76, 110],
-  'Паукообр.':   [8019, 8020, 8021, 8022, 8023, 8024],
-  'Змеи':        [8025, 8026, 8027, 8028],
-  'Птицы':       [8029, 8030, 8031, 8032],
-  'Грызуны':     [8033, 8035, 8036, 8037, 8038, 8042, 8043],
-  'Рептилии':    [8039, 8040, 8041],
-  'Разное':      [20, 566, 417, 1034, 565],
+  'Целебки':     [20, 75, 110, 565, 566],          // паутина, мох, мед, ветка, вьюнок - зеленая
+  'Сокровища':   [2072, 2073, 2074, 2075, 2076, 2077], // перья и гнезда - золотая
+  'Гадость':     [8027, 8028],                      // ядовитые змеи - красная
+  'Паукообр.':   [8019, 8020, 8021, 8022, 8023, 8024], // пауки и пчелы
+  'Змеи':        [8025, 8026],                      // обычные змеи
+  'Птицы':       [8029, 8030, 8031, 8032],          // птицы
+  'Грызуны':     [8033, 8035, 8036, 8037, 8038, 8042, 8043], // грызуны и летучие мыши
+  'Рептилии':    [8039, 8040, 8041],                // ящерицы и лягушки
+  'Разное':      [417, 1034],                       // камни
 };
 
 // Пауки + ядовитые змеи = отравление
@@ -737,8 +747,26 @@ const NAMES = {
 
 const IMG = id => `https://wsrv.nl/?url=catwar.net/cw3/things/${id}.png&n=-1`;
 
-const DIVE_PAL = ['#1a9090','#c04040','#1a70c0','#a09040','#4090b0','#405868'];
-const HOL_PAL  = ['#7a7228','#4a8058','#b06040','#c04040','#4a70a0','#8a6838','#4a8870','#485868','#606848'];
+const DIVE_PAL = {
+  'Сокровища': '#c4a747',  // золотая
+  'Гадость':   '#c84040',  // красная
+  'Целебки':   '#5a8a3a',  // зеленая
+  'Еда':       '#20a8d8',  // бирюзовая
+  'Камни':     '#888888',  // светло-серая
+  'Комок':     '#9850d8',  // фиолетовая
+};
+
+const HOL_PAL = {
+  'Целебки':     '#5a8a3a',  // зеленая
+  'Сокровища':   '#c4a747',  // золотая
+  'Гадость':     '#c84040',  // красная
+  'Паукообр.':   '#d86060',  // пауки - розовая
+  'Змеи':        '#9a5050',  // змеи - коричневая
+  'Птицы':       '#b8a050',  // птицы - охристая
+  'Грызуны':     '#708890',  // грызуны - синевато-серая
+  'Рептилии':    '#4a8858',  // рептилии - темная зелень
+  'Разное':      '#707070',  // камни - серая
+};
 
 let CH = {}, loaded = {};
 
@@ -915,6 +943,12 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
         <canvas id="${prefix}-chart-days"></canvas>
       </div>
       <div class="cbox">
+        <div class="cbox-head"><span class="cbox-title">Топ уловы за период</span></div>
+        <div style="max-height:320px;overflow-y:auto" id="${prefix}-top-catches"></div>
+      </div>
+    </div>
+    <div class="charts-row fu d3">
+      <div class="cbox">
         <div class="cbox-head"><span class="cbox-title">Распределение улова</span></div>
         <div class="pie-wrap"><canvas id="${prefix}-chart-pie"></canvas></div>
         <div class="pie-legend" id="${prefix}-pie-legend"></div>
@@ -922,9 +956,11 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
     </div>
   `;
 
-  buildItemsGrid(prefix, catchById);
+  buildItemsGrid(prefix, catchById, isDive);
   el._sessions = sessions;
+  el._catches = catches;
   drawDaysChart(prefix, sessions, '30');
+  drawTopCatches(prefix, sessions, catches, isDive);
   drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
 }
 
@@ -950,23 +986,41 @@ function renderLootSection(isDive, oldClumps, newClumpCount, clumpLoot, nestCoun
     </div>`;
 }
 
-function buildItemsGrid(prefix, catchById) {
+function buildItemsGrid(prefix, catchById, isDive) {
   const grid = document.getElementById(prefix+'-items-grid');
   if (!grid) return;
+  
+  const groups = isDive ? DIVE_GROUPS : HOL_GROUPS;
+  const pal = isDive ? DIVE_PAL : HOL_PAL;
+  const totalAttempts = Object.values(catchById).reduce((s, x) => s + x, 0);
+  
   const sorted = Object.entries(catchById).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
   if (!sorted.length) { grid.innerHTML = '<span style="font-family:Syne Mono,monospace;font-size:11px;color:var(--text2)">Нет данных</span>'; return; }
+  
   const max = sorted[0][1];
+  
+  // Найти категорию для каждого предмета
+  const itemCategory = {};
+  Object.entries(groups).forEach(([category, itemIds]) => {
+    itemIds.forEach(id => { itemCategory[id] = category; });
+  });
+  
   grid.innerHTML = sorted.map(([itemId,count]) => {
     const name = NAMES[itemId]||'ID '+itemId;
-    const bw   = Math.max(8, Math.round(count/max*100));
-    return `<div class="icard" title="${name}: ${count}">
+    const category = itemCategory[itemId] || 'Разное';
+    const categoryColor = pal[category] || '#808080';
+    const bw = Math.max(8, Math.round(count/max*100));
+    const chance = ((count / totalAttempts) * 100).toFixed(2);
+    return `<div class="icard" title="${name} (${category}): ${count} попыток, ${chance}%">
       <div class="icard-img-wrap">
         <img src="${IMG(itemId)}" alt="" loading="lazy"
              onerror="this.parentElement.innerHTML='<span class=icard-fallback>${itemId}</span>'">
       </div>
-      <span class="icard-count">${count}</span>
+      <span class="icard-count" style="color:${categoryColor}">${count}</span>
       <span class="icard-name">${name}</span>
-      <div class="icard-bar" style="width:${bw}%"></div>
+      <div class="icard-sub" style="font-family:'Syne Mono',monospace;font-size:8px;color:var(--text3);margin-top:2px">${category}</div>
+      <div class="icard-chance" style="font-family:'Syne Mono',monospace;font-size:8px;color:var(--text2);margin-top:1px">${chance}%</div>
+      <div class="icard-bar" style="width:${bw}%;background:linear-gradient(90deg,${categoryColor}44,${categoryColor})"></div>
     </div>`;
   }).join('');
 }
@@ -974,7 +1028,10 @@ function buildItemsGrid(prefix, catchById) {
 function setRange(prefix, range, btn) {
   document.querySelectorAll('#'+prefix+'-range-btns .rbtn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  drawDaysChart(prefix, document.getElementById(prefix+'-content')._sessions, range);
+  const el = document.getElementById(prefix+'-content');
+  const isDive = prefix === 'div';
+  drawDaysChart(prefix, el._sessions, range);
+  drawTopCatches(prefix, el._sessions, el._catches, isDive);
 }
 
 function drawDaysChart(prefix, sessions, range) {
@@ -1005,10 +1062,12 @@ function drawDaysChart(prefix, sessions, range) {
   }
   const id=prefix+'-chart-days';
   if (CH[id]) CH[id].destroy();
-  const col=getComputedStyle(document.body).getPropertyValue('--ac2').trim()||'#1498c0';
+  // Светлые цвета для видимости на темном фоне
+  const col='#5cb85c';
+  const col2='#a0d0a0';
   CH[id]=new Chart(document.getElementById(id),{
     type:'bar',
-    data:{ labels, datasets:[{ data, backgroundColor:col+'22', borderColor:col+'88', borderWidth:1, borderRadius:3, hoverBackgroundColor:col+'44' }] },
+    data:{ labels, datasets:[{ data, backgroundColor:col, borderColor:col2, borderWidth:2, borderRadius:4, hoverBackgroundColor:col2 }] },
     options:{
       responsive:true, plugins:{legend:{display:false}},
       scales:{
@@ -1023,11 +1082,15 @@ function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
   const labels=[...Object.keys(groupCounts),'Пусто'];
   const data=[...Object.values(groupCounts),pust];
   const pal=isDive ? DIVE_PAL : HOL_PAL;
+  const colors = labels.map((lbl, i) => {
+    if (lbl === 'Пусто') return '#555555';
+    return pal[lbl] || '#808080';
+  });
   const id=prefix+'-chart-pie';
   if (CH[id]) CH[id].destroy();
   CH[id]=new Chart(document.getElementById(id),{
     type:'doughnut',
-    data:{labels, datasets:[{data, backgroundColor:pal, borderWidth:0, hoverOffset:8}]},
+    data:{labels, datasets:[{data, backgroundColor:colors, borderWidth:0, hoverOffset:8}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'72%'}
   });
   const legend=document.getElementById(prefix+'-pie-legend');
@@ -1035,11 +1098,64 @@ function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
   legend.innerHTML=labels.map((lbl,i)=>{
     const val=data[i]||0;
     const pct=totalAttempts?(val/totalAttempts*100).toFixed(1):'0.0';
+    const color = lbl === 'Пусто' ? '#555555' : (pal[lbl] || '#808080');
     return `<div class="pleg-item">
-      <div class="pleg-left"><div class="pleg-dot" style="background:${pal[i]}"></div><span class="pleg-name">${lbl}</span></div>
+      <div class="pleg-left"><div class="pleg-dot" style="background:${color}"></div><span class="pleg-name">${lbl}</span></div>
       <div class="pleg-right"><span class="pleg-n">${val}</span><span class="pleg-pct">${pct}%</span></div>
     </div>`;
   }).join('');
+}
+
+function drawTopCatches(prefix, sessions, catches, isDive) {
+  const catchById = {};
+  catches.forEach(c => { catchById[c.item_id] = (catchById[c.item_id]||0)+1 });
+  
+  const groups = isDive ? DIVE_GROUPS : HOL_GROUPS;
+  const pal = isDive ? DIVE_PAL : HOL_PAL;
+  
+  // Собираем топ 10 предметов с шансами по категориям
+  const totalAttempts = sessions.reduce((s,x) => s+(x.total_attempts||0), 0);
+  
+  // Для каждой категории считаем топ предметы
+  const topItems = [];
+  Object.entries(groups).forEach(([category, itemIds]) => {
+    const categoryCount = itemIds.reduce((s, id) => s + (catchById[id] || 0), 0);
+    itemIds.forEach(itemId => {
+      const count = catchById[itemId] || 0;
+      if (count > 0) {
+        const chance = (count / totalAttempts * 100).toFixed(2);
+        topItems.push({
+          id: itemId,
+          name: NAMES[itemId] || 'ID ' + itemId,
+          count,
+          chance,
+          category,
+          categoryColor: pal[category] || '#808080'
+        });
+      }
+    });
+  });
+  
+  topItems.sort((a, b) => b.count - a.count);
+  const top10 = topItems.slice(0, 10);
+  
+  if (top10.length === 0) return '<span style="font-family:Syne Mono,monospace;font-size:11px;color:var(--text2)">Нет данных</span>';
+  
+  return top10.map(item => `
+    <div class="top-item" style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid var(--line)">
+      <div class="top-item-icon" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center">
+        <img src="${IMG(item.id)}" alt="" style="width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.7))" onerror="this.parentElement.textContent='${item.id}'">
+      </div>
+      <div style="flex:1">
+        <div style="font-family:'Syne Mono',monospace;font-size:11px;color:var(--text2)">${item.category}</div>
+        <div style="font-family:'Syne Mono',monospace;font-size:13px;color:var(--text);font-weight:600">${item.name}</div>
+        <div style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--text2);margin-top:2px">${item.count} попыток · ${item.chance}%</div>
+      </div>
+      <div style="width:60px;text-align:right">
+        <div style="font-family:'Cormorant',serif;font-size:24px;font-weight:700;color:${item.categoryColor}">${item.count}</div>
+      </div>
+    </div>
+  `).join('');
 }
 </script>
 </body>
