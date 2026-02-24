@@ -260,8 +260,7 @@ body.th-dive .depth-indicator { display:flex }
 .sec-line { flex:1;height:1px;background:var(--line) }
 .sec-dot { width:4px;height:4px;border-radius:50%;background:var(--ac2);flex-shrink:0 }
 
-/* ═══ CATEGORY BLOCKS ═══ */
-.cats-grid { display:flex;flex-direction:column;gap:10px; }
+.cats-grid { display:flex;flex-direction:column;gap:6px; }
 
 .cat-block {
   background: var(--card-bg);
@@ -275,93 +274,97 @@ body.th-dive .depth-indicator { display:flex }
               -2px 0 16px color-mix(in srgb, var(--cat-color, #808080) 15%, transparent);
 }
 .cat-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 18px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
   background: color-mix(in srgb, var(--cat-color, #808080) 7%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--cat-color, #808080) 14%, transparent);
   cursor: pointer; user-select: none;
 }
-.cat-icon { font-size: 18px; flex-shrink: 0; }
+.cat-icon { font-size: 14px; flex-shrink: 0; }
 .cat-label {
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-  color: var(--text); flex: 1; letter-spacing: .3px;
+  font-family: 'Syne Mono', monospace; font-size: 11px; font-weight: 700;
+  color: var(--text); flex: 1; letter-spacing: 1.5px; text-transform: uppercase;
 }
 .cat-total {
-  font-family: 'Cormorant', serif; font-size: 26px; font-weight: 700;
+  font-family: 'Cormorant', serif; font-size: 22px; font-weight: 700;
   color: var(--cat-color, var(--acl));
-  text-shadow: 0 0 20px color-mix(in srgb, var(--cat-color, var(--acl)) 40%, transparent);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--cat-color, var(--acl)) 35%, transparent);
 }
 .cat-total .cat-pct {
-  font-family: 'Syne Mono', monospace; font-size: 11px;
+  font-family: 'Syne Mono', monospace; font-size: 10px;
   color: color-mix(in srgb, var(--cat-color, #808080) 80%, var(--text2));
-  margin-left: 6px; font-weight: 400;
+  margin-left: 5px; font-weight: 400;
   text-shadow: none;
 }
-.cat-body { padding: 14px 18px; }
+.cat-body { padding: 10px 13px; }
 
-.cat-items-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.cat-items-row { display: flex; flex-wrap: wrap; gap: 5px; }
 .cat-item {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
   background: var(--bg2);
   border: 1px solid color-mix(in srgb, var(--cat-color, #808080) 14%, var(--line));
-  border-radius: 6px; padding: 10px 8px; min-width: 82px; flex: 0 0 auto;
-  transition: border-color .2s, transform .2s, box-shadow .2s; cursor: default;
+  border-radius: 5px; padding: 7px 6px 6px; min-width: 58px; flex: 0 0 auto;
+  transition: border-color .2s, transform .18s, box-shadow .2s; cursor: default;
   position: relative; overflow: hidden;
 }
 .cat-item::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, var(--cat-color, #808080), transparent);
-  opacity: .4;
+  opacity: .35;
 }
 .cat-item:hover {
   border-color: color-mix(in srgb, var(--cat-color, #808080) 35%, transparent);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,.45),
-              0 0 10px color-mix(in srgb, var(--cat-color, #808080) 15%, transparent);
+  box-shadow: 0 5px 16px rgba(0,0,0,.45),
+              0 0 8px color-mix(in srgb, var(--cat-color, #808080) 12%, transparent);
 }
-.cat-item img { width: 42px; height: 42px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.7)); }
-.cat-item-img-fallback { font-family:'Syne Mono',monospace;font-size:9px;color:var(--text3);text-align:center;width:42px;line-height:1.4 }
+.cat-item img { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,.75)); }
+.cat-item-img-fallback { font-family:'Syne Mono',monospace;font-size:8px;color:var(--text3);text-align:center;width:34px;line-height:1.4 }
 .cat-item-count {
-  font-family: 'Cormorant', serif; font-size: 24px; font-weight: 700;
+  font-family: 'Cormorant', serif; font-size: 20px; font-weight: 700;
   color: var(--cat-color, var(--acl)); line-height: 1;
-  text-shadow: 0 0 14px color-mix(in srgb, var(--cat-color, var(--acl)) 50%, transparent);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--cat-color, var(--acl)) 45%, transparent);
 }
 .cat-item-pct {
-  font-family: 'Syne Mono', monospace; font-size: 10px;
-  color: color-mix(in srgb, var(--cat-color, #808080) 70%, var(--text2));
-  letter-spacing: .3px;
-}
-.cat-item-name {
   font-family: 'Syne Mono', monospace; font-size: 9px;
-  color: var(--text2); text-align: center; line-height: 1.4;
+  color: color-mix(in srgb, var(--cat-color, #808080) 65%, var(--text2));
+  letter-spacing: .2px;
 }
 .cat-empty { font-family:'Syne Mono',monospace;font-size:11px;color:var(--text3);font-style:italic;padding:6px 0; }
 
+/* Пустые — darker muted block */
+.cat-block-empty {
+  border-color: rgba(58,58,68,.5) !important;
+  border-left-color: #3a3a44 !important;
+  opacity: .75;
+}
+.cat-block-empty:hover { opacity: 1; box-shadow: none; }
+
 /* Subcategory blocks (inside Еда) */
-.subcats-grid { display: flex; flex-direction: column; gap: 7px; }
+.subcats-grid { display: flex; flex-direction: column; gap: 4px; }
 .subcat-block {
-  border-radius: 5px; padding: 10px 13px;
+  border-radius: 4px; padding: 7px 10px;
   background: var(--bg3);
   border: 1px solid color-mix(in srgb, var(--sub-color, #808080) 18%, rgba(255,255,255,.05));
   border-left: 2px solid var(--sub-color, #808080);
 }
 .subcat-header {
-  display: flex; align-items: center; gap: 7px; margin-bottom: 9px;
+  display: flex; align-items: center; gap: 6px; margin-bottom: 7px;
 }
-.subcat-icon { font-size: 13px; }
+.subcat-icon { font-size: 11px; }
 .subcat-label {
   font-family: 'Syne Mono', monospace; font-size: 10px;
-  letter-spacing: 1.5px; text-transform: uppercase;
+  letter-spacing: 1.2px; text-transform: uppercase;
   color: var(--sub-color, var(--text2)); flex: 1;
 }
 .subcat-stats {
   font-family: 'Syne Mono', monospace; font-size: 10px; color: var(--text2);
 }
 .subcat-total {
-  font-family: 'Cormorant', serif; font-size: 18px; font-weight: 700;
+  font-family: 'Cormorant', serif; font-size: 16px; font-weight: 700;
   color: var(--sub-color, var(--acl));
 }
-.subcat-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.subcat-items { display: flex; flex-wrap: wrap; gap: 5px; }
 
 /* Loot box */
 .loot-box { background:var(--card-bg);border:1px solid var(--card-bd);border-radius:6px;padding:18px 20px; }
@@ -957,6 +960,15 @@ function buildCatsGrid(prefix, catchById, totalAttempts, categories) {
   const grid = document.getElementById(prefix+'-cats-grid');
   if (!grid) return;
 
+  /* Пустые попытки — тёмно-серый блок */
+  const pust = totalAttempts - categories.reduce((s, cat) => {
+    if (cat.subcategories) {
+      return s + cat.subcategories.reduce((ss, sub) => ss + sub.ids.reduce((sss,id)=>sss+(catchById[id]||0),0), 0);
+    }
+    return s + cat.ids.reduce((ss,id)=>ss+(catchById[id]||0),0);
+  }, 0);
+  const pustPct = totalAttempts ? (pust/totalAttempts*100).toFixed(1) : '0.0';
+
   grid.innerHTML = categories.map(cat => {
     if (cat.subcategories) {
       /* Еда with subcategories */
@@ -1016,7 +1028,13 @@ function buildCatsGrid(prefix, catchById, totalAttempts, categories) {
         </div>
       </div>`;
     }
-  }).join('');
+  }).join('') + `<div class="cat-block cat-block-empty" style="--cat-color:#3a3a44">
+    <div class="cat-header" style="border-bottom:none">
+      <span class="cat-icon" style="opacity:.5">⬜</span>
+      <span class="cat-label" style="color:var(--text3)">Пустые</span>
+      <span class="cat-total" style="color:#5a5a68;text-shadow:none">${pust}<span class="cat-pct" style="color:#484852">${pustPct}%</span></span>
+    </div>
+  </div>`;
 }
 
 function buildCatItem(id, count, totalAttempts, color) {
@@ -1027,7 +1045,6 @@ function buildCatItem(id, count, totalAttempts, color) {
          onerror="this.outerHTML='<span class=cat-item-img-fallback>${id}</span>'">
     <span class="cat-item-count">${count}</span>
     <span class="cat-item-pct">${pct}%</span>
-    <span class="cat-item-name">${name}</span>
   </div>`;
 }
 
