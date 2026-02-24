@@ -192,24 +192,27 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
 .home-rule-line { height:1px;background:linear-gradient(90deg,var(--ac2),transparent); }
 .home-rule-line:nth-child(2){opacity:.5;width:70%} .home-rule-line:nth-child(3){opacity:.25;width:40%}
 .home-desc { font-size:14px;line-height:2.1;color:var(--text2);max-width:380px;margin-bottom:56px;animation:homeSlide .7s .3s cubic-bezier(.25,.9,.3,1) both; }
-.home-right { height:100%;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:80px 0;border-left:1px solid var(--line2);padding-left:44px;animation:fadeIn .8s .4s both; }
+.home-right { height:100%;display:flex;flex-direction:column;justify-content:flex-start;gap:8px;padding:40px 0;border-left:1px solid var(--line2);padding-left:44px;animation:fadeIn .8s .4s both;overflow-y:auto;max-height:calc(100vh - 60px); }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.journal-card { background:var(--card-bg);border:1px solid var(--card-bd);border-radius:4px;padding:30px 28px;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.2,.8,.3,1),border-color .3s,box-shadow .3s; }
+.journal-card { background:var(--card-bg);border:1px solid var(--card-bd);border-radius:4px;padding:14px 20px;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.2,.8,.3,1),border-color .3s,box-shadow .3s; }
 .journal-card::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;transition:background .3s; }
 .jcard-sea::before  { background:linear-gradient(to bottom,transparent,#14a0d0,transparent) }
 .jcard-cave::before { background:linear-gradient(to bottom,transparent,#4a7035,transparent) }
 .journal-card:hover { transform:translateX(4px);border-color:var(--line3);box-shadow:-4px 0 40px rgba(0,0,0,.6),8px 0 60px rgba(0,0,0,.3); }
-.jcard-num { font-family:'Syne Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:14px;text-transform:uppercase; }
+.jcard-num { font-family:'Syne Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:6px;text-transform:uppercase; }
 .jcard-sea  .jcard-num { color:rgba(20,160,208,.6) }
 .jcard-cave .jcard-num { color:rgba(74,112,53,.7) }
-.jcard-icon { font-size:28px;margin-bottom:14px;display:block }
-.jcard-title { font-family:'Cormorant',serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:10px; }
+.jcard-icon { font-size:20px;margin-bottom:6px;display:block }
+.jcard-title { font-family:'Cormorant',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px; }
 .jcard-sea  .jcard-title { color:#d0eeff }
 .jcard-cave .jcard-title { color:#d0e4b8 }
-.jcard-desc { font-size:13px;color:var(--text2);line-height:1.9;margin-bottom:22px }
+.jcard-desc { font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px }
 .jcard-cta { display:inline-flex;align-items:center;gap:8px;font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;transition:gap .2s; }
 .jcard-sea  .jcard-cta { color:#20c8e8 }
 .jcard-cave .jcard-cta { color:#70a050 }
+.jcard-pear::before  { background:linear-gradient(to bottom,transparent,#90c030,transparent) }
+.jcard-tunnel::before{ background:linear-gradient(to bottom,transparent,#c08040,transparent) }
+.jcard-goat::before  { background:linear-gradient(to bottom,transparent,#d0a060,transparent) }
 .journal-card:hover .jcard-cta { gap:14px }
 
 .ocean-wave-wrap { position:relative;height:70px;overflow:hidden;pointer-events:none;margin-bottom:-4px; }
@@ -463,6 +466,9 @@ footer a:hover { color:var(--ac3) }
       <button class="nav-btn" data-page="home">Главная</button>
       <button class="nav-btn" data-page="diving">Нырки</button>
       <button class="nav-btn" data-page="hollow">Расщелина</button>
+      <button class="nav-btn" data-page="pears">Груши</button>
+      <button class="nav-btn" data-page="tunnels">Туннелеры</button>
+      <button class="nav-btn" data-page="goats">Козлики</button>
     </nav>
   </div>
 </header>
@@ -472,13 +478,13 @@ footer a:hover { color:var(--ac3) }
   <div class="home-layout">
     <div class="home-left">
       <div class="home-tag">catwar.net &middot; cw3 &middot; личная статистика</div>
-      <h1 class="home-h1">Дневник<br><span class="name-line">Сироты</span></h1>
+      <h1 class="home-h1">Бортовой журнал<br><span class="name-line">Шкуродёра</span></h1>
       <div class="home-rules">
         <div class="home-rule-line"></div>
         <div class="home-rule-line"></div>
         <div class="home-rule-line"></div>
       </div>
-      <p class="home-desc">Автоматический дневник ныряний и осмотров расщелины. Данные разбиты по эпохам навыков и сессиям.</p>
+      <p class="home-desc">Ведение статистики по персонажу</p>
     </div>
     <div class="home-right">
       <div class="journal-card jcard-sea" onclick="showPage('diving')">
@@ -494,6 +500,27 @@ footer a:hover { color:var(--ac3) }
         <div class="jcard-title">Лесная расщелина</div>
         <div class="jcard-desc">Осмотры расщелины: находки, шанс отравиться, комочки, гнёзда, эпохи ЗУ, УН и ЛУ.</div>
         <span class="jcard-cta" style="color:#70a050">Открыть записи →</span>
+      </div>
+      <div class="journal-card jcard-pear" onclick="showPage('pears')">
+        <div class="jcard-num">Запись 03 &mdash; груши</div>
+        <span class="jcard-icon">🍐</span>
+        <div class="jcard-title">Груши</div>
+        <div class="jcard-desc">Статистика по грушеванию</div>
+        <span class="jcard-cta" style="color:#a0c040">Открыть записи →</span>
+      </div>
+      <div class="journal-card jcard-tunnel" onclick="showPage('tunnels')">
+        <div class="jcard-num">Запись 04 &mdash; туннелеры</div>
+        <span class="jcard-icon">🪱</span>
+        <div class="jcard-title">Туннелеры</div>
+        <div class="jcard-desc">Статистика успешных уловов</div>
+        <span class="jcard-cta" style="color:#c08040">Открыть записи →</span>
+      </div>
+      <div class="journal-card jcard-goat" onclick="showPage('goats')">
+        <div class="jcard-num">Запись 05 &mdash; козлики</div>
+        <span class="jcard-icon">🐐</span>
+        <div class="jcard-title">Козлики</div>
+        <div class="jcard-desc">Мох и Горы</div>
+        <span class="jcard-cta" style="color:#d0a060">Открыть записи →</span>
       </div>
     </div>
   </div>
@@ -545,6 +572,57 @@ footer a:hover { color:var(--ac3) }
   </div>
 </div>
 
+<!-- PEARS -->
+<div id="page-pears" class="page">
+  <div class="sp">
+    <div class="sp-header fu">
+      <div class="sp-title-block">
+        <div class="sp-title">🍐&ensp;<em>Груши</em></div>
+      </div>
+    </div>
+    <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:18px;text-align:center;padding:60px 20px">
+      <span style="font-size:64px;opacity:.6">🍐</span>
+      <p style="font-family:'Cormorant',serif;font-size:28px;font-weight:300;font-style:italic;color:var(--text2);max-width:420px;line-height:1.6">Временно пусто.</p>
+      <p style="font-family:'Syne Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--text3)">Скоро рошка добавит информацию!</p>
+    </div>
+  </div>
+</div>
+
+<!-- TUNNELS -->
+<div id="page-tunnels" class="page">
+  <div class="sp">
+    <div class="sp-header fu">
+      <div class="sp-title-block">
+        <div class="sp-title">🪱&ensp;<em>Туннелеры</em></div>
+      </div>
+    </div>
+    <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:18px;text-align:center;padding:60px 20px">
+      <span style="font-size:64px;opacity:.6">🪱</span>
+      <p style="font-family:'Cormorant',serif;font-size:28px;font-weight:300;font-style:italic;color:var(--text2);max-width:420px;line-height:1.6">Временно пусто.</p>
+      <p style="font-family:'Syne Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--text3)">Скоро рошка добавит информацию!</p>
+    </div>
+  </div>
+</div>
+
+<!-- GOATS -->
+<div id="page-goats" class="page">
+  <div class="sp">
+    <div class="sp-header fu">
+      <div class="sp-title-block">
+        <div class="sp-title">🐐&ensp;<em>Козлики</em></div>
+      </div>
+    </div>
+    <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:18px;text-align:center;padding:60px 20px">
+      <span style="font-size:64px;opacity:.6">🐐</span>
+      <p style="font-family:'Cormorant',serif;font-size:28px;font-weight:300;font-style:italic;color:var(--text2);max-width:420px;line-height:1.6">Временно пусто.</p>
+      <p style="font-family:'Syne Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--text3)">Скоро рошка добавит информацию!</p>
+    </div>
+  </div>
+</div>
+
 <footer>
   <p>Бортовой Журнал &middot; Сирота &middot; catwar.net</p>
   <a href="https://sirotkin1.github.io/catwar-stats">sirotkin1.github.io/catwar-stats</a>
@@ -568,7 +646,7 @@ const DIVE_CATEGORIES = [
   },
   {
     label: 'Целебки', icon: '🌿', color: '#4a9050',
-    ids: [21, 3993, 566, 75]
+    ids: [21, 3993, 566, 75, 565]
   },
   {
     label: 'Еда', icon: '🐟', color: '#1a9090',
@@ -580,7 +658,7 @@ const DIVE_CATEGORIES = [
   },
   {
     label: 'Комок', icon: '🫧', color: '#7a40c0',
-    ids: [4008, 4009]
+    ids: [4008]
   },
 ];
 
@@ -606,9 +684,10 @@ const HOL_CATEGORIES = [
       { label: 'Змеи',        icon: '🐍', color: '#7a9a30', ids: [8025, 8026] },
       { label: 'Пауки',       icon: '🕷️', color: '#7050a0', ids: [8021, 8022, 8023, 8024] },
       { label: 'Птицы',       icon: '🐦', color: '#4080b8', ids: [8029, 8030, 8031, 8032] },
-      { label: 'Белки',       icon: '🐿️', color: '#c07030', ids: [8036] },
+      { label: 'Белки',       icon: '🐿️', color: '#c07030', ids: [8036, 8035, 8033] },
       { label: 'Ящерицы',     icon: '🦎', color: '#70b030', ids: [8039, 8040, 8041] },
-      { label: 'Мыши',        icon: '🐭', color: '#a07848', ids: [8033, 8035, 8037, 8038, 8042, 8043] },
+      { label: 'Мыши',        icon: '🐭', color: '#a07848', ids: [8042, 8043] },
+      { label: 'Летучие мышки',        icon: '🐭', color: '#464544', ids: [8037, 8038] },      
       { label: 'Пчёлы',       icon: '🐝', color: '#d0a020', ids: [8019, 8020] },
       { label: 'Водный мох',  icon: '🌱', color: '#30a878', ids: [76] },
     ]
@@ -635,12 +714,12 @@ const HOL_GROUPS = {
   'Целебки':     [20, 75, 76, 110, 565, 566],
   'Сокровища':   [2075, 2076, 2077],
   'Гадость':     [8027, 8028],
-  'Еда':         [8025, 8026, 8019, 8020, 8021, 8022, 8023, 8024, 8029, 8030, 8031, 8032, 8033, 8035, 8036, 8037, 8038, 8039, 8040, 8041, 8042, 8043],
+  'Еда':         [8025, 8026, 8019, 8020, 8021, 8022, 8023, 8024, 8029, 8030, 8031, 8032, 8033, 8035, 8036, 8037, 8038, 8039, 8040, 8041, 8042, 8043, 2074],
   'Камни':       [417, 418, 1034],
-  'Гнёзда':      [2072, 2073, 2074],
+  'Гнёзда':      [2072, 2073],
 };
 
-const POISON_IDS = [8019, 8020, 8021, 8022, 8023, 8024, 8027, 8028];
+const POISON_IDS = [8019, 8020, 8021, 8022, 8023, 8024, 8027, 8028, 8026, 8025, 8019, 8020, 110];
 
 const NAMES = {
   20:'Паутина', 75:'Мох', 76:'Водяной мох', 110:'Мёд',
@@ -654,8 +733,8 @@ const NAMES = {
   3971:'Угорь', 3973:'Угорь', 3993:'Плотная водор.',
   3994:'Ракушка +20', 3995:'Ракушка +30', 3997:'Ракушка сон',
   3998:'Ракушка +15', 3999:'Ракушка +28',
-  4008:'Комок (мальки)', 4009:'Комок (ракушки)',
-  8019:'Рой пчёл', 8020:'Пчела', 8021:'Паук', 8022:'Паук', 8023:'Паук', 8024:'Тёмн. паук',
+  4008:'Комок',
+  8019:'Пчела', 8020:'Пчела2', 8021:'Паук', 8022:'Паук', 8023:'Паук', 8024:'Тёмн. паук',
   8025:'Змея', 8026:'Змея (кр.)', 8027:'Ядов. змея', 8028:'Ядов. змея (кр.)',
   8029:'Птица', 8030:'Птица', 8031:'Птица', 8032:'Птица',
   8033:'Мышь', 8035:'Мышь (бурая)', 8036:'Белка', 8037:'Мышь (лесн.)',
@@ -666,7 +745,7 @@ const NAMES = {
 const IMG = id => `https://wsrv.nl/?url=catwar.net/cw3/things/${id}.png&n=-1`;
 
 /* Pie palette — "Пусто" now #3a3a44 (darker than stones #9090a0) */
-const DIVE_PAL = ['#4a9050','#c04040','#c8a820','#9090a0','#1a9090','#7a40c0','#3a3a44'];
+const DIVE_PAL = ['#4a9050','#c04040','#c8a820','#9090a0','#1a9090','#7a40c0','#3a3a44', '#3a3a44'];
 const HOL_PAL  = ['#4a9050','#c8a820','#c04040','#1a9090','#9090a0','#7a40c0','#3a3a44'];
 
 let CH = {}, loaded = {};
@@ -691,8 +770,8 @@ function spawnBubbles() {
 }
 spawnBubbles();
 
-const PAGES  = ['home', 'diving', 'hollow'];
-const THEMES = { home:'th-home', diving:'th-dive', hollow:'th-hollow' };
+const PAGES  = ['home', 'diving', 'hollow', 'pears', 'tunnels', 'goats'];
+const THEMES = { home:'th-home', diving:'th-dive', hollow:'th-hollow', pears:'th-hollow', tunnels:'th-hollow', goats:'th-hollow' };
 
 function showPage(id) {
   if (!PAGES.includes(id)) id = 'home';
@@ -1059,7 +1138,7 @@ function renderTopItems(prefix, filteredCatches, filtAttempts) {
 
   const byItem = {};
   filteredCatches.forEach(c=>{ byItem[c.item_id]=(byItem[c.item_id]||0)+1; });
-  const sorted = Object.entries(byItem).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const sorted = Object.entries(byItem).sort((a,b)=>b[1]-a[1]).slice(0,5);
 
   if (!sorted.length) {
     topEl.innerHTML = '<span style="font-family:Syne Mono,monospace;font-size:11px;color:var(--text3)">Нет данных за период</span>';
