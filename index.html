@@ -191,9 +191,46 @@ body.th-hollow header { background: rgba(12,14,10,.86) }
 .home-rules { display:flex;flex-direction:column;gap:5px;margin:36px 0;width:220px;animation:homeSlide .7s .2s cubic-bezier(.25,.9,.3,1) both; }
 .home-rule-line { height:1px;background:linear-gradient(90deg,var(--ac2),transparent); }
 .home-rule-line:nth-child(2){opacity:.5;width:70%} .home-rule-line:nth-child(3){opacity:.25;width:40%}
-.home-desc { font-size:14px;line-height:2.1;color:var(--text2);max-width:380px;margin-bottom:56px;animation:homeSlide .7s .3s cubic-bezier(.25,.9,.3,1) both; }
+.home-desc { font-size:14px;line-height:2.1;color:var(--text2);max-width:380px;margin-bottom:28px;animation:homeSlide .7s .3s cubic-bezier(.25,.9,.3,1) both; }
 .home-right { height:100%;display:flex;flex-direction:column;justify-content:flex-start;gap:8px;padding:40px 0;border-left:1px solid var(--line2);padding-left:44px;animation:fadeIn .8s .4s both;overflow-y:auto;max-height:calc(100vh - 60px); }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── ВРЕМЯ НА САЙТЕ ── */
+.site-time-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+  animation: homeSlide .7s .35s cubic-bezier(.25,.9,.3,1) both;
+}
+.site-time-bar .st-icon {
+  font-size: 18px;
+  opacity: .65;
+}
+.site-time-bar .st-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.site-time-bar .st-value {
+  font-family: 'Cormorant', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--acl);
+  line-height: 1;
+  text-shadow: 0 0 24px color-mix(in srgb, var(--acl) 30%, transparent);
+}
+.site-time-bar .st-since {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: .5px;
+  margin-top: 3px;
+}
+
 .journal-card { background:var(--card-bg);border:1px solid var(--card-bd);border-radius:4px;padding:14px 20px;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.2,.8,.3,1),border-color .3s,box-shadow .3s; }
 .journal-card::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;transition:background .3s; }
 .jcard-sea::before  { background:linear-gradient(to bottom,transparent,#14a0d0,transparent) }
@@ -263,7 +300,6 @@ body.th-dive .depth-indicator { display:flex }
 .sec-line { flex:1;height:1px;background:var(--line) }
 .sec-dot { width:4px;height:4px;border-radius:50%;background:var(--ac2);flex-shrink:0 }
 
-/* ── CATEGORIES — flat centered item stream ── */
 .cats-grid {
   display: flex;
   flex-wrap: wrap;
@@ -271,17 +307,12 @@ body.th-dive .depth-indicator { display:flex }
   gap: 8px;
   padding: 4px 0;
 }
-
-/* Thin divider between category groups */
 .cat-divider {
   width: 1px; align-self: stretch; margin: 0 4px;
   background: linear-gradient(to bottom, transparent, var(--line2) 30%, var(--line2) 70%, transparent);
   flex-shrink: 0;
 }
-
 .cat-items-row { display: contents; }
-
-/* ── Cat item — bigger image (70×70) ── */
 .cat-item {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
   background: var(--bg2);
@@ -301,7 +332,6 @@ body.th-dive .depth-indicator { display:flex }
   box-shadow: 0 5px 16px rgba(0,0,0,.45),
               0 0 8px color-mix(in srgb, var(--cat-color, #808080) 12%, transparent);
 }
-/* ── 70×70 item images ── */
 .cat-item img { width: 70px; height: 70px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.75)); }
 .cat-item-img-fallback { font-family:'Syne Mono',monospace;font-size:8px;color:var(--text3);text-align:center;width:70px;line-height:1.4 }
 .cat-item-count {
@@ -315,11 +345,7 @@ body.th-dive .depth-indicator { display:flex }
   letter-spacing: .3px; font-weight: 600;
 }
 .cat-empty { font-family:'Syne Mono',monospace;font-size:11px;color:var(--text3);font-style:italic;padding:6px 0; }
-
-/* subcat styles kept minimal for possible future use */
 .subcat-items { display: contents; }
-
-/* Loot box */
 .loot-box { background:var(--card-bg);border:1px solid var(--card-bd);border-radius:6px;padding:18px 20px; }
 .loot-items { display:flex;flex-wrap:wrap;gap:8px }
 .loot-chip { display:inline-flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--line);border-radius:5px;padding:10px 14px;transition:border-color .18s; }
@@ -328,8 +354,6 @@ body.th-dive .depth-indicator { display:flex }
 .loot-chip-count { font-family:'Cormorant',serif;font-size:24px;font-weight:700;color:var(--acl);line-height:1; }
 .loot-chip-name { font-family:'Syne Mono',monospace;font-size:10px;color:var(--text2);margin-top:3px;letter-spacing:.5px; }
 .loot-empty { font-family:'Syne Mono',monospace;font-size:11px;color:var(--text2);font-style:italic }
-
-/* Charts */
 .charts-row { display:grid;grid-template-columns:1fr 340px;gap:10px;margin-bottom:12px; }
 .cbox { background:var(--card-bg);border:1px solid var(--card-bd);border-radius:6px;padding:22px; }
 .cbox-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px; }
@@ -339,8 +363,6 @@ body.th-dive .depth-indicator { display:flex }
 .rbtn:hover { color:var(--text);border-color:var(--line2) }
 .rbtn.active { color:var(--ac3);border-color:var(--line2);background:var(--chip-bg) }
 .cbox canvas { max-height:280px }
-
-/* ── TOP CATCHES in chart block ── */
 .chart-top-section {
   margin-top: 16px; padding-top: 14px;
   border-top: 1px solid var(--line);
@@ -383,8 +405,6 @@ body.th-dive .depth-indicator { display:flex }
   height: 100%; border-radius: 2px;
   background: linear-gradient(90deg, var(--ac2), var(--ac3));
 }
-
-/* Pie chart */
 .pie-wrap { position:relative;min-height:180px;margin-bottom:16px }
 .pie-legend { display:flex;flex-direction:column;gap:4px }
 .pleg-item { display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line); }
@@ -485,6 +505,15 @@ footer a:hover { color:var(--ac3) }
         <div class="home-rule-line"></div>
       </div>
       <p class="home-desc">Ведение статистики по персонажу</p>
+      <!-- ВРЕМЯ НА САЙТЕ -->
+      <div class="site-time-bar" id="site-time-bar">
+        <span class="st-icon">⏱</span>
+        <div>
+          <div class="st-label">Провёл на сайте</div>
+          <div><span class="st-value" id="site-time-value">—</span></div>
+          <div class="st-since">начиная с 28.02.2026</div>
+        </div>
+      </div>
     </div>
     <div class="home-right">
       <div class="journal-card jcard-sea" onclick="showPage('diving')">
@@ -632,83 +661,44 @@ footer a:hover { color:var(--ac3) }
 const SB_URL = 'https://bnjsevuuqgqvohfrvkvx.supabase.co';
 const SB_KEY = 'sb_publishable_PX2go4dTqu3IoT_NXjdLXQ_i7yTPGp0';
 
-/* ──────────────────────────────────────────────────────────
-   КАТЕГОРИИ НЫРКОВ
-────────────────────────────────────────────────────────── */
 const DIVE_CATEGORIES = [
-  {
-    label: 'Сокровища', icon: '🥇', color: '#c8a820',
-    ids: [3994, 3995, 3997, 3998, 3999]
-  },
-  {
-    label: 'Гадость', icon: '☠️', color: '#c04040',
-    ids: [3956, 3958, 3960, 3962, 3963, 3971, 3973, 3964]
-  },
-  {
-    label: 'Целебки', icon: '🌿', color: '#4a9050',
-    ids: [21, 3993, 566, 75, 565]
-  },
-  {
-    label: 'Еда', icon: '🐟', color: '#1a9090',
-    ids: [3965, 3966, 3967, 3968, 3969, 3970, 76]
-  },
-  {
-    label: 'Камни', icon: '🪨', color: '#9090a0',
-    ids: [417, 418, 1034]
-  },
-  {
-    label: 'Комок', icon: '🫧', color: '#7a40c0',
-    ids: [4008]
-  },
+  { label: 'Сокровища', icon: '🥇', color: '#c8a820', ids: [3994, 3995, 3997, 3998, 3999] },
+  { label: 'Гадость', icon: '☠️', color: '#c04040', ids: [3956, 3958, 3960, 3962, 3963, 3971, 3973, 3964] },
+  { label: 'Целебки', icon: '🌿', color: '#4a9050', ids: [21, 3993, 566, 75, 565] },
+  { label: 'Еда', icon: '🐟', color: '#1a9090', ids: [3965, 3966, 3967, 3968, 3969, 3970, 76] },
+  { label: 'Камни', icon: '🪨', color: '#9090a0', ids: [417, 418, 1034] },
+  { label: 'Комок', icon: '🫧', color: '#7a40c0', ids: [4008] },
 ];
 
-/* ──────────────────────────────────────────────────────────
-   КАТЕГОРИИ РАСЩЕЛИНЫ
-────────────────────────────────────────────────────────── */
 const HOL_CATEGORIES = [
-  {
-    label: 'Целебки', icon: '🌿', color: '#4a9050',
-    ids: [20, 75, 110, 565, 566]
-  },
-  {
-    label: 'Сокровища', icon: '🥇', color: '#c8a820',
-    ids: [2075, 2076, 2077]
-  },
-  {
-    label: 'Гадость', icon: '☠️', color: '#c04040',
-    ids: [8027, 8028]
-  },
+  { label: 'Целебки', icon: '🌿', color: '#4a9050', ids: [20, 75, 110, 565, 566] },
+  { label: 'Сокровища', icon: '🥇', color: '#c8a820', ids: [2075, 2076, 2077] },
+  { label: 'Гадость', icon: '☠️', color: '#c04040', ids: [8027, 8028] },
   {
     label: 'Еда', icon: '🐟', color: '#1a9090',
     subcategories: [
-      { label: 'Змеи',        icon: '🐍', color: '#7a9a30', ids: [8025, 8026] },
-      { label: 'Пауки',       icon: '🕷️', color: '#7050a0', ids: [8021, 8022, 8023, 8024] },
-      { label: 'Птицы',       icon: '🐦', color: '#4080b8', ids: [8029, 8030, 8031, 8032, 2074] },
-      { label: 'Белки',       icon: '🐿️', color: '#c07030', ids: [8036, 8035, 8033] },
-      { label: 'Ящерицы',     icon: '🦎', color: '#70b030', ids: [8039, 8040, 8041] },
-      { label: 'Мыши',        icon: '🐭', color: '#a07848', ids: [8042, 8043] },
-      { label: 'Летучие мышки',        icon: '🐭', color: '#464544', ids: [8037, 8038] },      
-      { label: 'Пчёлы',       icon: '🐝', color: '#d0a020', ids: [8019, 8020] },
-      { label: 'Водный мох',  icon: '🌱', color: '#30a878', ids: [76] },
+      { label: 'Змеи', icon: '🐍', color: '#7a9a30', ids: [8025, 8026] },
+      { label: 'Пауки', icon: '🕷️', color: '#7050a0', ids: [8021, 8022, 8023, 8024] },
+      { label: 'Птицы', icon: '🐦', color: '#4080b8', ids: [8029, 8030, 8031, 8032, 2074] },
+      { label: 'Белки', icon: '🐿️', color: '#c07030', ids: [8036, 8035, 8033] },
+      { label: 'Ящерицы', icon: '🦎', color: '#70b030', ids: [8039, 8040, 8041] },
+      { label: 'Мыши', icon: '🐭', color: '#a07848', ids: [8042, 8043] },
+      { label: 'Летучие мышки', icon: '🐭', color: '#464544', ids: [8037, 8038] },
+      { label: 'Пчёлы', icon: '🐝', color: '#d0a020', ids: [8019, 8020] },
+      { label: 'Водный мох', icon: '🌱', color: '#30a878', ids: [76] },
     ]
   },
-  {
-    label: 'Камни', icon: '🪨', color: '#9090a0',
-    ids: [417, 418, 1034]
-  },
-  {
-    label: 'Гнездо', icon: '🪺', color: '#7a40c0',
-    ids: [2072, 2073]
-  },
+  { label: 'Камни', icon: '🪨', color: '#9090a0', ids: [417, 418, 1034] },
+  { label: 'Гнездо', icon: '🪺', color: '#7a40c0', ids: [2072, 2073] },
 ];
 
-/* Устаревшие group-based данные (для pie chart) */
 const DIVE_GROUPS = {
   'Целебки':  [21, 3993, 75, 565, 566],
   'Гадость':  [3956, 3958, 3960, 3962, 3963, 3971, 3973, 3964],
   'Ракушки':  [3994, 3995, 3997, 3998, 3999],
   'Камень':   [417, 418, 1034],
   'Еда/вода': [3965, 3966, 3967, 3968, 3969, 3970, 76],
+  'Комочек': [4008],
 };
 const HOL_GROUPS = {
   'Целебки':     [20, 75, 76, 110, 565, 566],
@@ -743,16 +733,11 @@ const NAMES = {
 };
 
 const IMG = id => `https://wsrv.nl/?url=catwar.net/cw3/things/${id}.png&n=-1`;
-
-/* Pie palette — "Пусто" now #3a3a44 (darker than stones #9090a0) */
 const DIVE_PAL = ['#4a9050','#c04040','#c8a820','#9090a0','#1a9090','#7a40c0','#3a3a44', '#3a3a44'];
 const HOL_PAL  = ['#4a9050','#c8a820','#c04040','#1a9090','#9090a0','#7a40c0','#3a3a44'];
 
 let CH = {}, loaded = {};
 
-/* ──────────────────────────────────────────────────────────
-   HELPERS
-────────────────────────────────────────────────────────── */
 function cssVar(name) {
   return getComputedStyle(document.body).getPropertyValue(name).trim() || '#b0b0b0';
 }
@@ -796,9 +781,36 @@ async function sbGet(path) {
   return r.json();
 }
 
-/* ──────────────────────────────────────────────────────────
-   LOAD PAGE
-────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   ВРЕМЯ НА САЙТЕ
+══════════════════════════════════════════════════════════ */
+async function loadSiteTime() {
+  try {
+    const rows = await sbGet('site_time?select=seconds_total&order=date.asc');
+    if (!rows || !rows.length) return;
+    const totalSeconds = rows.reduce((sum, r) => sum + (r.seconds_total || 0), 0);
+    const el = document.getElementById('site-time-value');
+    if (el) el.textContent = formatSiteTime(totalSeconds);
+  } catch(e) {
+    console.error('loadSiteTime error:', e);
+  }
+}
+
+function formatSiteTime(sec) {
+  const d = Math.floor(sec / 86400);
+  const h = Math.floor((sec % 86400) / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  if (d > 0) return d + 'д ' + h + 'ч ' + m + 'м';
+  if (h > 0) return h + 'ч ' + m + 'м';
+  return m + 'м';
+}
+
+// Загрузить при старте и обновлять каждые 2 минуты
+loadSiteTime();
+setInterval(loadSiteTime, 120000);
+
+/* ══════════════════════════════════════════════════════════ */
+
 async function loadPage(type) {
   const prefix = type==='diving' ? 'div' : 'hol';
   const groups = type==='diving' ? DIVE_GROUPS : HOL_GROUPS;
@@ -849,9 +861,6 @@ function makeEpochBtn(label, active, cb) {
   b.textContent = label; b.onclick = cb; return b;
 }
 
-/* ──────────────────────────────────────────────────────────
-   RENDER CONTENT
-────────────────────────────────────────────────────────── */
 function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, groups, prefix) {
   const isDive   = type==='diving';
   const sessions = epochId ? allSessions.filter(s=>s.epoch_id===epochId) : allSessions;
@@ -951,7 +960,6 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
     </div>
   `;
 
-  /* Store state on element for range switching */
   el._sessions       = sessions;
   el._catches        = catches;
   el._totalAttempts  = totalAttempts;
@@ -961,9 +969,6 @@ function renderContent(type, epochId, allSessions, allCatches, allLoot, epochs, 
   drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts);
 }
 
-/* ──────────────────────────────────────────────────────────
-   LOOT SECTION
-────────────────────────────────────────────────────────── */
 function renderLootSection(isDive, oldClumps, newClumpCount, clumpLoot, nestCount, nestLoot) {
   const total   = isDive ? (oldClumps+newClumpCount) : nestCount;
   const lootMap = isDive ? clumpLoot : nestLoot;
@@ -986,18 +991,12 @@ function renderLootSection(isDive, oldClumps, newClumpCount, clumpLoot, nestCoun
     </div>`;
 }
 
-/* ──────────────────────────────────────────────────────────
-   CATEGORY GRID — flat centred stream, no block wrappers
-────────────────────────────────────────────────────────── */
 function buildCatsGrid(prefix, catchById, totalAttempts, categories) {
   const grid = document.getElementById(prefix+'-cats-grid');
   if (!grid) return;
-
-  /* Flatten all categories into ordered item groups */
   const groups = [];
   categories.forEach(cat => {
     if (cat.subcategories) {
-      /* For food-type: flatten all sub-ids preserving sub-color */
       const subItems = [];
       cat.subcategories.forEach(sub => {
         sub.ids.filter(id => catchById[id] > 0).forEach(id => {
@@ -1012,8 +1011,6 @@ function buildCatsGrid(prefix, catchById, totalAttempts, categories) {
       if (items.length) groups.push(items);
     }
   });
-
-  /* Build HTML: items flat, thin divider between groups */
   const parts = [];
   groups.forEach((items, gi) => {
     if (gi > 0) parts.push('<div class="cat-divider"></div>');
@@ -1021,7 +1018,6 @@ function buildCatsGrid(prefix, catchById, totalAttempts, categories) {
       parts.push(buildCatItem(id, count, totalAttempts, color));
     });
   });
-
   grid.innerHTML = parts.join('') || '<span class="cat-empty">Не найдено</span>';
 }
 
@@ -1036,9 +1032,6 @@ function buildCatItem(id, count, totalAttempts, color) {
   </div>`;
 }
 
-/* ──────────────────────────────────────────────────────────
-   RANGE SWITCH
-────────────────────────────────────────────────────────── */
 function setRange(prefix, range, btn) {
   document.querySelectorAll('#'+prefix+'-range-btns .rbtn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -1046,13 +1039,8 @@ function setRange(prefix, range, btn) {
   drawDaysChart(prefix, el._sessions, range, el._catches, el._totalAttempts);
 }
 
-/* ──────────────────────────────────────────────────────────
-   DAYS CHART
-────────────────────────────────────────────────────────── */
 function drawDaysChart(prefix, sessions, range, allCatches, baseTotalAttempts) {
   if (!sessions?.length) return;
-
-  /* Filter sessions by range */
   let filteredSessions;
   if (range==='all') {
     filteredSessions = sessions;
@@ -1065,7 +1053,6 @@ function drawDaysChart(prefix, sessions, range, allCatches, baseTotalAttempts) {
   const filtCatches = allCatches ? allCatches.filter(c=>filtIds.has(c.session_id)) : [];
   const filtAttempts = filteredSessions.reduce((s,x)=>s+(x.total_attempts||0),0);
 
-  /* Build chart data */
   let labels, data;
   if (range==='all') {
     const byWeek={};
@@ -1093,11 +1080,9 @@ function drawDaysChart(prefix, sessions, range, allCatches, baseTotalAttempts) {
 
   const id = prefix+'-chart-days';
   if (CH[id]) CH[id].destroy();
-
   const col   = cssVar('--ac2');
   const text2 = cssVar('--text2');
   const gridC = 'rgba(255,255,255,0.04)';
-
   CH[id] = new Chart(document.getElementById(id), {
     type: 'bar',
     data: {
@@ -1112,39 +1097,24 @@ function drawDaysChart(prefix, sessions, range, allCatches, baseTotalAttempts) {
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
-        x: {
-          ticks: { color: text2, font: { family:'Syne Mono', size: 10 }, maxRotation: 45 },
-          grid: { color: gridC }
-        },
-        y: {
-          ticks: { color: text2, font: { family:'Syne Mono', size: 10 } },
-          grid: { color: gridC },
-          beginAtZero: true
-        }
+        x: { ticks: { color: text2, font: { family:'Syne Mono', size: 10 }, maxRotation: 45 }, grid: { color: gridC } },
+        y: { ticks: { color: text2, font: { family:'Syne Mono', size: 10 } }, grid: { color: gridC }, beginAtZero: true }
       }
     }
   });
-
-  /* Top catches for period */
   renderTopItems(prefix, filtCatches, filtAttempts);
 }
 
-/* ──────────────────────────────────────────────────────────
-   TOP ITEMS LIST
-────────────────────────────────────────────────────────── */
 function renderTopItems(prefix, filteredCatches, filtAttempts) {
   const topEl = document.getElementById(prefix+'-chart-top');
   if (!topEl) return;
-
   const byItem = {};
   filteredCatches.forEach(c=>{ byItem[c.item_id]=(byItem[c.item_id]||0)+1; });
   const sorted = Object.entries(byItem).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
   if (!sorted.length) {
     topEl.innerHTML = '<span style="font-family:Syne Mono,monospace;font-size:11px;color:var(--text3)">Нет данных за период</span>';
     return;
   }
-
   const maxCount = sorted[0][1];
   topEl.innerHTML = sorted.map(([id,cnt], i) => {
     const pct  = filtAttempts ? (cnt/filtAttempts*100).toFixed(2) : '0.00';
@@ -1160,9 +1130,6 @@ function renderTopItems(prefix, filteredCatches, filtAttempts) {
   }).join('');
 }
 
-/* ──────────────────────────────────────────────────────────
-   PIE CHART — «Пусто» окрашено в #3a3a44
-────────────────────────────────────────────────────────── */
 function drawPieChart(prefix, groupCounts, pust, isDive, totalAttempts) {
   const labels=[...Object.keys(groupCounts),'Пусто'];
   const data=[...Object.values(groupCounts),pust];
