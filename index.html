@@ -332,7 +332,6 @@ footer a:hover{color:var(--ac3)}
 }
 @media(max-width:460px){
   .metrics-row{grid-template-columns:1fr 1fr}
-  .shop-grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -419,7 +418,7 @@ footer a:hover{color:var(--ac3)}
 
 <div id="page-auction" class="page">
   <div class="sp" style="padding-bottom:80px">
-    <div class="sp-header fu" style="justify-content:center;text-align:center;"><div><div class="sp-title" style="justify-content:center">🐚&ensp;<em>Аукцион</em></div></div></div>
+    <div class="sp-header fu"><div><div class="sp-title-row"><div class="sp-title">🐚&ensp;<em>Аукцион</em></div><a href="https://vk.com/washclown" target="_blank" rel="noopener" class="sp-contact-icon vk" title="ВКонтакте"><svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path fill="#5181B8" d="M13.162 18.994c.609 0 .858-.406.851-.852-.031-1.622.74-2.619 2.221-1.164.434.415.861.915 1.315 1.39.567.63.969 1.064 1.626 1.064h2.201c.683 0 1.201-.442.983-.966-.103-.231-.49-.669-1.232-1.455-.753-.753-1.667-1.667-1.667-2.27 0-.389.155-.708.536-1.165.406-.494 2.379-2.76 2.379-4.271 0-.773-.466-1.291-1.264-1.291h-2.44c-.685 0-1.002.355-1.002.914 0 .666-.834 2.771-1.951 4.072-1.051 1.228-1.465.836-1.465-.119V8.133c0-.734-.238-1.13-.979-1.13h-3.08c-.608 0-.975.453-.975.979 0 .658.937.806 1.035 2.651v4.003c0 1.129-.206 1.332-.645 1.332-1.191 0-4.072-4.09-5.777-8.752C6.086 6.549 5.633 6 4.993 6H2.517C1.75 6 1.6 6.432 1.6 6.982c0 .771 1.196 4.554 5.569 9.57C10.063 19.928 13.162 18.994 13.162 18.994z"/></svg></a><a href="https://catwar.net/cat/1390991" target="_blank" rel="noopener" class="sp-contact-icon cw" title="CatWar"><img src="https://catwar.net/favicon.ico" width="16" height="16" onerror="this.outerHTML='🐾'" style="border-radius:2px"></a></div></div></div>
     <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
     <div id="auction-content"><div class="loading-wrap"><div class="loading-orb"></div><div class="loading-text">Загрузка</div></div></div>
   </div>
@@ -447,28 +446,62 @@ const HOL_PAL=['#4a9050','#c8a820','#c04040','#1a9090','#9090a0','#7a40c0','#3a3
 const SHELL_PU={3994:20,3995:30,3997:0,3998:15,3999:28};
 const FEATHER_IDS=[2075,2076,2077];
 
-// ── Товары магазина (редактируй здесь) ──
-// imgUrl: 'https://catwar.net/cw3/things/XXXX.png'
+// ══════════════════════════════════════════════════════════════
+// ТОВАРЫ МАГАЗИНА
+// Чтобы добавить картинку, замени '' на URL:
+// imgUrl:'https://catwar.net/cw3/things/XXXX.png'
+// pricePU / priceFeathers / priceCostUses — цены в каждой валюте
+// ══════════════════════════════════════════════════════════════
 const SHOP_ITEMS=[
-  {id:'wolfcub', name:'Волчонок',     imgUrl:'https://catwar.net/cw3/things/5700.png', pricePU:65,  priceFeathers:4, priceCostUses:2},
-  {id:'foxkit',  name:'Лисёнок',      imgUrl:'', pricePU:80,  priceFeathers:5, priceCostUses:2},
-  {id:'owl',     name:'Совёнок',      imgUrl:'', pricePU:55,  priceFeathers:3, priceCostUses:2},
-  {id:'hare',    name:'Зайчонок',     imgUrl:'', pricePU:45,  priceFeathers:3, priceCostUses:1},
-  {id:'bearcub', name:'Медвежонок',   imgUrl:'', pricePU:100, priceFeathers:7, priceCostUses:3},
-  {id:'snake',   name:'Змея',         imgUrl:'', pricePU:70,  priceFeathers:4, priceCostUses:2},
-  {id:'hedgehog',name:'Ёжик',         imgUrl:'', pricePU:40,  priceFeathers:2, priceCostUses:1},
-  {id:'bat',     name:'Летучая мышь', imgUrl:'', pricePU:60,  priceFeathers:4, priceCostUses:2},
+  {id:'wolfcub',      name:'Волчонок',              imgUrl:'https://catwar.net/cw3/things/5700.png', pricePU:65,  priceFeathers:4, priceCostUses:2},
+  {id:'arctic_fox',   name:'Щенок песца',           imgUrl:'', pricePU:70,  priceFeathers:4, priceCostUses:2},
+  {id:'cream_seal',   name:'Кремовый тюленчик',     imgUrl:'', pricePU:80,  priceFeathers:5, priceCostUses:2},
+  {id:'sandpiper',    name:'Птенец песочника',      imgUrl:'', pricePU:55,  priceFeathers:3, priceCostUses:2},
+  {id:'red_tanager',  name:'Красная пиранга',        imgUrl:'', pricePU:60,  priceFeathers:4, priceCostUses:2},
+  {id:'lynx_cub',     name:'Рысёнок',               imgUrl:'', pricePU:80,  priceFeathers:5, priceCostUses:2},
+  {id:'magpie',       name:'Птенец сороки',         imgUrl:'', pricePU:50,  priceFeathers:3, priceCostUses:1},
+  {id:'otter',        name:'Выдрёнок',              imgUrl:'', pricePU:65,  priceFeathers:4, priceCostUses:2},
+  {id:'boar',         name:'Кабанёнок',             imgUrl:'', pricePU:55,  priceFeathers:3, priceCostUses:1},
+  {id:'lamb',         name:'Ягнёнок',               imgUrl:'', pricePU:50,  priceFeathers:3, priceCostUses:1},
+  {id:'mandarin',     name:'Утёнок мандаринки',     imgUrl:'', pricePU:70,  priceFeathers:4, priceCostUses:2},
+  {id:'bear_cub',     name:'Медвежонок',            imgUrl:'', pricePU:100, priceFeathers:6, priceCostUses:3},
+  {id:'white_squirrel',name:'Белый бельчонок',      imgUrl:'', pricePU:60,  priceFeathers:4, priceCostUses:2},
+  {id:'red_fox_pup',  name:'Щенок красной крестовки',imgUrl:'',pricePU:70,  priceFeathers:4, priceCostUses:2},
+  {id:'shrew',        name:'Маленькая землероечка', imgUrl:'', pricePU:45,  priceFeathers:2, priceCostUses:1},
+  {id:'swift',        name:'Чёрный стрижонок',      imgUrl:'', pricePU:55,  priceFeathers:3, priceCostUses:1},
+  {id:'chipmunk',     name:'Бурундучок',            imgUrl:'', pricePU:55,  priceFeathers:3, priceCostUses:1},
+  {id:'argali',       name:'Архарёнок',             imgUrl:'', pricePU:65,  priceFeathers:4, priceCostUses:2},
+  {id:'caracal',      name:'Котёнок каракала',      imgUrl:'', pricePU:90,  priceFeathers:5, priceCostUses:2},
+  {id:'mink',         name:'Норка',                 imgUrl:'', pricePU:60,  priceFeathers:4, priceCostUses:2},
+  {id:'point1',       name:'1 балл',                imgUrl:'', pricePU:30,  priceFeathers:2, priceCostUses:1},
+  {id:'point2',       name:'2 балла',               imgUrl:'', pricePU:50,  priceFeathers:3, priceCostUses:1},
+  {id:'claws',        name:'Когти',                 imgUrl:'', pricePU:40,  priceFeathers:2, priceCostUses:1},
+  {id:'scar',         name:'Шрам',                  imgUrl:'', pricePU:40,  priceFeathers:2, priceCostUses:1},
 ];
 
-// ── Костюмы (редактируй imgUrl) ── 4 юза = 1 полный костюм
+// ══════════════════════════════════════════════════════════════
+// КОСТЮМЫ — вставь imgUrl для каждого (4 юза = 1 полный костюм)
+// ══════════════════════════════════════════════════════════════
 const COSTUMES=[
-  {id:'red_shells',   name:'Ракушки красные', imgUrl:''},
-  {id:'blue_shells',  name:'Ракушки синие',   imgUrl:''},
+  {id:'red_shells',   name:'Красные ракушки', imgUrl:''},
+  {id:'blue_shells',  name:'Синие ракушки',   imgUrl:''},
   {id:'feather_bind', name:'Переплёт перьев', imgUrl:''},
   {id:'corals',       name:'Кораллы',         imgUrl:''},
   {id:'seaweed',      name:'Водоросли',       imgUrl:''},
 ];
-const COSTUME_FB=['🐚','🔵','🪶','🪸','🌿'];
+const COSTUME_FB=['🔴','🔵','🪶','🪸','🌿'];
+
+// ══════════════════════════════════════════════════════════════
+// ИНВЕНТАРЬ КОСТЮМОВ — хардкод (текущие юзы на руках)
+// Редактируй прямо здесь когда юзы изменятся
+// ══════════════════════════════════════════════════════════════
+const COSTUME_INV=[
+  {name:'Красные ракушки', uses:0,  icon:'🔴', imgUrl:''},
+  {name:'Синие ракушки',   uses:0,  icon:'🔵', imgUrl:''},
+  {name:'Кораллы',         uses:19, icon:'🪸', imgUrl:''},
+  {name:'Водоросли',       uses:20, icon:'🌿', imgUrl:''},
+  {name:'Перья',           uses:3,  icon:'🪶', imgUrl:''},
+];
 
 let CH={},loaded={},cartItems=[],payMode='pu',selectedCostume=0,invCounts={},_totalFeathers=0;
 function cssVar(n){return getComputedStyle(document.body).getPropertyValue(n).trim()||'#b0b0b0';}
@@ -650,10 +683,25 @@ async function loadAuction(){
   }catch(e){el.innerHTML='<div class="loading-wrap"><div class="loading-text">Ошибка загрузки</div></div>';}
 }
 
+function shopPriceStr(item){
+  if(payMode==='feathers')return item.priceFeathers+'&thinsp;🪶';
+  if(payMode==='costume')return item.priceCostUses+'&thinsp;юз';
+  return item.pricePU+'&thinsp;ПУ';
+}
+function renderShopGrid(){
+  const g=document.getElementById('shop-grid-inner');if(!g)return;
+  g.innerHTML=SHOP_ITEMS.map(item=>{
+    const ih=item.imgUrl?`<img src="${item.imgUrl}" loading="lazy" onerror="this.style.display='none'">`:`<span class="fallback-icon">🐾</span>`;
+    return`<div class="shop-card" onclick="addToCart('${item.id}')" title="${item.name}"><div class="shop-card-img">${ih}</div><div class="shop-card-name">${item.name}</div><div class="shop-card-price">${shopPriceStr(item)}</div></div>`;
+  }).join('');
+}
 function renderAuction(counts,el){
   const shellChips=Object.entries(SHELL_PU).map(([id,pu])=>{const cnt=counts[id]||0;const ps=pu>0?`<span class="inv-chip-pu">+${pu} ПУ×${cnt}</span>`:`<span class="inv-chip-pu" style="opacity:.5">сон</span>`;return`<div class="inv-chip"><img src="${IMG(id)}" loading="lazy" onerror="this.style.display='none'"><div class="inv-chip-info"><span class="inv-chip-count">${cnt}</span><span class="inv-chip-name">${NAMES[id]||id}</span>${ps}</div></div>`;}).join('');
   const featherChips=FEATHER_IDS.map(id=>{const cnt=counts[id]||0;return`<div class="inv-chip"><img src="${IMG(id)}" loading="lazy" onerror="this.style.display='none'"><div class="inv-chip-info"><span class="inv-chip-count">${cnt}</span><span class="inv-chip-name">${NAMES[id]||id}</span></div></div>`;}).join('');
-  const shopCards=SHOP_ITEMS.map(item=>{const ih=item.imgUrl?`<img src="${item.imgUrl}" loading="lazy" onerror="this.style.display='none'">`:`<span class="fallback-icon">🐾</span>`;return`<div class="shop-card" onclick="addToCart('${item.id}')" title="Добавить в корзину"><div class="shop-card-img">${ih}</div><div class="shop-card-name">${item.name}</div><div class="shop-card-price">${item.pricePU} ПУ</div><div class="shop-card-hint">+ в корзину</div></div>`;}).join('');
+  const costumeInvChips=COSTUME_INV.map(c=>{
+    const ih=c.imgUrl?`<img src="${c.imgUrl}" loading="lazy" style="width:30px;height:30px;object-fit:contain" onerror="this.outerHTML='<span style=font-size:20px>${c.icon}</span>'">`:`<span style="font-size:20px;line-height:1">${c.icon}</span>`;
+    return`<div class="inv-chip"><div style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ih}</div><div class="inv-chip-info"><span class="inv-chip-count">${c.uses}</span><span class="inv-chip-name">${c.name}</span><span class="inv-chip-uses">юзов</span></div></div>`;
+  }).join('');
   const costumeHtml=COSTUMES.map((c,i)=>{const ih=c.imgUrl?`<img src="${c.imgUrl}" loading="lazy" onerror="this.outerHTML='<span class=c-icon>${COSTUME_FB[i]}</span>'">`:`<span class="c-icon">${COSTUME_FB[i]}</span>`;return`<button class="costume-btn${i===0?' active':''}" onclick="selectCostume(${i},this)"><div class="costume-btn-img">${ih}</div><span class="costume-btn-name">${c.name}</span></button>`;}).join('');
   el.innerHTML=`
   <div class="au-page">
@@ -662,10 +710,12 @@ function renderAuction(counts,el){
       <div class="inv-chips">${shellChips||'<span class="inv-empty">нет ракушек</span>'}</div>
       <div class="inv-bar-head" style="margin-top:12px">🪶 перья · итого: ${_totalFeathers}</div>
       <div class="inv-chips">${featherChips}</div>
+      <div class="inv-bar-head" style="margin-top:12px">👘 костюмы</div>
+      <div class="inv-chips">${costumeInvChips}</div>
     </div>
     <div class="shop-section fu d1" style="width:100%">
       <div class="au-sec-head">🛒 Магазин баффов</div>
-      <div class="shop-grid">${shopCards}</div>
+      <div class="shop-grid" id="shop-grid-inner"></div>
     </div>
     <div class="cart-box fu d2">
       <div class="cart-header">
@@ -682,22 +732,16 @@ function renderAuction(counts,el){
         <div class="pay-body" id="pay-body"></div>
       </div>
     </div>
-    <div class="contacts-bar fu d3">
-      <span class="contacts-label">Связь</span>
-      <div class="contacts-links">
-        <a href="https://vk.com/washclown" target="_blank" rel="noopener" class="contact-icon-btn vk"><span class="cib-icon">📘</span><span class="cib-label">ВКонтакте</span></a>
-        <a href="https://catwar.net/cat/1390991" target="_blank" rel="noopener" class="contact-icon-btn cw"><span class="cib-icon">🐾</span><span class="cib-label">CatWar</span></a>
-      </div>
-    </div>
   </div>
   <div id="au-costume-tpl" style="display:none">${costumeHtml}</div>`;
+  renderShopGrid();
 }
 
 function addToCart(itemId){const item=SHOP_ITEMS.find(it=>it.id===itemId);if(!item)return;const ex=cartItems.find(ci=>ci.item.id===itemId);if(ex)ex.qty++;else cartItems.push({item,qty:1});renderCart();}
 function changeCartQty(itemId,delta){const idx=cartItems.findIndex(ci=>ci.item.id===itemId);if(idx<0)return;cartItems[idx].qty=Math.max(0,cartItems[idx].qty+delta);if(cartItems[idx].qty===0)cartItems.splice(idx,1);renderCart();}
 function removeFromCart(itemId){cartItems=cartItems.filter(ci=>ci.item.id!==itemId);renderCart();}
 function resetCart(){cartItems=[];renderCart();}
-function setPayMode(mode,btn){payMode=mode;document.querySelectorAll('.pay-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPayBody();}
+function setPayMode(mode,btn){payMode=mode;document.querySelectorAll('.pay-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderShopGrid();renderCart();}
 function selectCostume(idx,btn){selectedCostume=idx;document.querySelectorAll('#pay-body .costume-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPayBody();}
 
 function renderCart(){
@@ -707,7 +751,12 @@ function renderCart(){
   if(badge)badge.textContent=totalQty;
   if(!cartItems.length){wrap.innerHTML='<div class="cart-empty"><span class="cart-empty-icon">🛒</span><span>Добавь товары из магазина выше</span></div>';if(paySection)paySection.style.display='none';return;}
   if(paySection)paySection.style.display='';
-  const rows=cartItems.map(ci=>{const item=ci.item;const ih=item.imgUrl?`<img class="cart-item-img" src="${item.imgUrl}" loading="lazy" onerror="this.style.display='none'">`:`<span class="cart-item-img-fb">🐾</span>`;return`<div class="cart-item">${ih}<span class="cart-item-name">${item.name}</span><div class="cart-item-controls"><button class="cqty-btn" onclick="changeCartQty('${item.id}',-1)">−</button><span class="cqty-val">${ci.qty}</span><button class="cqty-btn" onclick="changeCartQty('${item.id}',+1)">+</button></div><span class="cart-item-price">${ci.qty*item.pricePU} ПУ</span><button class="cart-item-del" onclick="removeFromCart('${item.id}')" title="Убрать">✕</button></div>`;}).join('');
+  function cartItemPrice(ci){
+  if(payMode==='feathers')return(ci.qty*ci.item.priceFeathers)+' 🪶';
+  if(payMode==='costume')return(ci.qty*ci.item.priceCostUses)+' юз';
+  return(ci.qty*ci.item.pricePU)+' ПУ';
+}
+const rows=cartItems.map(ci=>{const item=ci.item;const ih=item.imgUrl?`<img class="cart-item-img" src="${item.imgUrl}" loading="lazy" onerror="this.style.display='none'">`:`<span class="cart-item-img-fb">🐾</span>`;return`<div class="cart-item">${ih}<span class="cart-item-name">${item.name}</span><div class="cart-item-controls"><button class="cqty-btn" onclick="changeCartQty('${item.id}',-1)">−</button><span class="cqty-val">${ci.qty}</span><button class="cqty-btn" onclick="changeCartQty('${item.id}',+1)">+</button></div><span class="cart-item-price">${cartItemPrice(ci)}</span><button class="cart-item-del" onclick="removeFromCart('${item.id}')" title="Убрать">✕</button></div>`;}).join('');
   wrap.innerHTML=`<div class="cart-items-list">${rows}</div>`;
   renderPayBody();
 }
