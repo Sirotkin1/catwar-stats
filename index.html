@@ -79,6 +79,34 @@ body.th-hollow header{background:rgba(12,14,10,.86)}
 body.th-auction header{background:rgba(14,10,22,.90)}
 .hdr{max-width:1400px;margin:0 auto;padding:0 44px;display:flex;align-items:center;justify-content:space-between;height:60px;}
 .logo-btn{display:flex;align-items:center;gap:14px;background:none;border:none;cursor:pointer;color:var(--text);transition:color .2s;}
+/* inline contact icons */
+.sp-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sp-contact-icon{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;border:1px solid var(--line2);background:var(--bg3);text-decoration:none;transition:all .2s;flex-shrink:0;}
+.sp-contact-icon:hover{border-color:var(--line3);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.6);}
+.sp-contact-icon.vk:hover{border-color:rgba(100,150,220,.5);box-shadow:0 6px 20px rgba(80,130,210,.2);}
+.sp-contact-icon.cw:hover{border-color:var(--line3);box-shadow:0 6px 20px color-mix(in srgb,var(--ac3) 20%,transparent);}
+.inv-chip-uses{font-family:'Syne Mono',monospace;font-size:9px;color:#c060f0;letter-spacing:.3px;}
+/* modal */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--line3);border-radius:12px;max-width:660px;width:100%;max-height:88vh;overflow-y:auto;padding:32px 36px 28px;position:relative;animation:modalPop .3s cubic-bezier(.25,.9,.3,1) both;}
+@keyframes modalPop{from{opacity:0;transform:scale(.94) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{position:sticky;top:0;float:right;background:none;border:1px solid var(--line2);border-radius:6px;padding:4px 12px;font-family:'Syne Mono',monospace;font-size:11px;color:var(--text3);cursor:pointer;transition:all .15s;margin-left:16px;}
+.modal-close:hover{border-color:var(--line3);color:var(--text);}
+.modal-title{font-family:'Cormorant',serif;font-size:32px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.modal-subtitle{font-family:'Syne Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:22px;}
+.modal-section{margin-bottom:18px;}
+.modal-section h3{font-family:'Syne Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ac3);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.modal-section h3::after{content:'';flex:1;height:1px;background:var(--line2);}
+.modal-section p,.modal-section li{font-size:13px;color:var(--text2);line-height:1.9;}
+.modal-section ul{padding-left:18px;display:flex;flex-direction:column;gap:3px;}
+.modal-btn{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;border-radius:6px;border:1px solid var(--line2);background:var(--bg3);font-family:'Syne Mono',monospace;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;letter-spacing:1px;}
+.modal-btn:hover{border-color:var(--line3);color:var(--text);}
+/* copy result box */
+.copy-result-area{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:6px;padding:14px 16px;font-family:'Syne Mono',monospace;font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap;margin-bottom:10px;min-height:80px;}
+.copy-btn{display:flex;align-items:center;gap:8px;padding:8px 20px;border-radius:6px;border:1px solid var(--line2);background:var(--bg3);font-family:'Syne Mono',monospace;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;letter-spacing:1.5px;text-transform:uppercase;margin:0 auto;}
+.copy-btn:hover{border-color:var(--line3);color:var(--acl);box-shadow:0 0 14px color-mix(in srgb,var(--ac3) 15%,transparent);}
+.copy-btn.copied{border-color:rgba(80,200,100,.4);color:#70c878;}
 .logo-btn:hover{color:var(--ac3)}
 .logo-sigil{position:relative;width:32px;height:32px;border-radius:8px;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:15px;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
 .logo-btn:hover .logo-sigil{border-color:var(--line3);box-shadow:0 0 18px color-mix(in srgb,var(--ac3) 25%,transparent);}
@@ -235,14 +263,13 @@ footer a:hover{color:var(--ac3)}
 .inv-bar{width:100%;background:var(--card-bg);border:1px solid var(--card-bd);border-radius:8px;padding:14px 18px;}
 .inv-bar-head{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .inv-bar-head::after{content:'';flex:1;height:1px;background:var(--line);}
-.inv-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
-.inv-chip{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--line);border-radius:5px;padding:5px 10px 5px 6px;transition:border-color .15s;}
+.inv-chips{display:flex;flex-wrap:wrap;gap:4px;}
+.inv-chip{position:relative;display:flex;align-items:flex-end;justify-content:flex-end;background:var(--bg3);border:1px solid var(--line);border-radius:5px;padding:3px;transition:border-color .15s;cursor:default;}
 .inv-chip:hover{border-color:var(--line2);}
-.inv-chip img{width:30px;height:30px;object-fit:contain;}
-.inv-chip-info{display:flex;flex-direction:column;gap:1px;}
-.inv-chip-count{font-family:'Cormorant',serif;font-size:20px;font-weight:700;color:var(--acl);line-height:1;}
-.inv-chip-name{font-family:'Syne Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.3px;}
-.inv-chip-pu{font-family:'Syne Mono',monospace;font-size:9px;color:#c8a830;}
+.inv-chip-img-wrap{width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
+.inv-chip-img-wrap img{width:48px;height:48px;object-fit:contain;}
+.inv-chip-badge{position:absolute;bottom:2px;right:3px;font-family:'Cormorant',serif;font-size:16px;font-weight:700;color:var(--acl);line-height:1;text-shadow:0 0 6px rgba(0,0,0,.9),0 0 3px rgba(0,0,0,1);}
+.inv-chip-icon-fb{font-size:28px;line-height:1;width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
 .inv-empty{font-family:'Syne Mono',monospace;font-size:11px;color:var(--text3);font-style:italic;}
 .au-sec-head{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
 .au-sec-head::before{content:'';width:20px;height:1px;background:var(--ac2);}
@@ -418,9 +445,50 @@ footer a:hover{color:var(--ac3)}
 
 <div id="page-auction" class="page">
   <div class="sp" style="padding-bottom:80px">
-    <div class="sp-header fu"><div><div class="sp-title-row"><div class="sp-title">🐚&ensp;<em>Аукцион</em></div><a href="https://vk.com/washclown" target="_blank" rel="noopener" class="sp-contact-icon vk" title="ВКонтакте"><svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path fill="#5181B8" d="M13.162 18.994c.609 0 .858-.406.851-.852-.031-1.622.74-2.619 2.221-1.164.434.415.861.915 1.315 1.39.567.63.969 1.064 1.626 1.064h2.201c.683 0 1.201-.442.983-.966-.103-.231-.49-.669-1.232-1.455-.753-.753-1.667-1.667-1.667-2.27 0-.389.155-.708.536-1.165.406-.494 2.379-2.76 2.379-4.271 0-.773-.466-1.291-1.264-1.291h-2.44c-.685 0-1.002.355-1.002.914 0 .666-.834 2.771-1.951 4.072-1.051 1.228-1.465.836-1.465-.119V8.133c0-.734-.238-1.13-.979-1.13h-3.08c-.608 0-.975.453-.975.979 0 .658.937.806 1.035 2.651v4.003c0 1.129-.206 1.332-.645 1.332-1.191 0-4.072-4.09-5.777-8.752C6.086 6.549 5.633 6 4.993 6H2.517C1.75 6 1.6 6.432 1.6 6.982c0 .771 1.196 4.554 5.569 9.57C10.063 19.928 13.162 18.994 13.162 18.994z"/></svg></a><a href="https://catwar.net/cat/1390991" target="_blank" rel="noopener" class="sp-contact-icon cw" title="CatWar"><img src="https://catwar.net/favicon.ico" width="16" height="16" onerror="this.outerHTML='🐾'" style="border-radius:2px"></a></div></div></div>
+    <div class="sp-header fu"><div><div class="sp-title-row"><div class="sp-title">🐚&ensp;<em>Аукцион</em></div><button class="modal-btn" onclick="document.getElementById('modal-help').classList.add('open')" style="margin-left:6px">📖 Инструкция</button><a href="https://vk.com/washclown" target="_blank" rel="noopener" class="sp-contact-icon vk" title="ВКонтакте"><svg viewBox="0 0 24 24" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill="#5181B8" d="M13.162 18.994c.609 0 .858-.406.851-.852-.031-1.622.74-2.619 2.221-1.164.434.415.861.915 1.315 1.39.567.63.969 1.064 1.626 1.064h2.201c.683 0 1.201-.442.983-.966-.103-.231-.49-.669-1.232-1.455-.753-.753-1.667-1.667-1.667-2.27 0-.389.155-.708.536-1.165.406-.494 2.379-2.76 2.379-4.271 0-.773-.466-1.291-1.264-1.291h-2.44c-.685 0-1.002.355-1.002.914 0 .666-.834 2.771-1.951 4.072-1.051 1.228-1.465.836-1.465-.119V8.133c0-.734-.238-1.13-.979-1.13h-3.08c-.608 0-.975.453-.975.979 0 .658.937.806 1.035 2.651v4.003c0 1.129-.206 1.332-.645 1.332-1.191 0-4.072-4.09-5.777-8.752C6.086 6.549 5.633 6 4.993 6H2.517C1.75 6 1.6 6.432 1.6 6.982c0 .771 1.196 4.554 5.569 9.57C10.063 19.928 13.162 18.994 13.162 18.994z"/></svg></a><a href="https://catwar.net/cat/1390991" target="_blank" rel="noopener" class="sp-contact-icon cw" title="CatWar"><img src="https://catwar.net/favicon.ico" width="24" height="24" onerror="this.outerHTML='🐾'" style="border-radius:2px"></a></div></div></div>
     <div class="sp-rule"><div class="sp-rule-line"></div><div class="sp-rule-dot"></div><div class="sp-rule-line"></div></div>
     <div id="auction-content"><div class="loading-wrap"><div class="loading-orb"></div><div class="loading-text">Загрузка</div></div></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-help" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕ закрыть</button>
+    <div class="modal-title">📖 Как пользоваться</div>
+    <div class="modal-subtitle">Калькулятор аукциона · Бортовой Журнал</div>
+    <div class="modal-section">
+      <h3>🐚 Инвентарь</h3>
+      <p>Блок вверху показывает твои ракушки, перья и юзы костюмов. Данные берутся автоматически из Supabase (нырки и расщелина). Чтобы добавить предметы вручную — используй таблицу <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">manual_inventory</code> в Supabase.</p>
+    </div>
+    <div class="modal-section">
+      <h3>🛒 Магазин баффов</h3>
+      <ul>
+        <li>Нажимай на карточки баффов — они добавятся в корзину.</li>
+        <li>Цены в карточках и корзине меняются вместе с выбранной валютой оплаты (ПУ / Перья / Костюм).</li>
+        <li>Все цены примерные — уточняй у продавца!</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h3>🛍 Корзина</h3>
+      <ul>
+        <li>Меняй количество кнопками <strong>+</strong> и <strong>−</strong>, удаляй товар кнопкой <strong>✕</strong>.</li>
+        <li>Переключай вкладку оплаты (ПУ / Перья / Костюм) — итог и цены пересчитаются.</li>
+        <li>В разделе <em>Костюм</em> можно выбрать тип костюма из своего инвентаря.</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h3>📋 Копирование в буфер</h3>
+      <p>Кнопка <strong>«Скопировать сообщение»</strong> внизу корзины формирует готовый текст с суммой и списком баффов — вставляй прямо в CatWar или ВКонтакте.</p>
+    </div>
+    <div class="modal-section">
+      <h3>✏️ Редактирование данных</h3>
+      <ul>
+        <li>Картинки баффов: добавь <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">imgUrl</code> в массив <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">SHOP_ITEMS</code> в коде.</li>
+        <li>Юзы костюмов: меняй <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">uses:</code> в массиве <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">COSTUME_INV</code>.</li>
+        <li>Цены баффов: правь <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">pricePU / priceFeathers / priceCostUses</code> в <code style="background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:11px">SHOP_ITEMS</code>.</li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -696,11 +764,14 @@ function renderShopGrid(){
   }).join('');
 }
 function renderAuction(counts,el){
-  const shellChips=Object.entries(SHELL_PU).map(([id,pu])=>{const cnt=counts[id]||0;const ps=pu>0?`<span class="inv-chip-pu">+${pu} ПУ×${cnt}</span>`:`<span class="inv-chip-pu" style="opacity:.5">сон</span>`;return`<div class="inv-chip"><img src="${IMG(id)}" loading="lazy" onerror="this.style.display='none'"><div class="inv-chip-info"><span class="inv-chip-count">${cnt}</span><span class="inv-chip-name">${NAMES[id]||id}</span>${ps}</div></div>`;}).join('');
-  const featherChips=FEATHER_IDS.map(id=>{const cnt=counts[id]||0;return`<div class="inv-chip"><img src="${IMG(id)}" loading="lazy" onerror="this.style.display='none'"><div class="inv-chip-info"><span class="inv-chip-count">${cnt}</span><span class="inv-chip-name">${NAMES[id]||id}</span></div></div>`;}).join('');
+  const mkChip=(imgSrc,cnt,tooltip)=>`<div class="inv-chip" title="${tooltip}"><div class="inv-chip-img-wrap"><img src="${imgSrc}" loading="lazy" onerror="this.style.display='none'"></div><span class="inv-chip-badge">${cnt}</span></div>`;
+  const mkChipIcon=(icon,cnt,tooltip)=>`<div class="inv-chip" title="${tooltip}"><div class="inv-chip-img-wrap"><span class="inv-chip-icon-fb">${icon}</span></div><span class="inv-chip-badge">${cnt}</span></div>`;
+  const shellChips=Object.entries(SHELL_PU).map(([id,pu])=>{const cnt=counts[id]||0;const label=pu>0?`${NAMES[id]||id} (+${pu} ПУ × ${cnt})`:`${NAMES[id]||id} (сон)`;return mkChip(IMG(id),cnt,label);}).join('');
+  const featherChips=FEATHER_IDS.map(id=>{const cnt=counts[id]||0;return mkChip(IMG(id),cnt,`${NAMES[id]||id}: ${cnt} шт`);}).join('');
   const costumeInvChips=COSTUME_INV.map(c=>{
-    const ih=c.imgUrl?`<img src="${c.imgUrl}" loading="lazy" style="width:30px;height:30px;object-fit:contain" onerror="this.outerHTML='<span style=font-size:20px>${c.icon}</span>'">`:`<span style="font-size:20px;line-height:1">${c.icon}</span>`;
-    return`<div class="inv-chip"><div style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ih}</div><div class="inv-chip-info"><span class="inv-chip-count">${c.uses}</span><span class="inv-chip-name">${c.name}</span><span class="inv-chip-uses">юзов</span></div></div>`;
+    const imgSrc=c.imgUrl;
+    if(imgSrc)return mkChip(imgSrc,c.uses,`${c.name}: ${c.uses} юзов`);
+    return mkChipIcon(c.icon,c.uses,`${c.name}: ${c.uses} юзов`);
   }).join('');
   const costumeHtml=COSTUMES.map((c,i)=>{const ih=c.imgUrl?`<img src="${c.imgUrl}" loading="lazy" onerror="this.outerHTML='<span class=c-icon>${COSTUME_FB[i]}</span>'">`:`<span class="c-icon">${COSTUME_FB[i]}</span>`;return`<button class="costume-btn${i===0?' active':''}" onclick="selectCostume(${i},this)"><div class="costume-btn-img">${ih}</div><span class="costume-btn-name">${c.name}</span></button>`;}).join('');
   el.innerHTML=`
@@ -732,6 +803,10 @@ function renderAuction(counts,el){
         <div class="pay-body" id="pay-body"></div>
       </div>
     </div>
+    <div id="copy-section" style="padding:16px 18px 18px;border-top:1px solid var(--line);display:none;">
+      <div class="copy-result-area" id="copy-text-area"></div>
+      <button class="copy-btn" id="copy-btn" onclick="copyCartText()">📋 Скопировать сообщение</button>
+    </div>
   </div>
   <div id="au-costume-tpl" style="display:none">${costumeHtml}</div>`;
   renderShopGrid();
@@ -759,12 +834,47 @@ function renderCart(){
 const rows=cartItems.map(ci=>{const item=ci.item;const ih=item.imgUrl?`<img class="cart-item-img" src="${item.imgUrl}" loading="lazy" onerror="this.style.display='none'">`:`<span class="cart-item-img-fb">🐾</span>`;return`<div class="cart-item">${ih}<span class="cart-item-name">${item.name}</span><div class="cart-item-controls"><button class="cqty-btn" onclick="changeCartQty('${item.id}',-1)">−</button><span class="cqty-val">${ci.qty}</span><button class="cqty-btn" onclick="changeCartQty('${item.id}',+1)">+</button></div><span class="cart-item-price">${cartItemPrice(ci)}</span><button class="cart-item-del" onclick="removeFromCart('${item.id}')" title="Убрать">✕</button></div>`;}).join('');
   wrap.innerHTML=`<div class="cart-items-list">${rows}</div>`;
   renderPayBody();
+  updateCopySection();
 }
 
+function closeModal(){document.getElementById('modal-help').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function buildCopyText(){
+  if(!cartItems.length)return'';
+  const lines=cartItems.map(ci=>`  • ${ci.item.name}${ci.qty>1?' × '+ci.qty:''}`).join('\n');
+  let total,unit;
+  if(payMode==='feathers'){total=cartItems.reduce((s,ci)=>s+ci.qty*ci.item.priceFeathers,0);unit='перьев';}
+  else if(payMode==='costume'){total=cartItems.reduce((s,ci)=>s+ci.qty*ci.item.priceCostUses,0);unit='юзов костюма';}
+  else{total=cartItems.reduce((s,ci)=>s+ci.qty*ci.item.pricePU,0);unit='ПУ';}
+  const names=cartItems.map(ci=>ci.item.name+(ci.qty>1?' × '+ci.qty:'')).join(', ');
+  return `Привет!\nЯ набрал корзину на ${total} ${unit}, готов за это предложить:\n${lines}\n\nЕсли интересует — пиши! 🐾`;
+}
+function updateCopySection(){
+  const sec=document.getElementById('copy-section');
+  const ta=document.getElementById('copy-text-area');
+  const btn=document.getElementById('copy-btn');
+  if(!sec||!ta)return;
+  if(!cartItems.length){sec.style.display='none';return;}
+  sec.style.display='';
+  ta.textContent=buildCopyText();
+  if(btn)btn.classList.remove('copied');
+}
+function copyCartText(){
+  const text=buildCopyText();if(!text)return;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('copy-btn');
+    if(btn){btn.textContent='✓ Скопировано!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Скопировать сообщение';btn.classList.remove('copied');},2200);}
+  }).catch(()=>{
+    const ta=document.getElementById('copy-text-area');
+    if(ta){ta.select?.();document.execCommand('copy');}
+  });
+}
 function renderPayBody(){
   const el=document.getElementById('pay-body');if(!el)return;
   const totalPU=cartItems.reduce((s,ci)=>s+ci.qty*ci.item.pricePU,0);
   const availPU=Object.entries(SHELL_PU).filter(([,pu])=>pu>0).reduce((s,[id,pu])=>s+((invCounts[id]||0)*pu),0);
+  updateCopySection();
   if(payMode==='pu'){
     const rest=availPU-totalPU,over=rest<0,pct=availPU>0?Math.min(100,Math.round(totalPU/availPU*100)):(totalPU>0?100:0);
     el.innerHTML=`<div class="pay-pu-grid"><div class="pay-stat"><span class="pay-stat-label">Доступно</span><span class="pay-stat-val c-gold">${availPU}<small style="font-size:14px;color:rgba(200,160,40,.6)"> ПУ</small></span></div><div class="pay-stat"><span class="pay-stat-label">Стоимость</span><span class="pay-stat-val ${over?'c-red':'c-green'}">${totalPU}<small style="font-size:14px;opacity:.5"> ПУ</small></span></div><div class="pay-stat"><span class="pay-stat-label">Остаток</span><span class="pay-stat-val ${over?'c-red':'c-green'}">${over?'−':''}${Math.abs(rest)}<small style="font-size:14px;opacity:.5"> ПУ</small></span></div></div><div class="pay-bar-wrap"><div class="pay-bar" style="width:${pct}%;background:${over?'linear-gradient(90deg,#c03030,#e05050)':'linear-gradient(90deg,#8a40c0,#c060f0)'}"></div></div>`;
